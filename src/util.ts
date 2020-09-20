@@ -1,8 +1,5 @@
-import * as readline from 'readline';
 import * as http from 'http';
-import * as https from 'https';
-import {URL} from 'url';
-import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
+import * as readline from 'readline';
 
 const readlineInterface = readline.createInterface({
   input: process.stdin,
@@ -42,67 +39,6 @@ export function parseCookies(rawHeaders: http.IncomingHttpHeaders): Cookies {
     }
   }
   return cookies;
-}
-
-export function request({
-  data,
-  headers,
-  method = 'get',
-  wantedStatusCode = HTTP_STATUS.OK,
-  url,
-}: RequestOptions): Promise<ResponseData> {
-  const parsedURL = new URL(url);
-  const httpAgent = parsedURL.protocol === 'https:' ? https : http;
-
-  /** @type {import('http').RequestOptions} */
-  const options = {
-    headers: {
-      ...(data && {'Content-Type': 'application/json;charset=UTF-8'}),
-      ...headers,
-    },
-    host: parsedURL.host,
-    method,
-    path: parsedURL.pathname,
-  };
-
-  return new Promise((resolve, reject) => {
-    const req = httpAgent
-      .request(options, response => {
-        let rawData = '';
-        const cookies = parseCookies(response.headers);
-
-        response
-          .on('end', () =>
-            resolve({
-              cookies,
-              rawData,
-            })
-          )
-          .on('data', data => (rawData += data))
-          .on('error', error => reject(error))
-          .setEncoding('utf8');
-
-        if (response.statusCode !== wantedStatusCode) {
-          if (rawData) {
-            console.info('Received data from server:', rawData);
-          }
-          const errorMessage = `Received status code "${response.statusCode}" but wanted "${wantedStatusCode}".`;
-          response.resume();
-          // eslint-disable-next-line prefer-promise-reject-errors
-          return reject({code: response.statusCode, errorMessage});
-        }
-      })
-      .on('error', error => reject(error));
-
-    if (data) {
-      if (method.toLowerCase() === 'delete') {
-        req.useChunkedEncodingByDefault = true;
-      }
-      req.write(JSON.stringify(data));
-    }
-
-    req.end();
-  });
 }
 
 export function ask(question: string, responseRegex: RegExp = /.+/): Promise<string> {

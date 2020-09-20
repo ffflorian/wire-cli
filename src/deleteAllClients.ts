@@ -1,7 +1,13 @@
 import {login, getClients, deleteClient, logout} from './client';
 import {ask, pluralize} from './util';
 
-export async function deleteAllClients({backendURL}: {backendURL?: string}): Promise<void> {
+export interface DeleteAllClientsOptions {
+  backendURL?: string;
+  dryRun?: boolean;
+  emailAddress?: string;
+}
+
+export async function deleteAllClients({backendURL, dryRun, emailAddress}: DeleteAllClientsOptions): Promise<void> {
   if (!backendURL) {
     backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
   }
@@ -10,7 +16,10 @@ export async function deleteAllClients({backendURL}: {backendURL?: string}): Pro
     backendURL = `https://${backendURL}`;
   }
 
-  const emailAddress = await ask('Enter your email address:', /.+@.+\..+/);
+  if (!emailAddress) {
+    emailAddress = await ask('Enter your email address:', /.+@.+\..+/);
+  }
+
   const password = await ask('Enter the password for your account:');
 
   console.info('Logging in ...');
@@ -26,7 +35,7 @@ export async function deleteAllClients({backendURL}: {backendURL?: string}): Pro
   await Promise.all(
     clients.map(client => {
       console.info(`Deleting client with ID "${client.id}" ...`);
-      return deleteClient(backendURL!, client.id, password, accessToken);
+      return dryRun ? undefined : deleteClient(backendURL!, client.id, password, accessToken);
     })
   );
 

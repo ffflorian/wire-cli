@@ -2,13 +2,19 @@ import {completePasswordReset, initatePasswordReset} from './client';
 import {ask} from './util';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
+export interface ResetPasswordOptions {
+  backendURL?: string;
+  dryRun?: boolean;
+  emailAddress?: string;
+  skipInitation?: boolean;
+}
+
 export async function resetPassword({
   skipInitation,
+  dryRun,
+  emailAddress,
   backendURL,
-}: {
-  backendURL?: string;
-  skipInitation?: boolean;
-}): Promise<void> {
+}: ResetPasswordOptions): Promise<void> {
   if (!backendURL) {
     backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
   }
@@ -17,12 +23,16 @@ export async function resetPassword({
     backendURL = `https://${backendURL}`;
   }
 
-  const emailAddress = await ask('Enter your email address:', /.+@.+\..+/);
+  if (!emailAddress) {
+    emailAddress = await ask('Enter your email address:', /.+@.+\..+/);
+  }
 
   if (!skipInitation) {
     console.info('Initiating password reset ...');
     try {
-      await initatePasswordReset(emailAddress, backendURL);
+      if (!dryRun) {
+        await initatePasswordReset(emailAddress, backendURL);
+      }
     } catch (error) {
       if (error.code === HTTP_STATUS.CONFLICT) {
         const shouldContinue = await ask(
@@ -44,5 +54,7 @@ export async function resetPassword({
 
   console.info('Completing password reset ...');
 
-  await completePasswordReset(resetCode, emailAddress, newPassword, backendURL);
+  if (!dryRun) {
+    await completePasswordReset(resetCode, emailAddress, newPassword, backendURL);
+  }
 }
