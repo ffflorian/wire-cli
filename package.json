@@ -4,6 +4,7 @@
     "my-cli": "dist/cli.js"
   },
   "dependencies": {
+    "http-status-codes": "2.1.4"
   },
   "description": "Wire CLI tools",
   "devDependencies": {
@@ -80,7 +81,7 @@
     "lint:ts:spec": "eslint --ignore-path .gitignore --ext .ts --config .eslintrc.spec.json spec/",
     "prettier": "prettier \"*.{json,md,yml}\"",
     "release": "semantic-release",
-    "start": "ts-node src/cli.ts",
+    "start": "node -r ts-node/register src/cli.ts",
     "test": "ts-node -P tsconfig.jasmine.json node_modules/.bin/jasmine"
   },
   "version": "1.0.0"
