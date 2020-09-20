@@ -5,7 +5,7 @@
   },
   "dependencies": {
   },
-  "description": "A boilerplate for a modern™ TypeScript project.",
+  "description": "Wire CLI tools",
   "devDependencies": {
     "@ffflorian/eslint-config": "0.6.2",
     "@ffflorian/prettier-config": "0.1.2",
@@ -13,8 +13,8 @@
     "@semantic-release/git": "9.0.0",
     "@types/jasmine": "3.5.14",
     "@types/node": "~14",
-    "@typescript-eslint/eslint-plugin": "4.0.0",
-    "@typescript-eslint/parser": "3.10.1",
+    "@typescript-eslint/eslint-plugin": "4.1.1",
+    "@typescript-eslint/parser": "4.1.1",
     "babel-eslint": "10.1.0",
     "eslint": "7.9.0",
     "eslint-config-prettier": "6.11.0",
@@ -33,7 +33,7 @@
     "rimraf": "3.0.2",
     "semantic-release": "17.1.2",
     "ts-node": "9.0.0",
-    "typescript": "4.0.2"
+    "typescript": "4.0.3"
   },
   "engines": {
     "node": ">= 10.9"
@@ -63,10 +63,10 @@
     ]
   },
   "main": "dist/index.js",
-  "name": "@ffflorian/ts-boilerplate",
+  "name": "@ffflorian/wire-cli",
   "prettier": "@ffflorian/prettier-config",
   "private": true,
-  "repository": "https://github.com/ffflorian/ts-boilerplate.git",
+  "repository": "https://github.com/ffflorian/wire-cli.git",
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",

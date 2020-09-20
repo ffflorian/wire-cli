@@ -1,14 +1,26 @@
-# ts-boilerplate [![Build Status](https://github.com/ffflorian/ts-boilerplate/workflows/Build/badge.svg)](https://github.com/ffflorian/ts-boilerplate/actions/)
+# wire-cli [![Build Status](https://github.com/ffflorian/wire-cli/workflows/Build/badge.svg)](https://github.com/ffflorian/wire-cli/actions/)
 
-A boilerplate for a modern™ TypeScript project.
+Wire CLI tools
 
 ## Installation
 
-Fork this repository or just [generate a new one](https://github.com/ffflorian/ts-boilerplate/generate) from this template.
+Run `yarn global add @ffflorian/wire-cli` or `npm install -g @ffflorian/wire-cli`.
 
 ## Usage
 
-- Clone your new repository
-- Run `yarn` in the new repository
-- Start coding
-- Don't forget to update the `package.json`!
+```
+Usage: wire-cli [options] [directory]
+
+Wire CLI tools.
+
+Options:
+  -v, --version           output the version number
+  -h, --help              output usage information
+```
+
+## Test
+
+```
+yarn
+yarn test
+```
