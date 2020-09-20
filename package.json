@@ -1,0 +1,87 @@
+{
+  "author": "Florian Imdahl <git@ffflorian.de>",
+  "bin": {
+    "my-cli": "dist/cli.js"
+  },
+  "dependencies": {
+  },
+  "description": "A boilerplate for a modern™ TypeScript project.",
+  "devDependencies": {
+    "@ffflorian/eslint-config": "0.6.2",
+    "@ffflorian/prettier-config": "0.1.2",
+    "@semantic-release/changelog": "5.0.1",
+    "@semantic-release/git": "9.0.0",
+    "@types/jasmine": "3.5.14",
+    "@types/node": "~14",
+    "@typescript-eslint/eslint-plugin": "4.0.0",
+    "@typescript-eslint/parser": "3.10.1",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.9.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-jasmine": "4.1.1",
+    "eslint-plugin-jsdoc": "30.5.1",
+    "eslint-plugin-no-unsanitized": "3.1.2",
+    "eslint-plugin-prettier": "3.1.4",
+    "eslint-plugin-simple-import-sort": "5.0.3",
+    "eslint-plugin-sort-keys-fix": "1.1.1",
+    "eslint-plugin-typescript-sort-keys": "1.3.0",
+    "husky": "4.3.0",
+    "jasmine": "3.6.1",
+    "lint-staged": "10.4.0",
+    "prettier": "2.1.2",
+    "rimraf": "3.0.2",
+    "semantic-release": "17.1.2",
+    "ts-node": "9.0.0",
+    "typescript": "4.0.2"
+  },
+  "engines": {
+    "node": ">= 10.9"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cli",
+    "typescript"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "license": "GPL-3.0",
+  "lint-staged": {
+    "*.{json,md,yml}": [
+      "prettier --write"
+    ],
+    "spec/**/*.ts": [
+      "eslint --config .eslintrc.spec.json --fix"
+    ],
+    "src/**/*.ts": [
+      "eslint --fix"
+    ]
+  },
+  "main": "dist/index.js",
+  "name": "@ffflorian/ts-boilerplate",
+  "prettier": "@ffflorian/prettier-config",
+  "private": true,
+  "repository": "https://github.com/ffflorian/ts-boilerplate.git",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "dist": "yarn clean && yarn build",
+    "fix": "yarn fix:other && yarn fix:ts",
+    "fix:other": "yarn prettier --write",
+    "fix:ts": "yarn lint:ts --fix",
+    "lint": "yarn lint:ts && yarn lint:ts:spec && yarn lint:other",
+    "lint:other": "yarn prettier --list-different",
+    "lint:ts": "eslint --ignore-path .gitignore --ext .ts src/",
+    "lint:ts:spec": "eslint --ignore-path .gitignore --ext .ts --config .eslintrc.spec.json spec/",
+    "prettier": "prettier \"*.{json,md,yml}\"",
+    "release": "semantic-release",
+    "start": "ts-node src/cli.ts",
+    "test": "ts-node -P tsconfig.jasmine.json node_modules/.bin/jasmine"
+  },
+  "version": "1.0.0"
+}
