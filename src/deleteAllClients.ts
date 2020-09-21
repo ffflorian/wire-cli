@@ -1,10 +1,18 @@
-import {login, getClients, deleteClient, logout} from './client';
+import {login, getClients, deleteClient, logout} from './apiClient';
 import {CommonOptions} from './CommonOptions';
 import {ask, pluralize} from './util';
 
-export interface DeleteAllClientsOptions extends CommonOptions {}
+export interface DeleteAllClientsOptions extends CommonOptions {
+  /** Your Wire password */
+  password?: string;
+}
 
-export async function deleteAllClients({backendURL, dryRun, emailAddress}: DeleteAllClientsOptions): Promise<void> {
+export async function deleteAllClients({
+  backendURL,
+  dryRun,
+  emailAddress,
+  password,
+}: DeleteAllClientsOptions): Promise<void> {
   if (!backendURL) {
     backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
   }
@@ -17,7 +25,9 @@ export async function deleteAllClients({backendURL, dryRun, emailAddress}: Delet
     emailAddress = await ask('Enter your email address:', /.+@.+\..+/);
   }
 
-  const password = await ask('Enter the password for your account:');
+  if (!password) {
+    password = await ask('Enter the password for your account:');
+  }
 
   console.info('Logging in ...');
 
@@ -32,7 +42,7 @@ export async function deleteAllClients({backendURL, dryRun, emailAddress}: Delet
   await Promise.all(
     clients.map(client => {
       console.info(`Deleting client with ID "${client.id}" ...`);
-      return dryRun ? undefined : deleteClient(backendURL!, client.id, password, accessToken);
+      return dryRun ? undefined : deleteClient(backendURL!, client.id, password!, accessToken);
     })
   );
 

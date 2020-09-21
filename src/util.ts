@@ -63,3 +63,11 @@ export async function tryAndExit(fn: TryFunction): Promise<void> {
     process.exit(1);
   }
 }
+
+export function chunk<T>(array: T[], chunkSize: number): T[][] {
+  const chunks = [];
+  for (let index = 0, length = array.length; index < length; index += chunkSize) {
+    chunks.push(array.slice(index, index + chunkSize));
+  }
+  return chunks;
+}

@@ -4,8 +4,13 @@
     "wire-cli": "dist/cli.js"
   },
   "dependencies": {
+    "@wireapp/api-client": "11.26.3",
+    "@wireapp/core": "16.12.14",
+    "@wireapp/protocol-messaging": "1.25.4",
+    "@wireapp/store-engine": "4.5.11",
     "axios": "0.20.0",
-    "http-status-codes": "2.1.4"
+    "http-status-codes": "2.1.4",
+    "uuidjs": "4.2.6"
   },
   "description": "Wire CLI tools",
   "devDependencies": {
