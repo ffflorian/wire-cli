@@ -20,6 +20,7 @@ export interface ResponseData {
 }
 
 export type Cookies = Record<string, string>;
+export type TryFunction = () => any | Promise<any>;
 
 export function parseCookies(rawHeaders: http.IncomingHttpHeaders): Cookies {
   const cookies: Cookies = {};
@@ -51,4 +52,14 @@ export function ask(question: string, responseRegex: RegExp = /.+/): Promise<str
 
 export function pluralize(text: string, times: number, postfix: string = 's'): string {
   return `${text}${times === 1 ? '' : postfix}`;
+}
+
+export async function tryAndExit(fn: TryFunction): Promise<void> {
+  try {
+    await fn();
+    process.exit();
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 }

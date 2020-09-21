@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 import * as commander from 'commander';
+
 import {deleteAllClients} from './deleteAllClients';
 import {resetPassword} from './resetPassword';
+import {tryAndExit} from './util';
+
 const {description, name, version} = require('../package.json');
 
 commander
@@ -23,19 +26,15 @@ commander
   .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
-  .action(async ({parent}: commander.Command) => {
-    try {
-      await deleteAllClients({
+  .action(({parent}: commander.Command) =>
+    tryAndExit(() =>
+      deleteAllClients({
         ...(parent.backend && {backendURL: parent.backend}),
         ...(parent.dryRun && {dryRun: parent.dryRun}),
         ...(parent.email && {emailAddress: parent.email}),
-      });
-      process.exit();
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
-  });
+      })
+    )
+  );
 
 commander
   .command('reset-password')
@@ -44,19 +43,15 @@ commander
   .option('-c, --continue', 'skip initiation (if you already received the password reset email)')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
-  .action(async ({parent}: commander.Command) => {
-    try {
-      await resetPassword({
+  .action(({parent}: commander.Command) =>
+    tryAndExit(() =>
+      resetPassword({
         ...(parent.backend && {backendURL: parent.backend}),
         ...(parent.continue && {skipInitation: parent.continue}),
         ...(parent.dryRun && {dryRun: parent.dryRun}),
         ...(parent.email && {emailAddress: parent.email}),
-      });
-      process.exit();
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
-  });
+      })
+    )
+  );
 
 commander.parse(process.argv);
