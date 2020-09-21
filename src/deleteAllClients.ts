@@ -1,11 +1,8 @@
 import {login, getClients, deleteClient, logout} from './client';
+import {CommonOptions} from './CommonOptions';
 import {ask, pluralize} from './util';
 
-export interface DeleteAllClientsOptions {
-  backendURL?: string;
-  dryRun?: boolean;
-  emailAddress?: string;
-}
+export interface DeleteAllClientsOptions extends CommonOptions {}
 
 export async function deleteAllClients({backendURL, dryRun, emailAddress}: DeleteAllClientsOptions): Promise<void> {
   if (!backendURL) {

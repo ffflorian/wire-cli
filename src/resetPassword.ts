@@ -1,11 +1,11 @@
-import {completePasswordReset, initatePasswordReset} from './client';
-import {ask} from './util';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
-export interface ResetPasswordOptions {
-  backendURL?: string;
-  dryRun?: boolean;
-  emailAddress?: string;
+import {completePasswordReset, initatePasswordReset} from './client';
+import {CommonOptions} from './CommonOptions';
+import {ask} from './util';
+
+export interface ResetPasswordOptions extends CommonOptions {
+  /** If you already received the password reset email */
   skipInitation?: boolean;
 }
 
