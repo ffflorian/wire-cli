@@ -14,7 +14,8 @@ commander
   .description(description)
   .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
-  .option('-e, --email <address>', 'specify your email address')
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
   .version(version, '-v, --version')
   .on('command:*', args => {
     console.error(`\n  error: invalid command \`${args[0]}'\n`);

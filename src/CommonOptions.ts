@@ -5,4 +5,6 @@ export interface CommonOptions {
   dryRun?: boolean;
   /** Your Wire email address */
   emailAddress?: string;
+  /** Your Wire password */
+  password?: string;
 }

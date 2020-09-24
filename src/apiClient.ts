@@ -1,4 +1,4 @@
-import axios, {AxiosError} from 'axios';
+import axios, {AxiosError, AxiosPromise, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
 import {Cookies, parseCookies} from './util';
@@ -50,107 +50,131 @@ export interface Response<T> {
   data: T;
 }
 
-export async function initatePasswordReset(emailAddress: string, environment: string): Promise<void> {
-  await axios.request({
-    data: {email: emailAddress},
-    method: 'post',
-    url: `${environment}/password-reset`,
-    validateStatus: status => status === HTTP_STATUS.CREATED,
-  });
-}
+export class APIClient {
+  private readonly backendURL: string;
+  private readonly emailAddress: string;
+  private readonly password: string;
+  private accessToken?: TokenData;
+  private cookieString?: string;
 
-export async function completePasswordReset(
-  resetCode: string,
-  emailAddress: string,
-  newPassword: string,
-  environment: string
-) {
-  await axios.request({
-    data: {
-      code: resetCode,
-      email: emailAddress,
-      password: newPassword,
-    },
-    method: 'post',
-    url: `${environment}/password-reset`,
-  });
-}
-
-export async function login(backendURL: string, email: string, password: string): Promise<Response<TokenData>> {
-  try {
-    const {data, headers} = await axios.request({
-      data: {email, password},
-      method: 'post',
-      url: `${backendURL}/login`,
-    });
-    return {cookies: parseCookies(headers), data};
-  } catch (error) {
-    if ((error as AxiosError).isAxiosError) {
-      const maybeMessage = (error as AxiosError).response?.data?.message || '(no message)';
-      const errorCode = (error as AxiosError).response?.status;
-      throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
+  constructor(backendURL: string, emailAddress: string, password: string) {
+    if (!backendURL.startsWith('https')) {
+      backendURL = `https://${backendURL}`;
     }
-    throw error;
+
+    this.backendURL = backendURL;
+    this.emailAddress = emailAddress;
+    this.password = password;
   }
-}
 
-export async function logout(
-  backendURL: string,
-  {access_token, token_type}: TokenData,
-  cookieString: string
-): Promise<void> {
-  await axios.request({
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-      Cookie: cookieString,
-    },
-    method: 'post',
-    url: `${backendURL}/access/logout`,
-  });
-}
+  async initatePasswordReset(): Promise<void> {
+    await this.request({
+      data: {email: this.emailAddress},
+      method: 'post',
+      url: `/password-reset`,
+      validateStatus: status => status === HTTP_STATUS.CREATED,
+    });
+  }
 
-export async function getClients(
-  backendURL: string,
-  {access_token, token_type}: TokenData
-): Promise<Response<Client[]>> {
-  const {data, headers} = await axios.request({
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-    method: 'get',
-    url: `${backendURL}/clients`,
-  });
+  async completePasswordReset(resetCode: string, newPassword: string) {
+    await this.request({
+      data: {
+        code: resetCode,
+        email: this.emailAddress,
+        password: newPassword,
+      },
+      method: 'post',
+      url: `/password-reset`,
+    });
+  }
 
-  return {cookies: parseCookies(headers), data};
-}
+  async login(): Promise<Response<TokenData>> {
+    try {
+      const {data: accessTokenData, headers} = await this.request({
+        data: {email: this.emailAddress, password: this.password},
+        method: 'post',
+        url: `/login`,
+      });
 
-export async function deleteClient(
-  backendURL: string,
-  clientId: string,
-  password: string,
-  {access_token, token_type}: TokenData
-): Promise<void> {
-  await axios.request({
-    data: {password},
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-    method: 'delete',
-    url: `${backendURL}/clients/${clientId}`,
-  });
-}
+      this.accessToken = accessTokenData;
 
-export async function putSelf(
-  profileData: SelfUpdate,
-  backendURL: string,
-  {access_token, token_type}: TokenData
-): Promise<void> {
-  await axios.request({
-    data: profileData,
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-    method: 'put',
-    url: `${backendURL}/self`,
-  });
+      const cookies = parseCookies(headers);
+
+      if (!cookies.zuid) {
+        console.warn('No `zuid` cookie received from server.');
+      }
+
+      this.cookieString = `zuid=${cookies.zuid}`;
+
+      return {cookies: parseCookies(headers), data: accessTokenData};
+    } catch (error) {
+      if ((error as AxiosError).isAxiosError) {
+        const maybeMessage = (error as AxiosError).response?.data?.message || '(no message)';
+        const errorCode = (error as AxiosError).response?.status;
+        throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
+      }
+      throw error;
+    }
+  }
+
+  async logout(): Promise<void> {
+    this.checkCookieString();
+    this.checkAccessToken();
+
+    await this.request({
+      method: 'post',
+      url: `${this.backendURL}/access/logout`,
+    });
+  }
+
+  async getClients(): Promise<Response<Client[]>> {
+    const {data, headers} = await this.request({
+      method: 'get',
+      url: `${this.backendURL}/clients`,
+    });
+
+    return {cookies: parseCookies(headers), data};
+  }
+
+  async deleteClient(clientId: string): Promise<void> {
+    await this.request({
+      data: {password: this.password},
+      method: 'delete',
+      url: `/clients/${clientId}`,
+    });
+  }
+
+  async putSelf(profileData: SelfUpdate): Promise<void> {
+    await this.request({
+      data: profileData,
+      method: 'put',
+      url: `/self`,
+    });
+  }
+
+  private checkCookieString(): void {
+    if (!this.cookieString) {
+      throw new Error('No cookie received. Please login first.');
+    }
+  }
+
+  private checkAccessToken(): void {
+    if (!this.accessToken) {
+      throw new Error('No access token received. Please login first.');
+    }
+  }
+
+  private request(config: AxiosRequestConfig): AxiosPromise {
+    this.checkAccessToken();
+    this.checkCookieString();
+
+    return axios.request({
+      baseURL: this.backendURL,
+      headers: {
+        Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
+        Cookie: this.cookieString,
+      },
+      ...config,
+    });
+  }
 }

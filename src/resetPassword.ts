@@ -1,6 +1,6 @@
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
-import {completePasswordReset, initatePasswordReset} from './apiClient';
+import {APIClient} from './apiClient';
 import {CommonOptions} from './CommonOptions';
 import {ask} from './util';
 
@@ -24,14 +24,16 @@ export async function resetPassword({
   }
 
   if (!emailAddress) {
-    emailAddress = await ask('Enter your email address:', /.+@.+\..+/);
+    emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
   }
+
+  const apiClient = new APIClient(backendURL, emailAddress, '');
 
   if (!skipInitation) {
     console.info('Initiating password reset ...');
     try {
       if (!dryRun) {
-        await initatePasswordReset(emailAddress, backendURL);
+        await apiClient.initatePasswordReset();
       }
     } catch (error) {
       if (error.code === HTTP_STATUS.CONFLICT) {
@@ -55,6 +57,6 @@ export async function resetPassword({
   console.info('Completing password reset ...');
 
   if (!dryRun) {
-    await completePasswordReset(resetCode, emailAddress, newPassword, backendURL);
+    await apiClient.completePasswordReset(resetCode, newPassword);
   }
 }
