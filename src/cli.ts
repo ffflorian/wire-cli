@@ -1,13 +1,21 @@
 #!/usr/bin/env node
 
 import * as commander from 'commander';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import {deleteAllClients} from './deleteAllClients';
 import {resetPassword} from './resetPassword';
 import {setName} from './setName';
 import {tryAndExit} from './util';
 
-const {description, name, version} = require('../package.json');
+const defaultPackageJsonPath = path.join(__dirname, 'package.json');
+const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
+  ? defaultPackageJsonPath
+  : path.join(__dirname, '../package.json');
+
+const packageJson = fs.readFileSync(packageJsonPath, 'utf-8');
+const {description, name, version} = JSON.parse(packageJson);
 
 commander
   .name(name.replace(/^@.+\//, ''))
