@@ -54,12 +54,15 @@ export function pluralize(text: string, times: number, postfix: string = 's'): s
   return `${text}${times === 1 ? '' : postfix}`;
 }
 
-export async function tryAndExit(fn: TryFunction): Promise<void> {
+export async function tryAndExit(fn: TryFunction): Promise<never> {
+  let exitCode = 0;
+
   try {
     await fn();
-    process.exit();
   } catch (error) {
     console.error(error);
-    process.exit(1);
+    exitCode = 1;
   }
+
+  process.exit(exitCode);
 }
