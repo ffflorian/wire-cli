@@ -1,6 +1,6 @@
 # wire-cli [![Build Status](https://github.com/ffflorian/wire-cli/workflows/Build/badge.svg)](https://github.com/ffflorian/wire-cli/actions/) [![npm version](https://img.shields.io/npm/v/wire-cli.svg?style=flat)](https://www.npmjs.com/package/wire-cli)
 
-Wire CLI tools
+Wire CLI
 
 ## Installation
 
@@ -16,7 +16,7 @@ yarn start
 ```
 Usage: wire-cli [options] [command]
 
-Wire CLI tools
+Wire CLI
 
 Options:
   -b, --backend <URL>           specify the Wire backend URL (e.g.
