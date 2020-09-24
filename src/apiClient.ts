@@ -71,7 +71,7 @@ export class APIClient {
     await this.request({
       data: {email: this.emailAddress},
       method: 'post',
-      url: `/password-reset`,
+      url: '/password-reset',
       validateStatus: status => status === HTTP_STATUS.CREATED,
     });
   }
@@ -84,29 +84,30 @@ export class APIClient {
         password: newPassword,
       },
       method: 'post',
-      url: `/password-reset`,
+      url: '/password-reset',
     });
   }
 
   async login(): Promise<Response<TokenData>> {
     try {
-      const {data: accessTokenData, headers} = await this.request({
+      const {data: accessTokenData, headers} = await axios.request({
+        baseURL: this.backendURL,
         data: {email: this.emailAddress, password: this.password},
         method: 'post',
-        url: `/login`,
+        url: '/login',
       });
 
       this.accessToken = accessTokenData;
 
       const cookies = parseCookies(headers);
 
-      if (!cookies.zuid) {
+      if (cookies.zuid) {
+        this.cookieString = `zuid=${cookies.zuid}`;
+      } else {
         console.warn('No `zuid` cookie received from server.');
       }
 
-      this.cookieString = `zuid=${cookies.zuid}`;
-
-      return {cookies: parseCookies(headers), data: accessTokenData};
+      return {cookies, data: accessTokenData};
     } catch (error) {
       if ((error as AxiosError).isAxiosError) {
         const maybeMessage = (error as AxiosError).response?.data?.message || '(no message)';
@@ -123,14 +124,14 @@ export class APIClient {
 
     await this.request({
       method: 'post',
-      url: `${this.backendURL}/access/logout`,
+      url: '/access/logout',
     });
   }
 
   async getClients(): Promise<Response<Client[]>> {
     const {data, headers} = await this.request({
       method: 'get',
-      url: `${this.backendURL}/clients`,
+      url: '/clients',
     });
 
     return {cookies: parseCookies(headers), data};
@@ -148,7 +149,7 @@ export class APIClient {
     await this.request({
       data: profileData,
       method: 'put',
-      url: `/self`,
+      url: '/self',
     });
   }
 

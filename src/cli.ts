@@ -28,12 +28,14 @@ commander
   .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
+  .option('-p, --password <password>', 'specify your Wire password')
   .action(({parent}: commander.Command) =>
     tryAndExit(() =>
       deleteAllClients({
         ...(parent.backend && {backendURL: parent.backend}),
         ...(parent.dryRun && {dryRun: parent.dryRun}),
         ...(parent.email && {emailAddress: parent.email}),
+        ...(parent.password && {password: parent.password}),
       })
     )
   );
@@ -63,6 +65,7 @@ commander
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-n, --new-name <name>', 'specify your new name')
+  .option('-p, --password <password>', 'specify your Wire password')
   .action(({newName, parent}: commander.Command) =>
     tryAndExit(() =>
       setName({
@@ -70,6 +73,7 @@ commander
         ...(parent.dryRun && {dryRun: parent.dryRun}),
         ...(parent.email && {emailAddress: parent.email}),
         ...(newName && {name: newName}),
+        ...(parent.password && {password: parent.password}),
       })
     )
   );
