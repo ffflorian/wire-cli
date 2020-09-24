@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/ffflorian/wire-cli/compare/v1.0.1...v1.0.2) (2020-09-24)
+
+
+### Bug Fixes
+
+* Add missing dependency ([b385380](https://github.com/ffflorian/wire-cli/commit/b3853806f03ea2681a2fc5b114326f846a4e4f23))
+
 ## [1.0.1](https://github.com/ffflorian/wire-cli/compare/v1.0.0...v1.0.1) (2020-09-24)
 
 
