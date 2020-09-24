@@ -1,7 +1,7 @@
-// import {Availability, GenericMessage} from '@wireapp/protocol-messaging';
-// import UUID from 'uuidjs';
+import {Availability, GenericMessage} from '@wireapp/protocol-messaging';
+import UUID = require('uuidjs');
 
-import {getSelf, login} from './apiClient';
+import {broadcastGenericMessage, getSelf, login} from './apiClient';
 import {CommonOptions} from './CommonOptions';
 import {ask} from './util';
 
@@ -49,12 +49,12 @@ export async function setAvailabilityStatus({
 
   // const client = await getClient
 
-  // console.info('Setting availability status ...');
+  console.info('Setting availability status ...');
 
-  // const genericMessage = GenericMessage.create({
-  //   availability: new Availability({type: Availability.Type.AVAILABLE}),
-  //   messageId: UUID.genV4().toString(),
-  // });
+  const genericMessage = GenericMessage.create({
+    availability: new Availability({type: Availability.Type.AVAILABLE}),
+    messageId: UUID.genV4().toString(),
+  });
 
-  // await broadcastGenericMessage(teamId, genericMessage, '', backendURL, accessToken);
+  await broadcastGenericMessage(teamId, genericMessage, '', backendURL, accessToken);
 }

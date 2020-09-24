@@ -48,7 +48,7 @@ async function encryptPayloadForSession(
   let encryptedPayload;
 
   try {
-    const decodedPreKeyBundle = Buffer.from(base64EncodedPreKey, 'base64');
+    const decodedPreKeyBundle = new Uint8Array(Buffer.from(base64EncodedPreKey, 'base64')).buffer;
     const payloadAsBuffer = Buffer.from(await cryptobox.encrypt(sessionId, plainText, decodedPreKeyBundle));
     encryptedPayload = payloadAsBuffer.toString('base64');
   } catch (error) {

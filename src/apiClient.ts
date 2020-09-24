@@ -327,7 +327,7 @@ async function postBroadcastMessage(
       Authorization: `${token_type} ${access_token}`,
     },
     method: 'post',
-    url: `${backendURL}/broadcast`,
+    url: `${backendURL}/broadcast/otr/messages`,
   });
   return data;
 }
