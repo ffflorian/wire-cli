@@ -1,4 +1,4 @@
-# wire-cli [![Build Status](https://github.com/ffflorian/wire-cli/workflows/Build/badge.svg)](https://github.com/ffflorian/wire-cli/actions/) [![npm version](https://img.shields.io/npm/v/@ffflorian/wire-cli.svg?style=flat)](https://www.npmjs.com/package/@ffflorian/wire-cli)
+# wire-cli [![Build Status](https://github.com/ffflorian/wire-cli/workflows/Build/badge.svg)](https://github.com/ffflorian/wire-cli/actions/) [![npm version](https://img.shields.io/npm/v/wire-cli.svg?style=flat)](https://www.npmjs.com/package/wire-cli)
 
 Wire CLI tools
 
