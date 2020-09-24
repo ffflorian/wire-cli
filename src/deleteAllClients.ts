@@ -1,4 +1,4 @@
-import {APIClient} from './apiClient';
+import {APIClient} from './APIClient';
 import {CommonOptions} from './CommonOptions';
 import {ask, pluralize} from './util';
 

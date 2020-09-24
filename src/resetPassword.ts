@@ -1,6 +1,6 @@
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
-import {APIClient} from './apiClient';
+import {APIClient} from './APIClient';
 import {CommonOptions} from './CommonOptions';
 import {ask} from './util';
 
