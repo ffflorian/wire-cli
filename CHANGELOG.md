@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/ffflorian/wire-cli/compare/v1.0.2...v1.0.3) (2020-09-24)
+
+
+### Bug Fixes
+
+* Use cli as main entrypoint ([0d51bdd](https://github.com/ffflorian/wire-cli/commit/0d51bdd14758a0fa7ec2dccd2ac6eb3fbb127c67))
+
 ## [1.0.2](https://github.com/ffflorian/wire-cli/compare/v1.0.1...v1.0.2) (2020-09-24)
 
 
