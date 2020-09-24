@@ -1,6 +1,6 @@
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
-import {completePasswordReset, initatePasswordReset} from './client';
+import {completePasswordReset, initatePasswordReset} from './apiClient';
 import {CommonOptions} from './CommonOptions';
 import {ask} from './util';
 

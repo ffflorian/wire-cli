@@ -25,6 +25,26 @@ export interface Client {
   type: string;
 }
 
+interface UserAsset {
+  key: string;
+  size: string;
+  type: 'image';
+}
+
+export interface User {
+  accent_id?: number;
+  assets: UserAsset[];
+  deleted?: boolean;
+  email?: string;
+  expires_at?: string;
+  handle?: string;
+  id: string;
+  name: string;
+  team?: string;
+}
+
+export type SelfUpdate = Partial<Pick<User, 'accent_id' | 'assets' | 'name'>>;
+
 export interface Response<T> {
   cookies: Cookies;
   data: T;
@@ -117,5 +137,20 @@ export async function deleteClient(
     },
     method: 'delete',
     url: `${backendURL}/clients/${clientId}`,
+  });
+}
+
+export async function putSelf(
+  profileData: SelfUpdate,
+  backendURL: string,
+  {access_token, token_type}: TokenData
+): Promise<void> {
+  await axios.request({
+    data: profileData,
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+    method: 'put',
+    url: `${backendURL}/self`,
   });
 }

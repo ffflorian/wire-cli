@@ -1,4 +1,4 @@
-import {login, getClients, deleteClient, logout} from './client';
+import {login, getClients, deleteClient, logout} from './apiClient';
 import {CommonOptions} from './CommonOptions';
 import {ask, pluralize} from './util';
 
