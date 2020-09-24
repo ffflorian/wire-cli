@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/ffflorian/wire-cli/compare/v1.0.0...v1.0.1) (2020-09-24)
+
+
+### Bug Fixes
+
+* Read package.json from upper level ([c89fbab](https://github.com/ffflorian/wire-cli/commit/c89fbaba5e7580eb3806b877463ae19b5ea7e4d1))
+
 # 1.0.0 (2020-09-24)
 
 
