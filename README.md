@@ -4,7 +4,7 @@ Wire CLI tools
 
 ## Installation
 
-Run `yarn global add @ffflorian/wire-cli` or `npm install -g @ffflorian/wire-cli`.
+Run `yarn global add wire-cli` or `npm install -g wire-cli`.
 
 ## Usage
 
