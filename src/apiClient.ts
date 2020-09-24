@@ -1,7 +1,9 @@
 import axios, {AxiosError, AxiosPromise, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
+import {RegisteredClient as Client} from '@wireapp/api-client/dist/client/';
+import {UserUpdate as SelfUpdate} from '@wireapp/api-client/dist/user/';
 
-import {Cookies, parseCookies} from './util';
+import {Cookies, parseCookies, TryFunction} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -9,41 +11,6 @@ export interface TokenData {
   token_type: string;
   user: string;
 }
-
-export interface Location {
-  lat: number;
-  lon: number;
-}
-
-export interface Client {
-  class: string;
-  id: string;
-  label: string;
-  location: Location;
-  model: string;
-  time: string;
-  type: string;
-}
-
-interface UserAsset {
-  key: string;
-  size: string;
-  type: 'image';
-}
-
-export interface User {
-  accent_id?: number;
-  assets: UserAsset[];
-  deleted?: boolean;
-  email?: string;
-  expires_at?: string;
-  handle?: string;
-  id: string;
-  name: string;
-  team?: string;
-}
-
-export type SelfUpdate = Partial<Pick<User, 'accent_id' | 'assets' | 'name'>>;
 
 export interface Response<T> {
   cookies: Cookies;
@@ -89,7 +56,7 @@ export class APIClient {
   }
 
   async login(): Promise<Response<TokenData>> {
-    try {
+    return this.tryRequest(async () => {
       const {data: accessTokenData, headers} = await axios.request({
         baseURL: this.backendURL,
         data: {email: this.emailAddress, password: this.password},
@@ -108,14 +75,7 @@ export class APIClient {
       }
 
       return {cookies, data: accessTokenData};
-    } catch (error) {
-      if ((error as AxiosError).isAxiosError) {
-        const maybeMessage = (error as AxiosError).response?.data?.message || '(no message)';
-        const errorCode = (error as AxiosError).response?.status;
-        throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
-      }
-      throw error;
-    }
+    });
   }
 
   async logout(): Promise<void> {
@@ -169,13 +129,28 @@ export class APIClient {
     this.checkAccessToken();
     this.checkCookieString();
 
-    return axios.request({
-      baseURL: this.backendURL,
-      headers: {
-        Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
-        Cookie: this.cookieString,
-      },
-      ...config,
-    });
+    return this.tryRequest(() =>
+      axios.request({
+        baseURL: this.backendURL,
+        headers: {
+          Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
+          Cookie: this.cookieString,
+        },
+        ...config,
+      })
+    );
+  }
+
+  private async tryRequest<T>(fn: TryFunction): Promise<T> {
+    try {
+      return await fn();
+    } catch (error) {
+      if ((error as AxiosError).isAxiosError) {
+        const maybeMessage = (error as AxiosError<{message: string}>).response?.data?.message || '(no message)';
+        const errorCode = (error as AxiosError).response?.status;
+        throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
+      }
+      throw error;
+    }
   }
 }
