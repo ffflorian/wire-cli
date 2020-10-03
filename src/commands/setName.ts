@@ -1,6 +1,6 @@
-import {APIClient} from './APIClient';
-import {CommonOptions} from './CommonOptions';
-import {ask} from './util';
+import {APIClient} from '../APIClient';
+import {CommonOptions} from '../CommonOptions';
+import {ask} from '../util';
 
 export interface SetNameOptions extends CommonOptions {
   name?: string;

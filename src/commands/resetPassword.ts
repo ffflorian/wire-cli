@@ -1,8 +1,8 @@
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 
-import {APIClient} from './APIClient';
-import {CommonOptions} from './CommonOptions';
-import {ask} from './util';
+import {APIClient} from '../APIClient';
+import {CommonOptions} from '../CommonOptions';
+import {ask} from '../util';
 
 export interface ResetPasswordOptions extends CommonOptions {
   /** If you already received the password reset email */

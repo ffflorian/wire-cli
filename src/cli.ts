@@ -4,9 +4,10 @@ import * as commander from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {deleteAllClients} from './deleteAllClients';
-import {resetPassword} from './resetPassword';
-import {setName} from './setName';
+import {deleteAllClients} from './commands/deleteAllClients';
+import {resetPassword} from './commands/resetPassword';
+import {setName} from './commands/setName';
+import {getAllClients, updateClient} from './commands/updateOrGetClient';
 import {tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
@@ -49,6 +50,28 @@ commander
   );
 
 commander
+  .command('set-client-label')
+  .description(`update a client's label`)
+  .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your email address')
+  .option('-i, --client-id <id>', `specify the client's ID`)
+  .option('-l, --label <label>', 'specify the new label')
+  .option('-t, --password <password>', 'specify your Wire password')
+  .action(({clientId, label, parent}: commander.Command) =>
+    tryAndExit(() =>
+      updateClient({
+        ...(clientId && {clientId}),
+        ...(label && {label}),
+        ...(parent.backend && {backendURL: parent.backend}),
+        ...(parent.dryRun && {dryRun: parent.dryRun}),
+        ...(parent.email && {emailAddress: parent.email}),
+        ...(parent.password && {password: parent.password}),
+      })
+    )
+  );
+
+commander
   .command('reset-password')
   .description('reset your password')
   .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
@@ -62,6 +85,24 @@ commander
         ...(command.continue && {skipInitation: command.continue}),
         ...(command.parent.dryRun && {dryRun: command.parent.dryRun}),
         ...(command.parent.email && {emailAddress: command.parent.email}),
+      })
+    )
+  );
+
+commander
+  .command('get-all-clients')
+  .description('get all clients data')
+  .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .action((command: commander.Command) =>
+    tryAndExit(() =>
+      getAllClients({
+        ...(command.parent.backend && {backendURL: command.parent.backend}),
+        ...(command.parent.dryRun && {dryRun: command.parent.dryRun}),
+        ...(command.parent.email && {emailAddress: command.parent.email}),
+        ...(command.parent.password && {password: command.parent.password}),
       })
     )
   );

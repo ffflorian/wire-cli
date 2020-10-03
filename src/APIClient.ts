@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
-import {RegisteredClient as Client} from '@wireapp/api-client/dist/client/';
+import {RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/dist/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/dist/user/';
 
 import {Cookies, parseCookies, TryFunction} from './util';
@@ -97,10 +97,27 @@ export class APIClient {
     return {cookies: parseCookies(headers), data};
   }
 
+  async getClient(clientId: string): Promise<Response<Client>> {
+    const {data, headers} = await this.request({
+      method: 'get',
+      url: `/clients/${clientId}`,
+    });
+
+    return {cookies: parseCookies(headers), data};
+  }
+
   async deleteClient(clientId: string): Promise<void> {
     await this.request({
       data: {password: this.password},
       method: 'delete',
+      url: `/clients/${clientId}`,
+    });
+  }
+
+  async putClient(clientId: string, updatedClient: UpdatedClient): Promise<void> {
+    await this.request({
+      data: updatedClient,
+      method: 'put',
       url: `/clients/${clientId}`,
     });
   }

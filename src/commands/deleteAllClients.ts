@@ -1,6 +1,6 @@
-import {APIClient} from './APIClient';
-import {CommonOptions} from './CommonOptions';
-import {ask, pluralize} from './util';
+import {APIClient} from '../APIClient';
+import {CommonOptions} from '../CommonOptions';
+import {ask, pluralize} from '../util';
 
 export interface DeleteAllClientsOptions extends CommonOptions {}
 
@@ -29,7 +29,6 @@ export async function deleteAllClients({
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
   console.info('Logging in ...');
-
   await apiClient.login();
 
   console.info('Getting all clients ...');
