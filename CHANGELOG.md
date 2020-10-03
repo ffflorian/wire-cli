@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ffflorian/wire-cli/compare/v1.0.3...v1.1.0) (2020-10-03)
+
+
+### Features
+
+* Get client and update client ([14237f2](https://github.com/ffflorian/wire-cli/commit/14237f24bd7cef42847bc67efeecbdde3bb04c5f))
+
 ## [1.0.3](https://github.com/ffflorian/wire-cli/compare/v1.0.2...v1.0.3) (2020-09-24)
 
 
