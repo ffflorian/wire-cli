@@ -526,15 +526,15 @@
     "@typescript-eslint/types" "4.4.1"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@11.27.4":
-  version "11.27.4"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.27.4.tgz#39462d63260978ba8016bc8eb500383827c3fb8d"
-  integrity sha512-eWG66QkxxRGhQgnimMYJWeuxRjtW3dFM613GwypyD5j7ZW5m3PZCId0stze3AEBjZ/q/c/SWgoQkSo8aIt/drw==
+"@wireapp/api-client@11.27.6":
+  version "11.27.6"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.27.6.tgz#2eb9cba547eb534caad24a6e35d68bcf206df65b"
+  integrity sha512-PWcZs+ODR2Trzh5O68L83pSWDvA5axFuzTfrUzj2Mqd3TFCYG4N55wNMsSMsWytHor8QMupwG+braUzjoAAQHQ==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.0"
-    "@wireapp/commons" "3.8.6"
+    "@wireapp/commons" "3.8.7"
     "@wireapp/priority-queue" "1.6.9"
     axios "0.20.0"
     logdown "3.3.1"
@@ -543,10 +543,10 @@
     tough-cookie "4.0.0"
     ws "7.3.1"
 
-"@wireapp/commons@3.8.6":
-  version "3.8.6"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.8.6.tgz#e68eb76a0b89eb968d6ec06c39daf3ab736acb8d"
-  integrity sha512-d2QNY9WY3egITgY9irVzi0fAhvDzCycd/pyE1XqXBaLchmIHEiD3/DpeFLqCxhzAFAtgmcUwOtTOEaC8pXd1Vg==
+"@wireapp/commons@3.8.7":
+  version "3.8.7"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.8.7.tgz#e4d6e8eba9115d9e209aa4d1a800f485e48fb6d9"
+  integrity sha512-l/pQJqtUwR8ADyBvHXdZpmnjTRqvSDVaHbeUETojVAO8X+uc/GCdL4hpicoLHMXkz1eMTGok8St6V4n2ntMpzg==
   dependencies:
     "@types/fs-extra" "8.1.0"
     "@types/node" "~12"
