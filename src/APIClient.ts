@@ -35,24 +35,30 @@ export class APIClient {
   }
 
   async initatePasswordReset(): Promise<void> {
-    await this.request({
-      data: {email: this.emailAddress},
-      method: 'post',
-      url: '/password-reset',
-      validateStatus: status => status === HTTP_STATUS.CREATED,
-    });
+    await this.request(
+      {
+        data: {email: this.emailAddress},
+        method: 'post',
+        url: '/service/password-reset',
+        validateStatus: status => status === HTTP_STATUS.CREATED,
+      },
+      false
+    );
   }
 
   async completePasswordReset(resetCode: string, newPassword: string) {
-    await this.request({
-      data: {
-        code: resetCode,
-        email: this.emailAddress,
-        password: newPassword,
+    await this.request(
+      {
+        data: {
+          code: resetCode,
+          email: this.emailAddress,
+          password: newPassword,
+        },
+        method: 'post',
+        url: '/password-reset',
       },
-      method: 'post',
-      url: '/password-reset',
-    });
+      false
+    );
   }
 
   async login(): Promise<Response<TokenData>> {
@@ -142,20 +148,20 @@ export class APIClient {
     }
   }
 
-  private request<T>(config: AxiosRequestConfig): Promise<T> {
-    this.checkAccessToken();
-    this.checkCookieString();
+  private request<T>(config: AxiosRequestConfig, accessTokenNeeded = true): Promise<T> {
+    config.baseURL ??= this.backendURL;
 
-    return this.tryRequest(() =>
-      axios.request({
-        baseURL: this.backendURL,
-        headers: {
-          Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
-          Cookie: this.cookieString,
-        },
-        ...config,
-      })
-    );
+    if (accessTokenNeeded) {
+      this.checkAccessToken();
+      this.checkCookieString();
+      config.headers = {
+        Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
+        Cookie: this.cookieString,
+        ...config.headers,
+      };
+    }
+
+    return this.tryRequest(() => axios.request(config));
   }
 
   private async tryRequest<T>(fn: TryFunction): Promise<T> {
