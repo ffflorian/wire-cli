@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/ffflorian/wire-cli/compare/v1.1.0...v1.2.0) (2020-10-22)
+
+
+### Features
+
+* Set access token optional ([c8cf89c](https://github.com/ffflorian/wire-cli/commit/c8cf89cbeec2c19f6ae8f51b25b34ba7278a313a))
+
 # [1.1.0](https://github.com/ffflorian/wire-cli/compare/v1.0.3...v1.1.0) (2020-10-03)
 
 
