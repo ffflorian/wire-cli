@@ -1,4 +1,4 @@
-import {RegisteredClient} from '@wireapp/api-client/dist/client/';
+import {RegisteredClient} from '@wireapp/api-client/src/client/';
 
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';

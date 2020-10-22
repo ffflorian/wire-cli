@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
-import {RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/dist/client/';
-import {UserUpdate as SelfUpdate} from '@wireapp/api-client/dist/user/';
+import {RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
+import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
 
 import {Cookies, parseCookies, TryFunction} from './util';
 
