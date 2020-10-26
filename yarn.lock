@@ -513,10 +513,10 @@
     "@typescript-eslint/types" "4.5.0"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@11.29.0":
-  version "11.29.0"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.29.0.tgz#86940aef3c08e885dc5826d2b5269a8674725dd1"
-  integrity sha512-H9t7t6b46fOWac7ls2zF0hC/2x2MYDnJoQ4ePpcw1NtxDnCF25nb5aFfJzBcOXdt2Yd424HLccWPB9BStd1x6Q==
+"@wireapp/api-client@11.30.1":
+  version "11.30.1"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.30.1.tgz#d716a0a0d862f2af36b8a483f70ad7a02cdbd8bb"
+  integrity sha512-B3MflOymBOdF6E2m2BiUPC2shigN1C2X1zlNmh0YRP+WkGcQMoD/0Qb0g+r7yRU0jKNrBxUCOoGhM5fqpKl+xg==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
@@ -524,6 +524,7 @@
     "@wireapp/commons" "3.8.9"
     "@wireapp/priority-queue" "1.6.10"
     axios "0.20.0"
+    http-status-codes "2.1.4"
     logdown "3.3.1"
     reconnecting-websocket "4.4.0"
     spark-md5 "3.0.1"
