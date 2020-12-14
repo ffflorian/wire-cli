@@ -6,7 +6,7 @@
   "dependencies": {
     "@wireapp/api-client": "11.33.4",
     "axios": "0.21.0",
-    "commander": "6.2.0",
+    "commander": "6.2.1",
     "http-status-codes": "2.1.4"
   },
   "description": "Wire CLI",
