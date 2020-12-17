@@ -513,15 +513,15 @@
     "@typescript-eslint/types" "4.10.0"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@11.35.1":
-  version "11.35.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.35.1.tgz#3ba2afa9d5c6ff748a6f06f490b3b7cd543c8e63"
-  integrity sha512-j/FslZyfxBne/EI0RRsHsXYtuIRwPTvP+mpfoWfF3vVLFtofeiCvORXGmmQdJlqL8D1HrzmVvorKMjRQP6cgqQ==
+"@wireapp/api-client@11.35.3":
+  version "11.35.3"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.35.3.tgz#23d77000220103bb25b114a261ec41a9efcf86e7"
+  integrity sha512-aUABPWguqD4aD50m1e3jqRUUCwSb9CqJek+orOXsuoKxT+SJJRGxHytrfLEdu5Q77pTdSwVtdiEgxSqOcBWE4Q==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.0"
-    "@wireapp/commons" "3.8.14"
+    "@wireapp/commons" "3.8.15"
     "@wireapp/priority-queue" "1.6.15"
     axios "0.21.0"
     http-status-codes "2.1.4"
@@ -529,12 +529,12 @@
     reconnecting-websocket "4.4.0"
     spark-md5 "3.0.1"
     tough-cookie "4.0.0"
-    ws "7.3.1"
+    ws "7.4.1"
 
-"@wireapp/commons@3.8.14":
-  version "3.8.14"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.8.14.tgz#76c1856044b8c938aff7ee4de8e6cbc8254df6da"
-  integrity sha512-R61YfKrUcgFoJs/1g8ukNSIP+bAQAU7s0LVoL4XXdB5n+BcRlTWKogavAJ9ISgmFKwomTBsXLnlmsL6+DmGfTw==
+"@wireapp/commons@3.8.15":
+  version "3.8.15"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.8.15.tgz#8377ef71812fe26402bd11b3dbd5283384df9020"
+  integrity sha512-fmVxO/IPE/rauCJas/DMdQcSFVbCKOwA0B+w4zcSmv82nHx76XJSkR7YTDAUkwKhtYtaCS/s/MUNDVE1J1tV8Q==
   dependencies:
     "@types/fs-extra" "8.1.0"
     "@types/node" "~12"
@@ -6070,10 +6070,10 @@ write-file-atomic@^2.0.0, write-file-atomic@^2.3.0, write-file-atomic@^2.4.3:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
 
-ws@7.3.1:
-  version "7.3.1"
-  resolved "https://registry.npmjs.org/ws/-/ws-7.3.1.tgz#d0547bf67f7ce4f12a72dfe31262c68d7dc551c8"
-  integrity sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
+ws@7.4.1:
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/ws/-/ws-7.4.1.tgz#a333be02696bd0e54cea0434e21dcc8a9ac294bb"
+  integrity sha512-pTsP8UAfhy3sk1lSk/O/s4tjD0CRwvMnzvwr4OKGX7ZvqZtUyx4KIJB5JWbkykPoc55tixMGgTNoh3k4FkNGFQ==
 
 xdg-basedir@^3.0.0:
   version "3.0.0"
