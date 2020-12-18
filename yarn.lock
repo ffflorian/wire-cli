@@ -513,10 +513,10 @@
     "@typescript-eslint/types" "4.10.0"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@11.35.3":
-  version "11.35.3"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.35.3.tgz#23d77000220103bb25b114a261ec41a9efcf86e7"
-  integrity sha512-aUABPWguqD4aD50m1e3jqRUUCwSb9CqJek+orOXsuoKxT+SJJRGxHytrfLEdu5Q77pTdSwVtdiEgxSqOcBWE4Q==
+"@wireapp/api-client@11.35.4":
+  version "11.35.4"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.35.4.tgz#0a25e9d54afc45ce74ac605ccfacf6c22510bc8f"
+  integrity sha512-SEX+9FJrpF4Nb7iCy4SfH0AsBmqftlw9iO0viDnJVfPZEAq1HbIpd63HC+pwyoT1xoP2BwP+QitHnTbnRTZQFQ==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
