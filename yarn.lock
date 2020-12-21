@@ -513,16 +513,16 @@
     "@typescript-eslint/types" "4.10.0"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@11.35.4":
-  version "11.35.4"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.35.4.tgz#0a25e9d54afc45ce74ac605ccfacf6c22510bc8f"
-  integrity sha512-SEX+9FJrpF4Nb7iCy4SfH0AsBmqftlw9iO0viDnJVfPZEAq1HbIpd63HC+pwyoT1xoP2BwP+QitHnTbnRTZQFQ==
+"@wireapp/api-client@11.35.5":
+  version "11.35.5"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-11.35.5.tgz#3c6b7e75a130cbde489780a740be3e5acd303344"
+  integrity sha512-E79sTnO18wLdv2pFgNqveBQUz3LWxY7W9QxU6LZwLR+zzswB4ShMUKcKjnGyPzDCOd6eIkl5WkKEqN0hOQlXQQ==
   dependencies:
     "@types/node" "~12"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.0"
-    "@wireapp/commons" "3.8.15"
-    "@wireapp/priority-queue" "1.6.15"
+    "@wireapp/commons" "3.8.16"
+    "@wireapp/priority-queue" "1.6.16"
     axios "0.21.0"
     http-status-codes "2.1.4"
     logdown "3.3.1"
@@ -531,10 +531,10 @@
     tough-cookie "4.0.0"
     ws "7.4.1"
 
-"@wireapp/commons@3.8.15":
-  version "3.8.15"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.8.15.tgz#8377ef71812fe26402bd11b3dbd5283384df9020"
-  integrity sha512-fmVxO/IPE/rauCJas/DMdQcSFVbCKOwA0B+w4zcSmv82nHx76XJSkR7YTDAUkwKhtYtaCS/s/MUNDVE1J1tV8Q==
+"@wireapp/commons@3.8.16":
+  version "3.8.16"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-3.8.16.tgz#d49ce4231d90c536e6fc496ca2a5a1a0a9c81650"
+  integrity sha512-dTmCERMAhn0t0jgPHhrfjvNM3d94GDb4qovttuMlyJT7agvUJhNXY3fJ3w+MNgv8hXYenjkpBlvgAogy+DKOSg==
   dependencies:
     "@types/fs-extra" "8.1.0"
     "@types/node" "~12"
@@ -545,10 +545,10 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.0"
 
-"@wireapp/priority-queue@1.6.15":
-  version "1.6.15"
-  resolved "https://registry.npmjs.org/@wireapp/priority-queue/-/priority-queue-1.6.15.tgz#eb831bfddd9e30666c9a6de051da297df5bcc97b"
-  integrity sha512-8InEkphdn/+wyNYmH2vWyj5qpNcVnsYRAIHjgkIFJz/N6ped8gkuqQl5DvpBKzlQyY6UnshS2uNva6KhtAB/nQ==
+"@wireapp/priority-queue@1.6.16":
+  version "1.6.16"
+  resolved "https://registry.npmjs.org/@wireapp/priority-queue/-/priority-queue-1.6.16.tgz#8f31518009175727cabf1f87ceefe821da56bd35"
+  integrity sha512-aiXrphuZNLc5dnU7S4w2XU76Lc2i8QuvXWkhFoSr45Ob4yh1EBEi8u/USFULNKF2shlo46wYyxa6LPSD+Fnq8A==
   dependencies:
     "@types/node" "~12"
     logdown "3.3.1"
