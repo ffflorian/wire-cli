@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as commander from 'commander';
+import commander from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -17,6 +17,7 @@ const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
 
 const packageJson = fs.readFileSync(packageJsonPath, 'utf-8');
 const {description, name, version} = JSON.parse(packageJson);
+const commanderOptions = commander.opts();
 
 commander
   .name(name.replace(/^@.+\//, ''))
@@ -38,13 +39,13 @@ commander
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(({parent}: commander.Command) =>
+  .action(() =>
     tryAndExit(() =>
       deleteAllClients({
-        ...(parent.backend && {backendURL: parent.backend}),
-        ...(parent.dryRun && {dryRun: parent.dryRun}),
-        ...(parent.email && {emailAddress: parent.email}),
-        ...(parent.password && {password: parent.password}),
+        ...(commanderOptions.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions.password && {password: commanderOptions.password}),
       })
     )
   );
@@ -58,15 +59,15 @@ commander
   .option('-i, --client-id <id>', `specify the client's ID`)
   .option('-l, --label <label>', 'specify the new label')
   .option('-t, --password <password>', 'specify your Wire password')
-  .action(({clientId, label, parent}: commander.Command) =>
+  .action(() =>
     tryAndExit(() =>
       updateClient({
-        ...(clientId && {clientId}),
-        ...(label && {label}),
-        ...(parent.backend && {backendURL: parent.backend}),
-        ...(parent.dryRun && {dryRun: parent.dryRun}),
-        ...(parent.email && {emailAddress: parent.email}),
-        ...(parent.password && {password: parent.password}),
+        ...(commanderOptions.clientId && {clientId: commanderOptions.clientId}),
+        ...(commanderOptions.label && {label: commanderOptions.label}),
+        ...(commanderOptions.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions.password && {password: commanderOptions.password}),
       })
     )
   );
@@ -78,13 +79,13 @@ commander
   .option('-c, --continue', 'skip initiation (if you already received the password reset email)')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
-  .action((command: commander.Command) =>
+  .action(() =>
     tryAndExit(() =>
       resetPassword({
-        ...(command.parent.backend && {backendURL: command.parent.backend}),
-        ...(command.continue && {skipInitation: command.continue}),
-        ...(command.parent.dryRun && {dryRun: command.parent.dryRun}),
-        ...(command.parent.email && {emailAddress: command.parent.email}),
+        ...(commanderOptions.parent.backend && {backendURL: commanderOptions.parent.backend}),
+        ...(commanderOptions.continue && {skipInitation: commanderOptions.continue}),
+        ...(commanderOptions.parent.dryRun && {dryRun: commanderOptions.parent.dryRun}),
+        ...(commanderOptions.parent.email && {emailAddress: commanderOptions.parent.email}),
       })
     )
   );
@@ -96,13 +97,13 @@ commander
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action((command: commander.Command) =>
+  .action(() =>
     tryAndExit(() =>
       getAllClients({
-        ...(command.parent.backend && {backendURL: command.parent.backend}),
-        ...(command.parent.dryRun && {dryRun: command.parent.dryRun}),
-        ...(command.parent.email && {emailAddress: command.parent.email}),
-        ...(command.parent.password && {password: command.parent.password}),
+        ...(commanderOptions.parent.backend && {backendURL: commanderOptions.parent.backend}),
+        ...(commanderOptions.parent.dryRun && {dryRun: commanderOptions.parent.dryRun}),
+        ...(commanderOptions.parent.email && {emailAddress: commanderOptions.parent.email}),
+        ...(commanderOptions.parent.password && {password: commanderOptions.parent.password}),
       })
     )
   );
@@ -115,14 +116,14 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-n, --new-name <name>', 'specify your new name')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(({newName, parent}: commander.Command) =>
+  .action(() =>
     tryAndExit(() =>
       setName({
-        ...(parent.backend && {backendURL: parent.backend}),
-        ...(parent.dryRun && {dryRun: parent.dryRun}),
-        ...(parent.email && {emailAddress: parent.email}),
-        ...(newName && {name: newName}),
-        ...(parent.password && {password: parent.password}),
+        ...(commanderOptions.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions.newName && {name: commanderOptions.newName}),
+        ...(commanderOptions.password && {password: commanderOptions.password}),
       })
     )
   );
