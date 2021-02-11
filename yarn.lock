@@ -564,10 +564,10 @@
     "@typescript-eslint/types" "4.15.0"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@12.2.1":
-  version "12.2.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.2.1.tgz#35ecdc2c52838382749fe1fa7c2e3e346f605802"
-  integrity sha512-6Fjnq3S3CRwonID0vBSuUnsK7B6PkbAQVHZSlUn3icoXNpf0DcpOAHBAGQXQr9npIOZ3cyJh//jEbZmE/Xyn7A==
+"@wireapp/api-client@12.2.3":
+  version "12.2.3"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.2.3.tgz#674c99065be97d979e2f81c35fc3a09fccd1adc6"
+  integrity sha512-Brfjd8wmLmcMV1vaQcqTouUK1GETMOgjPkCVHGendbo3XMbWn8n68Y/pAajY9MxkL+DbhSkjSIXim4cC3JuQyA==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
@@ -581,7 +581,7 @@
     reconnecting-websocket "4.4.0"
     spark-md5 "3.0.1"
     tough-cookie "4.0.0"
-    ws "7.4.2"
+    ws "7.4.3"
 
 "@wireapp/commons@4.0.3":
   version "4.0.3"
@@ -6134,10 +6134,10 @@ write-file-atomic@^2.0.0, write-file-atomic@^2.3.0, write-file-atomic@^2.4.3:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
 
-ws@7.4.2:
-  version "7.4.2"
-  resolved "https://registry.npmjs.org/ws/-/ws-7.4.2.tgz#782100048e54eb36fe9843363ab1c68672b261dd"
-  integrity sha512-T4tewALS3+qsrpGI/8dqNMLIVdq/g/85U98HPMa6F0m6xTbvhXU6RCQLqPH3+SlomNV/LdY6RXEbBpMH6EOJnA==
+ws@7.4.3:
+  version "7.4.3"
+  resolved "https://registry.npmjs.org/ws/-/ws-7.4.3.tgz#1f9643de34a543b8edb124bdcbc457ae55a6e5cd"
+  integrity sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==
 
 xdg-basedir@^3.0.0:
   version "3.0.0"
