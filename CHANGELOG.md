@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/ffflorian/wire-cli/compare/v1.2.0...v1.2.1) (2021-02-15)
+
+
+### Bug Fixes
+
+* Set description and bump dependencies ([5bbd5fd](https://github.com/ffflorian/wire-cli/commit/5bbd5fd59fbbf63047e656642767bb32a9018799))
+
 # [1.2.0](https://github.com/ffflorian/wire-cli/compare/v1.1.0...v1.2.0) (2020-10-22)
 
 
