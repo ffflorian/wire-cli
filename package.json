@@ -9,7 +9,7 @@
     "commander": "7.1.0",
     "http-status-codes": "2.1.4"
   },
-  "description": "Wire CLI",
+  "description": "A Wire CLI.",
   "devDependencies": {
     "@ffflorian/eslint-config": "0.6.2",
     "@ffflorian/prettier-config": "0.1.2",
