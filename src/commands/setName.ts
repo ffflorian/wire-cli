@@ -6,14 +6,29 @@ export interface SetNameOptions extends CommonOptions {
   name?: string;
 }
 
-export async function setName({dryRun, emailAddress, backendURL, name, password}: SetNameOptions): Promise<void> {
+export async function setName({
+  defaultBackendURL,
+  dryRun,
+  emailAddress,
+  backendURL,
+  name,
+  password,
+}: SetNameOptions): Promise<void> {
   if (!backendURL) {
-    backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
+    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
   }
+
+  if (!backendURL.startsWith('https')) {
+    backendURL = `https://${backendURL}`;
+  }
+
+  console.info(`Using "${backendURL}" as backend.`);
 
   if (!emailAddress) {
     emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
   }
+
+  console.info(`Using "${emailAddress}" as email address.`);
 
   if (!password) {
     password = await ask('Enter your Wire password:');

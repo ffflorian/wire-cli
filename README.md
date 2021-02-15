@@ -21,7 +21,7 @@ Usage: wire-cli [options] [command]
 A Wire CLI.
 
 Options:
-  -b, --backend <URL>           specify the Wire backend URL (e.g.
+  -b, --backend <URL>           specify the Wire backend URL (default:
                                 "staging-nginz-https.zinfra.io")
   -d, --dry-run                 don't send any data (beside logging in and out)
   -e, --email <address>         specify your Wire email address
