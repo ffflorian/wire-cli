@@ -1,10 +1,5 @@
 import * as http from 'http';
-import * as readline from 'readline';
-
-const readlineInterface = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+import prompts from 'prompts';
 
 export interface RequestOptions {
   data?: any;
@@ -42,16 +37,62 @@ export function parseCookies(rawHeaders: http.IncomingHttpHeaders): Cookies {
   return cookies;
 }
 
-export function ask(question: string, responseRegex: RegExp = /.+/, defaultAnswer?: string): Promise<string> {
-  return new Promise(resolve =>
-    readlineInterface.question(`${question} `, answer => {
-      if (!!answer) {
-        resolve(responseRegex.test(answer) ? answer : ask(question, responseRegex));
-      } else {
-        resolve(defaultAnswer ?? ask(question, responseRegex));
-      }
-    })
+export async function getBackendURL(defaultBackendURL?: string): Promise<string> {
+  let {backendURL} = await prompts(
+    {
+      initial: defaultBackendURL,
+      message: 'Enter the backend URL',
+      name: 'backendURL',
+      type: 'text',
+      validate: input => input.match(/(https?)?.+\..+/),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
   );
+
+  backendURL ||= defaultBackendURL;
+
+  if (!backendURL.startsWith('http')) {
+    backendURL = `https://${backendURL}`;
+  }
+
+  console.info(`Using "${backendURL}" as backend.`);
+
+  return backendURL;
+}
+
+export async function getEmailAddress(): Promise<string> {
+  const {emailAddress} = await prompts(
+    {
+      hint: 'Email address must be in the format email@example.com',
+      message: 'Enter your Wire email address',
+      name: 'emailAddress',
+      type: 'text',
+      validate: input => input.match(/.+@.+\..+/),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  console.info(`Using "${emailAddress}" as email address.`);
+
+  return emailAddress;
+}
+
+export async function getPassword(): Promise<string> {
+  const {password} = await prompts(
+    {
+      message: 'Enter your Wire password',
+      name: 'password',
+      type: 'password',
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+  return password;
 }
 
 export function pluralize(text: string, times: number, postfix: string = 's'): string {

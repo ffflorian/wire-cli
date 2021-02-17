@@ -2,7 +2,7 @@ import {RegisteredClient} from '@wireapp/api-client/src/client/';
 
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {ask} from '../util';
+import {getBackendURL, getEmailAddress, getPassword} from '../util';
 
 export interface GetClientOptions extends CommonOptions {
   clientId: string;
@@ -21,25 +21,9 @@ export async function updateClient({
   label,
   password,
 }: UpdateClientOptions): Promise<void> {
-  if (!backendURL) {
-    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
-  }
-
-  if (!backendURL.startsWith('https')) {
-    backendURL = `https://${backendURL}`;
-  }
-
-  console.info(`Using "${backendURL}" as backend.`);
-
-  if (!emailAddress) {
-    emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
-  }
-
-  console.info(`Using "${emailAddress}" as email address.`);
-
-  if (!password) {
-    password = await ask('Enter your Wire password:');
-  }
+  backendURL ||= await getBackendURL(defaultBackendURL);
+  emailAddress ||= await getEmailAddress();
+  password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
@@ -59,25 +43,9 @@ export async function getClient({
   emailAddress,
   password,
 }: GetClientOptions): Promise<RegisteredClient> {
-  if (!backendURL) {
-    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
-  }
-
-  if (!backendURL.startsWith('https')) {
-    backendURL = `https://${backendURL}`;
-  }
-
-  console.info(`Using "${backendURL}" as backend.`);
-
-  if (!emailAddress) {
-    emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
-  }
-
-  console.info(`Using "${emailAddress}" as email address.`);
-
-  if (!password) {
-    password = await ask('Enter your Wire password:');
-  }
+  backendURL ||= await getBackendURL(defaultBackendURL);
+  emailAddress ||= await getEmailAddress();
+  password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
@@ -96,25 +64,9 @@ export async function getAllClients({
   emailAddress,
   password,
 }: CommonOptions): Promise<RegisteredClient[]> {
-  if (!backendURL) {
-    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
-  }
-
-  if (!backendURL.startsWith('https')) {
-    backendURL = `https://${backendURL}`;
-  }
-
-  console.info(`Using "${backendURL}" as backend.`);
-
-  if (!emailAddress) {
-    emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
-  }
-
-  console.info(`Using "${emailAddress}" as email address.`);
-
-  if (!password) {
-    password = await ask('Enter your Wire password:');
-  }
+  backendURL ||= await getBackendURL(defaultBackendURL);
+  emailAddress ||= await getEmailAddress();
+  password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 

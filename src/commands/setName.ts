@@ -1,6 +1,7 @@
+import prompts from 'prompts';
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {ask} from '../util';
+import {getBackendURL, getEmailAddress, getPassword} from '../util';
 
 export interface SetNameOptions extends CommonOptions {
   name?: string;
@@ -14,25 +15,9 @@ export async function setName({
   name,
   password,
 }: SetNameOptions): Promise<void> {
-  if (!backendURL) {
-    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
-  }
-
-  if (!backendURL.startsWith('https')) {
-    backendURL = `https://${backendURL}`;
-  }
-
-  console.info(`Using "${backendURL}" as backend.`);
-
-  if (!emailAddress) {
-    emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
-  }
-
-  console.info(`Using "${emailAddress}" as email address.`);
-
-  if (!password) {
-    password = await ask('Enter your Wire password:');
-  }
+  backendURL ||= await getBackendURL(defaultBackendURL);
+  emailAddress ||= await getEmailAddress();
+  password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
@@ -41,12 +26,18 @@ export async function setName({
   await apiClient.login();
 
   if (!name) {
-    name = await ask('Enter your new name (max. 128 chars):', /.{1,128}/);
+    const response = await prompts(
+      {max: 128, message: 'Enter your new name (max. 128 chars):', name: 'newName', type: 'text'},
+      {
+        onCancel: () => process.exit(),
+      }
+    );
+    name = response.newName as string;
   }
 
   console.info('Setting new name ...');
 
   if (!dryRun) {
-    await apiClient.putSelf({name: name});
+    await apiClient.putSelf({name});
   }
 }
