@@ -25,10 +25,6 @@ export class APIClient {
   private cookieString?: string;
 
   constructor(backendURL: string, emailAddress: string, password: string) {
-    if (!backendURL.startsWith('https')) {
-      backendURL = `https://${backendURL}`;
-    }
-
     this.backendURL = backendURL;
     this.emailAddress = emailAddress;
     this.password = password;

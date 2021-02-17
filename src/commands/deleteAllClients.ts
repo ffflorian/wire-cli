@@ -1,6 +1,6 @@
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {ask, pluralize} from '../util';
+import {getBackendURL, getEmailAddress as getEmailAddress, getPassword, pluralize} from '../util';
 
 export interface DeleteAllClientsOptions extends CommonOptions {}
 
@@ -11,25 +11,9 @@ export async function deleteAllClients({
   emailAddress,
   password,
 }: DeleteAllClientsOptions): Promise<void> {
-  if (!backendURL) {
-    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
-  }
-
-  if (!backendURL.startsWith('https')) {
-    backendURL = `https://${backendURL}`;
-  }
-
-  console.info(`Using "${backendURL}" as backend.`);
-
-  if (!emailAddress) {
-    emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
-  }
-
-  console.info(`Using "${emailAddress}" as email address.`);
-
-  if (!password) {
-    password = await ask('Enter your Wire password:');
-  }
+  backendURL ||= await getBackendURL(defaultBackendURL);
+  emailAddress ||= await getEmailAddress();
+  password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
