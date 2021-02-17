@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/ffflorian/wire-cli/compare/v1.2.1...v1.3.0) (2021-02-17)
+
+
+### Features
+
+* Add default backend URL ([#199](https://github.com/ffflorian/wire-cli/issues/199)) ([ec1a2ea](https://github.com/ffflorian/wire-cli/commit/ec1a2ea501f3d770838d84e6390653b10dfdabfa))
+
 ## [1.2.1](https://github.com/ffflorian/wire-cli/compare/v1.2.0...v1.2.1) (2021-02-15)
 
 
