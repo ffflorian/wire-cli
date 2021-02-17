@@ -13,6 +13,7 @@ export interface UpdateClientOptions extends GetClientOptions {
 }
 
 export async function updateClient({
+  defaultBackendURL,
   backendURL,
   clientId,
   dryRun,
@@ -21,16 +22,20 @@ export async function updateClient({
   password,
 }: UpdateClientOptions): Promise<void> {
   if (!backendURL) {
-    backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
+    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
   }
 
   if (!backendURL.startsWith('https')) {
     backendURL = `https://${backendURL}`;
   }
 
+  console.info(`Using "${backendURL}" as backend.`);
+
   if (!emailAddress) {
     emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
   }
+
+  console.info(`Using "${emailAddress}" as email address.`);
 
   if (!password) {
     password = await ask('Enter your Wire password:');
@@ -48,22 +53,27 @@ export async function updateClient({
 }
 
 export async function getClient({
+  defaultBackendURL,
   backendURL,
   clientId,
   emailAddress,
   password,
 }: GetClientOptions): Promise<RegisteredClient> {
   if (!backendURL) {
-    backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
+    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
   }
 
   if (!backendURL.startsWith('https')) {
     backendURL = `https://${backendURL}`;
   }
 
+  console.info(`Using "${backendURL}" as backend.`);
+
   if (!emailAddress) {
     emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
   }
+
+  console.info(`Using "${emailAddress}" as email address.`);
 
   if (!password) {
     password = await ask('Enter your Wire password:');
@@ -80,18 +90,27 @@ export async function getClient({
   return client;
 }
 
-export async function getAllClients({backendURL, emailAddress, password}: CommonOptions): Promise<RegisteredClient[]> {
+export async function getAllClients({
+  defaultBackendURL,
+  backendURL,
+  emailAddress,
+  password,
+}: CommonOptions): Promise<RegisteredClient[]> {
   if (!backendURL) {
-    backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
+    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
   }
 
   if (!backendURL.startsWith('https')) {
     backendURL = `https://${backendURL}`;
   }
 
+  console.info(`Using "${backendURL}" as backend.`);
+
   if (!emailAddress) {
     emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
   }
+
+  console.info(`Using "${emailAddress}" as email address.`);
 
   if (!password) {
     password = await ask('Enter your Wire password:');

@@ -42,11 +42,15 @@ export function parseCookies(rawHeaders: http.IncomingHttpHeaders): Cookies {
   return cookies;
 }
 
-export function ask(question: string, responseRegex: RegExp = /.+/): Promise<string> {
+export function ask(question: string, responseRegex: RegExp = /.+/, defaultAnswer?: string): Promise<string> {
   return new Promise(resolve =>
-    readlineInterface.question(`${question} `, answer =>
-      resolve(responseRegex.test(answer) ? answer : ask(question, responseRegex))
-    )
+    readlineInterface.question(`${question} `, answer => {
+      if (!!answer) {
+        resolve(responseRegex.test(answer) ? answer : ask(question, responseRegex));
+      } else {
+        resolve(defaultAnswer ?? ask(question, responseRegex));
+      }
+    })
   );
 }
 

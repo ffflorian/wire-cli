@@ -10,18 +10,21 @@ export interface ResetPasswordOptions extends CommonOptions {
 }
 
 export async function resetPassword({
+  defaultBackendURL,
   skipInitation,
   dryRun,
   emailAddress,
   backendURL,
 }: ResetPasswordOptions): Promise<void> {
   if (!backendURL) {
-    backendURL = await ask('Enter the backend URL (e.g. "staging-nginz-https.zinfra.io"):', /.+\..+/);
+    backendURL = await ask(`Enter the backend URL (default is "${defaultBackendURL}"):`, /.+\..+/, defaultBackendURL);
   }
 
   if (!backendURL.startsWith('https')) {
     backendURL = `https://${backendURL}`;
   }
+
+  console.info(`Using "${backendURL}" as backend.`);
 
   if (!emailAddress) {
     emailAddress = await ask('Enter your Wire email address:', /.+@.+\..+/);
