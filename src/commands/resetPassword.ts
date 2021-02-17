@@ -24,12 +24,9 @@ export async function resetPassword({
 
   if (!skipInitation) {
     console.info('Initiating password reset ...');
-    try {
-      if (!dryRun) {
-        await apiClient.initatePasswordReset();
-      }
-    } catch (error) {
-      if (error.code === HTTP_STATUS.CONFLICT) {
+    if (!dryRun) {
+      const result = await apiClient.initatePasswordReset();
+      if (result && result.errorCode === HTTP_STATUS.CONFLICT) {
         const {shouldContinue} = await prompts(
           {
             message: 'A password reset is already in progress. Would you like to continue?',
@@ -44,8 +41,6 @@ export async function resetPassword({
         if (!shouldContinue) {
           process.exit();
         }
-      } else {
-        throw error;
       }
     }
   }

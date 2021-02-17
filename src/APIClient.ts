@@ -30,15 +30,16 @@ export class APIClient {
     this.password = password;
   }
 
-  async initatePasswordReset(): Promise<void> {
-    await this.request(
+  initatePasswordReset(): Promise<void | {errorCode: HTTP_STATUS}> {
+    return this.request(
       {
         data: {email: this.emailAddress},
         method: 'post',
-        url: '/service/password-reset',
+        url: '/password-reset',
         validateStatus: status => status === HTTP_STATUS.CREATED,
       },
-      false
+      false,
+      true
     );
   }
 
@@ -144,7 +145,17 @@ export class APIClient {
     }
   }
 
-  private request<T>(config: AxiosRequestConfig, accessTokenNeeded = true): Promise<T> {
+  private request<T>(config: AxiosRequestConfig, accessTokenNeeded?: boolean, getErrorCode?: boolean): Promise<T>;
+  private request<T>(
+    config: AxiosRequestConfig,
+    accessTokenNeeded: boolean,
+    getErrorCode: true
+  ): Promise<{errorCode: HTTP_STATUS}>;
+  private request<T>(
+    config: AxiosRequestConfig,
+    accessTokenNeeded = true,
+    getErrorCode: boolean = false
+  ): Promise<T | {errorCode: HTTP_STATUS}> {
     config.baseURL ??= this.backendURL;
 
     if (accessTokenNeeded) {
@@ -157,16 +168,21 @@ export class APIClient {
       };
     }
 
-    return this.tryRequest(() => axios.request(config));
+    return this.tryRequest(() => axios.request(config), getErrorCode);
   }
 
-  private async tryRequest<T>(fn: TryFunction): Promise<T> {
+  private async tryRequest<T>(fn: TryFunction, getErrorCode: true): Promise<{errorCode: HTTP_STATUS}>;
+  private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T>;
+  private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T | {errorCode: HTTP_STATUS}> {
     try {
       return await fn();
     } catch (error) {
       if ((error as AxiosError).isAxiosError) {
         const maybeMessage = (error as AxiosError<{message: string}>).response?.data?.message || '(no message)';
         const errorCode = (error as AxiosError).response?.status;
+        if (getErrorCode) {
+          return {errorCode} as {errorCode: HTTP_STATUS};
+        }
         throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
       }
       throw error;
