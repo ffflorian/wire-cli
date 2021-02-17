@@ -27,7 +27,7 @@ const defaultOptions: CommonOptions = {
 commander
   .name(name.replace(/^@.+\//, ''))
   .description(description)
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (default: "staging-nginz-https.zinfra.io")')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-p, --password <password>', 'specify your Wire password')
@@ -40,7 +40,7 @@ commander
 commander
   .command('delete-all-clients')
   .description('delete all clients')
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (default: "staging-nginz-https.zinfra.io")')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
@@ -59,7 +59,7 @@ commander
 commander
   .command('set-client-label')
   .description(`update a client's label`)
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (default: "staging-nginz-https.zinfra.io")')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-i, --client-id <id>', `specify the client's ID`)
@@ -82,7 +82,7 @@ commander
 commander
   .command('reset-password')
   .description('reset your password')
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (default: "staging-nginz-https.zinfra.io")')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-c, --continue', 'skip initiation (if you already received the password reset email)')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
@@ -101,7 +101,7 @@ commander
 commander
   .command('get-all-clients')
   .description('get all clients data')
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (default: "staging-nginz-https.zinfra.io")')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
@@ -120,7 +120,7 @@ commander
 commander
   .command('set-name')
   .description('set your name')
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (default: "staging-nginz-https.zinfra.io")')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-n, --new-name <name>', 'specify your new name')
