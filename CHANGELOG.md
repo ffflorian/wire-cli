@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/ffflorian/wire-cli/compare/v1.3.0...v1.4.0) (2021-02-17)
+
+
+### Features
+
+* Use prompts ([#200](https://github.com/ffflorian/wire-cli/issues/200)) ([e29fcad](https://github.com/ffflorian/wire-cli/commit/e29fcad3dc4658c6610ee1a68df45750298d3519))
+
 # [1.3.0](https://github.com/ffflorian/wire-cli/compare/v1.2.1...v1.3.0) (2021-02-17)
 
 
