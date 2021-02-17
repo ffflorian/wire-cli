@@ -37,14 +37,12 @@ export async function resetPassword({
             type: 'confirm',
           },
           {
-            onCancel: () => {
-              process.exit();
-            },
+            onCancel: () => process.exit(),
           }
         );
 
         if (!shouldContinue) {
-          process.exit(0);
+          process.exit();
         }
       } else {
         throw error;
@@ -59,11 +57,10 @@ export async function resetPassword({
       type: 'text',
     },
     {
-      onCancel: () => {
-        process.exit();
-      },
+      onCancel: () => process.exit(),
     }
   );
+
   const {newPassword} = await prompts(
     {
       message: 'Enter the new password for your account:',
@@ -71,9 +68,7 @@ export async function resetPassword({
       type: 'password',
     },
     {
-      onCancel: () => {
-        process.exit();
-      },
+      onCancel: () => process.exit(),
     }
   );
 

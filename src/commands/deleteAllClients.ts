@@ -1,6 +1,6 @@
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {getBackendURL, getEmailAddress as getEmailAddress, getPassword, pluralize} from '../util';
+import {getBackendURL, getEmailAddress, getPassword, pluralize} from '../util';
 
 export interface DeleteAllClientsOptions extends CommonOptions {}
 

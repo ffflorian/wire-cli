@@ -29,9 +29,7 @@ export async function setName({
     const response = await prompts(
       {max: 128, message: 'Enter your new name (max. 128 chars):', name: 'newName', type: 'text'},
       {
-        onCancel: () => {
-          process.exit();
-        },
+        onCancel: () => process.exit(),
       }
     );
     name = response.newName as string;

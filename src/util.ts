@@ -47,11 +47,7 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
       validate: input => input.match(/(https?)?.+\..+/),
     },
     {
-      onCancel: () => {
-        if (!defaultBackendURL) {
-          process.exit();
-        }
-      },
+      onCancel: () => process.exit(),
     }
   );
 
@@ -76,9 +72,7 @@ export async function getEmailAddress(): Promise<string> {
       validate: input => input.match(/.+@.+\..+/),
     },
     {
-      onCancel: () => {
-        process.exit();
-      },
+      onCancel: () => process.exit(),
     }
   );
 
@@ -95,9 +89,7 @@ export async function getPassword(): Promise<string> {
       type: 'password',
     },
     {
-      onCancel: () => {
-        process.exit();
-      },
+      onCancel: () => process.exit(),
     }
   );
   return password;
