@@ -569,15 +569,15 @@
     "@typescript-eslint/types" "4.15.1"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@12.3.4":
-  version "12.3.4"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.3.4.tgz#00be339b065b68fef7f1b05048485b1cfa11c298"
-  integrity sha512-t6VVyCXxPOhKf5R0PkHcoFLjJUCySeVMq9IsM/fb3XyW2dXNnm4OXppMSJcd9DqCCJtnoxUnZpe4XizEkDwrQA==
+"@wireapp/api-client@12.3.5":
+  version "12.3.5"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.3.5.tgz#11488344b413ee97162502ad4b89f10dfeaa1e9a"
+  integrity sha512-yOG/Yn5293A8lmXiW5I7djWniEWYMr2PGoTGUAbMZu/pez/yzr1HdgymcTNJLEK5cmD/vccVKgu/ZSR+Oy/FiQ==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.0"
-    "@wireapp/commons" "4.0.3"
+    "@wireapp/commons" "4.1.0"
     "@wireapp/priority-queue" "1.6.22"
     "@wireapp/protocol-messaging" "1.28.0"
     axios "0.21.1"
@@ -588,10 +588,10 @@
     tough-cookie "4.0.0"
     ws "7.4.3"
 
-"@wireapp/commons@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-4.0.3.tgz#96edbc7e4ff69b7796587302b134b2c2249c8afa"
-  integrity sha512-g/H0xA8cjEENHQJ7sneeOBCR1+MOqO9+vGYlsZlQBy30FRBglNtIwAatLmF2d/mQvrTINlquPTBOhWGQRBYGYw==
+"@wireapp/commons@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-4.1.0.tgz#244f1ee4a7475def9698b51d75e1515bf638ce65"
+  integrity sha512-AvZjxwzIUhG/y1ycB7ECGoX6kVbHaHPeLhR8gdQ+vIkfyEjj3naSw00DyTe96IZ+gbKWxEtEnX6ZMnOG07NquQ==
   dependencies:
     "@types/fs-extra" "9.0.6"
     "@types/node" "~14"
