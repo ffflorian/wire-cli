@@ -43,5 +43,7 @@ export async function setAvailabilityStatus({
   if (!dryRun) {
     await apiClient.broadcastGenericMessage(teamId, genericMessage, '');
   }
+
+  logger.info('Logging out ...');
   await apiClient.logout();
 }
