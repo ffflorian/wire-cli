@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/ffflorian/wire-cli/compare/v1.4.1...v1.5.0) (2021-02-18)
+
+
+### Features
+
+* Add logdown ([#203](https://github.com/ffflorian/wire-cli/issues/203)) ([942b9b7](https://github.com/ffflorian/wire-cli/commit/942b9b7780993ec1ec2c8f30534ae948f4cb3817))
+
 ## [1.4.1](https://github.com/ffflorian/wire-cli/compare/v1.4.0...v1.4.1) (2021-02-18)
 
 
