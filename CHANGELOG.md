@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/ffflorian/wire-cli/compare/v1.4.0...v1.4.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* Use commanderOptions directly ([61f5ae3](https://github.com/ffflorian/wire-cli/commit/61f5ae3ef2e17b5e70bce20b8d7df9b99ca27b88))
+
 # [1.4.0](https://github.com/ffflorian/wire-cli/compare/v1.3.0...v1.4.0) (2021-02-17)
 
 
