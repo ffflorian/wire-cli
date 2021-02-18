@@ -1,8 +1,10 @@
-import {Availability, GenericMessage} from '@wireapp/protocol-messaging';
+import {Availability} from '@wireapp/protocol-messaging';
 import prompts from 'prompts';
-import UUID from 'uuidjs';
+import {Account} from '@wireapp/core';
+import {APIClient} from '@wireapp/api-client';
+import {ClientType} from '@wireapp/api-client/src/client/';
+import {MemoryEngine} from '@wireapp/store-engine';
 
-import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
 import {getLogger, getBackendURL, getEmailAddress, getPassword} from '../util';
 
@@ -52,14 +54,22 @@ export async function setAvailabilityStatus({
     )
   ).status;
 
-  const apiClient = new APIClient(backendURL, emailAddress, password);
+  const apiClient = new APIClient({
+    urls: {
+      name: 'backend',
+      rest: backendURL,
+      ws: `wss://${backendURL.replace(/https?:\/\//, '')}`,
+    },
+  });
+
+  const engine = new MemoryEngine();
+
+  const account = new Account(apiClient, () => Promise.resolve(engine));
 
   logger.info('Logging in ...');
-  await apiClient.login();
+  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
 
-  const {
-    data: {team: teamId},
-  } = await apiClient.getSelf();
+  const {team: teamId} = await account.service!.self.getSelf();
 
   if (!teamId) {
     throw new Error('User is not part of a team on Wire.');
@@ -67,13 +77,8 @@ export async function setAvailabilityStatus({
 
   logger.info('Setting availability status ...');
 
-  const genericMessage = GenericMessage.create({
-    availability: new Availability({type: statusType!}),
-    messageId: UUID.genV4().toString(),
-  });
-
   if (!dryRun) {
-    await apiClient.broadcastGenericMessage(teamId, genericMessage, '');
+    await account.service!.user.setAvailability(teamId, statusType!);
   }
 
   logger.info('Logging out ...');

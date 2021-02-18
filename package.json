@@ -9,8 +9,7 @@
     "commander": "7.1.0",
     "http-status-codes": "2.1.4",
     "logdown": "3.3.1",
-    "prompts": "2.4.0",
-    "uuidjs": "4.2.8"
+    "prompts": "2.4.0"
   },
   "description": "A Wire CLI.",
   "devDependencies": {

@@ -1,22 +1,14 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
-import {GenericMessage} from '@wireapp/protocol-messaging';
 import {ClientType, RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
 import {Self} from '@wireapp/api-client/src/self';
 import {UserPreKeyBundleMap} from '@wireapp/api-client/src/user';
-import {
-  ClientMismatch,
-  NewOTRMessage,
-  OTRClientMap,
-  OTRRecipients,
-  UserClients,
-} from '@wireapp/api-client/src/conversation';
+import {UserClients} from '@wireapp/api-client/src/conversation';
 import {Members} from '@wireapp/api-client/src/team';
 import {PreKeyBundle} from '@wireapp/api-client/src/auth';
 
-import {encryptMessage} from './crypto';
-import {chunk, getLogger, Cookies, parseCookies, TryFunction} from './util';
+import {getLogger, Cookies, parseCookies, TryFunction} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -58,105 +50,22 @@ export class APIClient {
     );
   }
 
-  async broadcastGenericMessage(teamId: string, genericMessage: GenericMessage, clientId: string): Promise<void> {
-    const plainTextArray = GenericMessage.encode(genericMessage).finish();
-    const preKeyBundle = await this.getPreKeyBundle(teamId);
-    const recipients = await encryptMessage(plainTextArray, preKeyBundle);
-    return this.sendOTRBroadcastMessage(clientId, recipients, plainTextArray);
-  }
-
-  async getPreKeyBundle(teamId: string): Promise<UserPreKeyBundleMap> {
-    const {members: teamMembers} = await this.getAllTeamMembers(teamId);
-
-    const members = teamMembers.map(member => ({id: member.user}));
-
-    const preKeys = await Promise.all(members.map(member => this.getUserPreKeys(member.id)));
-
-    return preKeys.reduce((bundleMap: UserPreKeyBundleMap, bundle) => {
-      bundleMap[bundle.user] = {};
-      for (const client of bundle.clients) {
-        bundleMap[bundle.user][client.client] = client.prekey;
-      }
-      return bundleMap;
-    }, {});
-  }
-
-  async sendOTRBroadcastMessage(
-    sendingClientId: string,
-    recipients: OTRRecipients<Uint8Array>,
-    plainTextArray: Uint8Array
-  ): Promise<void> {
-    const message: NewOTRMessage<Uint8Array> = {
-      recipients,
-      report_missing: Object.keys(recipients),
-      sender: sendingClientId,
-    };
-
-    try {
-      await this.postBroadcastMessage(message);
-    } catch (error) {
-      const reEncryptedMessage = await this.onClientMismatch(error, message, plainTextArray);
-      await this.postBroadcastMessage(reEncryptedMessage);
-    }
-  }
-
-  private async onClientMismatch(
-    error: AxiosError,
-    message: NewOTRMessage<Uint8Array>,
-    plainTextArray: Uint8Array
-  ): Promise<NewOTRMessage<Uint8Array>> {
-    if (error.response?.status === HTTP_STATUS.PRECONDITION_FAILED) {
-      const {missing, deleted}: {deleted: UserClients; missing: UserClients} = error.response.data;
-
-      const deletedUserIds = Object.keys(deleted);
-      const missingUserIds = Object.keys(missing);
-
-      if (deletedUserIds.length) {
-        for (const deletedUserId of deletedUserIds) {
-          for (const deletedClientId of deleted[deletedUserId]) {
-            const deletedUser = message.recipients[deletedUserId];
-            if (deletedUser) {
-              delete deletedUser[deletedClientId];
-            }
-          }
-        }
-      }
-
-      if (missingUserIds.length) {
-        const missingPreKeyBundles = await this.postMultiPreKeyBundles(missing);
-        const reEncryptedPayloads = await encryptMessage(plainTextArray, missingPreKeyBundles);
-        for (const missingUserId of missingUserIds) {
-          for (const missingClientId in reEncryptedPayloads[missingUserId]) {
-            const missingUser = message.recipients[missingUserId];
-            if (!missingUser) {
-              message.recipients[missingUserId] = {};
-            }
-            message.recipients[missingUserId][missingClientId] = reEncryptedPayloads[missingUserId][missingClientId];
-          }
-        }
-      }
-
-      return message;
-    }
-
-    throw error;
-  }
-
-  async getUserPreKeys(userId: string): Promise<PreKeyBundle> {
-    const {data} = await this.request({
+  async getUserPreKeys(userId: string): Promise<Response<PreKeyBundle>> {
+    const {data, headers} = await this.request({
       method: 'get',
       url: `/users/${userId}/prekeys`,
     });
 
-    return data;
+    return {cookies: parseCookies(headers), data};
   }
 
-  async getAllTeamMembers(teamId: string): Promise<Members> {
-    const {data} = await this.request({
+  async getAllTeamMembers(teamId: string): Promise<Response<Members>> {
+    const {data, headers} = await this.request({
       method: 'get',
       url: `/teams/${teamId}/members`,
     });
-    return data;
+
+    return {cookies: parseCookies(headers), data};
   }
 
   async postMultiPreKeyBundlesChunk(userClientMap: UserClients): Promise<UserPreKeyBundleMap> {
@@ -166,58 +75,6 @@ export class APIClient {
       url: '/users/prekeys',
     });
 
-    return data;
-  }
-
-  async postMultiPreKeyBundles(
-    userClientMap: UserClients,
-    // eslint-disable-next-line no-magic-numbers
-    limit: number = 128
-  ): Promise<UserPreKeyBundleMap> {
-    const userIdChunks = chunk(Object.keys(userClientMap), limit);
-    const userPreKeyBundleMapChunks = await Promise.all(
-      userIdChunks.map(userIdChunk =>
-        this.postMultiPreKeyBundlesChunk(
-          userIdChunk.reduce(
-            (chunkedUserClientMap, userId) => ({
-              ...chunkedUserClientMap,
-              [userId]: userClientMap[userId],
-            }),
-            {}
-          )
-        )
-      )
-    );
-    return userPreKeyBundleMapChunks.reduce(
-      (userPreKeyBundleMap, userPreKeyBundleMapChunk) => ({
-        ...userPreKeyBundleMap,
-        ...userPreKeyBundleMapChunk,
-      }),
-      {}
-    );
-  }
-
-  async postBroadcastMessage(payload: NewOTRMessage<Uint8Array>): Promise<ClientMismatch> {
-    const stringPayload: NewOTRMessage<string> = {
-      ...payload,
-      data: payload.data ? Buffer.from(payload.data).toString('base64') : undefined,
-      recipients: Object.fromEntries(
-        Object.entries(payload.recipients).map(([userId, otrClientMap]) => {
-          const otrClientMapWithBase64: OTRClientMap<string> = Object.fromEntries(
-            Object.entries(otrClientMap).map(([clientId, payload]) => {
-              return [clientId, Buffer.from(payload).toString('base64')];
-            })
-          );
-          return [userId, otrClientMapWithBase64];
-        })
-      ),
-    };
-
-    const {data} = await this.request({
-      data: stringPayload,
-      method: 'post',
-      url: '/broadcast/otr/messages',
-    });
     return data;
   }
 

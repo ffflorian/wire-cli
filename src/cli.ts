@@ -149,7 +149,7 @@ commander
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-s, --status <number>', 'specify the status type to be set')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(() =>
+  .action(localOptions =>
     tryAndExit(() =>
       setAvailabilityStatus({
         ...defaultOptions,
@@ -157,7 +157,7 @@ commander
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(commanderOptions?.status && {statusType: commanderOptions.status}),
+        ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
       })
     )
   );
