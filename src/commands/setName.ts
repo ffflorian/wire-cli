@@ -42,4 +42,7 @@ export async function setName({
   if (!dryRun) {
     await apiClient.putSelf({name});
   }
+
+  logger.info('Logging out ...');
+  await apiClient.logout();
 }
