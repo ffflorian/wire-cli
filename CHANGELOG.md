@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/ffflorian/wire-cli/compare/v1.5.1...v1.5.2) (2021-02-18)
+
+
+### Bug Fixes
+
+* Logger prefixes ([8c6641d](https://github.com/ffflorian/wire-cli/commit/8c6641ddcac52a22e1016ee93c1b50417dc3a07e))
+
 ## [1.5.1](https://github.com/ffflorian/wire-cli/compare/v1.5.0...v1.5.1) (2021-02-18)
 
 
