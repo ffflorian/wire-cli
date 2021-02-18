@@ -3,12 +3,14 @@ import prompts from 'prompts';
 
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {getBackendURL, getEmailAddress} from '../util';
+import {getBackendURL, getEmailAddress, getLogger} from '../util';
 
 export interface ResetPasswordOptions extends CommonOptions {
   /** If you already received the password reset email */
   skipInitation?: boolean;
 }
+
+const logger = getLogger('reset-password');
 
 export async function resetPassword({
   defaultBackendURL,
@@ -23,7 +25,7 @@ export async function resetPassword({
   const apiClient = new APIClient(backendURL, emailAddress, '');
 
   if (!skipInitation) {
-    console.info('Initiating password reset ...');
+    logger.info('Initiating password reset ...');
     if (!dryRun) {
       const result = await apiClient.initatePasswordReset();
       if (result && result.errorCode === HTTP_STATUS.CONFLICT) {
@@ -67,7 +69,7 @@ export async function resetPassword({
     }
   );
 
-  console.info('Completing password reset ...');
+  logger.info('Completing password reset ...');
 
   if (!dryRun) {
     await apiClient.completePasswordReset(resetCode, newPassword);

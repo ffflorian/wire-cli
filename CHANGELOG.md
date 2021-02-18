@@ -1,3 +1,24 @@
+## [1.5.1](https://github.com/ffflorian/wire-cli/compare/v1.5.0...v1.5.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* Use temporary clients ([#202](https://github.com/ffflorian/wire-cli/issues/202)) ([c09d6ea](https://github.com/ffflorian/wire-cli/commit/c09d6eac2bc2c9744479a7b8cd95cf14b4dd9971))
+
+# [1.5.0](https://github.com/ffflorian/wire-cli/compare/v1.4.1...v1.5.0) (2021-02-18)
+
+
+### Features
+
+* Add logdown ([#203](https://github.com/ffflorian/wire-cli/issues/203)) ([942b9b7](https://github.com/ffflorian/wire-cli/commit/942b9b7780993ec1ec2c8f30534ae948f4cb3817))
+
+## [1.4.1](https://github.com/ffflorian/wire-cli/compare/v1.4.0...v1.4.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* Use commanderOptions directly ([61f5ae3](https://github.com/ffflorian/wire-cli/commit/61f5ae3ef2e17b5e70bce20b8d7df9b99ca27b88))
+
 # [1.4.0](https://github.com/ffflorian/wire-cli/compare/v1.3.0...v1.4.0) (2021-02-17)
 
 

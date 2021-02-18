@@ -1,9 +1,9 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
-import {RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
+import {ClientType, RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
 
-import {Cookies, parseCookies, TryFunction} from './util';
+import {Cookies, getLogger, parseCookies, TryFunction} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -16,6 +16,8 @@ export interface Response<T> {
   cookies: Cookies;
   data: T;
 }
+
+const logger = getLogger('APIClient');
 
 export class APIClient {
   private readonly backendURL: string;
@@ -58,11 +60,15 @@ export class APIClient {
     );
   }
 
-  async login(): Promise<Response<TokenData>> {
+  async login(permanent: boolean = false): Promise<Response<TokenData>> {
     const {data: accessTokenData, headers} = await this.tryRequest(() =>
       axios.request({
         baseURL: this.backendURL,
-        data: {email: this.emailAddress, password: this.password},
+        data: {
+          clientType: permanent ? ClientType.TEMPORARY : ClientType.PERMANENT,
+          email: this.emailAddress,
+          password: this.password,
+        },
         method: 'post',
         url: '/login',
       })
@@ -75,7 +81,7 @@ export class APIClient {
     if (cookies.zuid) {
       this.cookieString = `zuid=${cookies.zuid}`;
     } else {
-      console.warn('No `zuid` cookie received from server.');
+      logger.warn('No `zuid` cookie received from server.');
     }
 
     return {cookies, data: accessTokenData};
