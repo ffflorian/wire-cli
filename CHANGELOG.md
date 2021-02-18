@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/ffflorian/wire-cli/compare/v1.5.0...v1.5.1) (2021-02-18)
+
+
+### Bug Fixes
+
+* Use temporary clients ([#202](https://github.com/ffflorian/wire-cli/issues/202)) ([c09d6ea](https://github.com/ffflorian/wire-cli/commit/c09d6eac2bc2c9744479a7b8cd95cf14b4dd9971))
+
 # [1.5.0](https://github.com/ffflorian/wire-cli/compare/v1.4.1...v1.5.0) (2021-02-18)
 
 

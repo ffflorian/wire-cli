@@ -25,7 +25,7 @@ const defaultOptions: CommonOptions = {
   defaultBackendURL: 'https://staging-nginz-https.zinfra.io',
 };
 
-const logger = getLogger('get-client');
+const logger = getLogger('cli');
 
 commander
   .name(name.replace(/^@.+\//, ''))
