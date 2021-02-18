@@ -59,6 +59,9 @@ export async function getClient({
   logger.info(`Getting client with ID "${clientId}" ...`);
   const {data: client} = await apiClient.getClient(clientId);
 
+  logger.info('Logging out ...');
+  await apiClient.logout();
+
   return client;
 }
 
@@ -81,6 +84,9 @@ export async function getAllClients({
 
   logger.info('Getting all clients ...');
   const {data: clients} = await apiClient.getClients();
+
+  logger.info('Logging out ...');
+  await apiClient.logout();
 
   logger.info('Found clients:', clients);
 
