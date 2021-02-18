@@ -55,6 +55,9 @@ export async function getClient({
   console.info(`Getting client with ID "${clientId}" ...`);
   const {data: client} = await apiClient.getClient(clientId);
 
+  console.info('Logging out ...');
+  await apiClient.logout();
+
   return client;
 }
 
@@ -75,6 +78,9 @@ export async function getAllClients({
 
   console.info('Getting all clients ...');
   const {data: clients} = await apiClient.getClients();
+
+  console.info('Logging out ...');
+  await apiClient.logout();
 
   console.info('Found clients:', clients);
 
