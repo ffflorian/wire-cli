@@ -7,7 +7,7 @@ export interface SetNameOptions extends CommonOptions {
   name?: string;
 }
 
-const logger = getLogger('delete-all-clients');
+const logger = getLogger('set-name');
 
 export async function setName({
   defaultBackendURL,

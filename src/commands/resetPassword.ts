@@ -10,7 +10,7 @@ export interface ResetPasswordOptions extends CommonOptions {
   skipInitation?: boolean;
 }
 
-const logger = getLogger('delete-all-clients');
+const logger = getLogger('reset-password');
 
 export async function resetPassword({
   defaultBackendURL,
