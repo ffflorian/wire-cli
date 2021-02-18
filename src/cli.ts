@@ -151,6 +151,7 @@ commander
   .action(() =>
     tryAndExit(() =>
       setAvailabilityStatus({
+        ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
