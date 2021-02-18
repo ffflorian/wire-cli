@@ -90,10 +90,10 @@ commander
     tryAndExit(() =>
       resetPassword({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.parent.backend}),
+        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
         ...(commanderOptions?.continue && {skipInitation: commanderOptions.continue}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.parent.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.parent.email}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
       })
     )
   );
@@ -109,10 +109,10 @@ commander
     tryAndExit(() =>
       getAllClients({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.parent.backend}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.parent.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.parent.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.parent.password}),
+        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions?.password && {password: commanderOptions.password}),
       })
     )
   );
