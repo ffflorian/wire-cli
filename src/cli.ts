@@ -9,7 +9,7 @@ import {resetPassword} from './commands/resetPassword';
 import {setName} from './commands/setName';
 import {getAllClients, updateClient} from './commands/updateOrGetClient';
 import {CommonOptions} from './CommonOptions';
-import {tryAndExit} from './util';
+import {init, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
@@ -45,15 +45,16 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      deleteAllClients({
+    tryAndExit(() => {
+      init();
+      return deleteAllClients({
         ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -66,8 +67,9 @@ commander
   .option('-l, --label <label>', 'specify the new label')
   .option('-t, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      updateClient({
+    tryAndExit(() => {
+      init();
+      return updateClient({
         ...defaultOptions,
         ...(commanderOptions?.clientId && {clientId: commanderOptions.clientId}),
         ...(commanderOptions?.label && {label: commanderOptions.label}),
@@ -75,8 +77,8 @@ commander
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -87,15 +89,16 @@ commander
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .action(() =>
-    tryAndExit(() =>
-      resetPassword({
+    tryAndExit(() => {
+      init();
+      return resetPassword({
         ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: commanderOptions.parent.backend}),
         ...(commanderOptions?.continue && {skipInitation: commanderOptions.continue}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.parent.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.parent.email}),
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -106,15 +109,16 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      getAllClients({
+    tryAndExit(() => {
+      init();
+      return getAllClients({
         ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: commanderOptions.parent.backend}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.parent.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.parent.email}),
         ...(commanderOptions?.password && {password: commanderOptions.parent.password}),
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -126,16 +130,17 @@ commander
   .option('-n, --new-name <name>', 'specify your new name')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      setName({
+    tryAndExit(() => {
+      init();
+      return setName({
         ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.newName && {name: commanderOptions.newName}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-      })
-    )
+      });
+    })
   );
 
 commander.parse(process.argv);
