@@ -3,7 +3,9 @@ import UUID from 'uuidjs';
 
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {getBackendURL, getEmailAddress, getPassword} from '../util';
+import {getLogger, getBackendURL, getEmailAddress, getPassword} from '../util';
+
+const logger = getLogger('set-availability');
 
 export interface SetAvailabilityStatusOptions extends CommonOptions {}
 
@@ -20,7 +22,7 @@ export async function setAvailabilityStatus({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  console.info('Logging in ...');
+  logger.info('Logging in ...');
   await apiClient.login();
 
   const {
@@ -31,7 +33,7 @@ export async function setAvailabilityStatus({
     throw new Error('User is not part of a team on Wire.');
   }
 
-  console.info('Setting availability status ...');
+  logger.info('Setting availability status ...');
 
   const genericMessage = GenericMessage.create({
     availability: new Availability({type: Availability.Type.AVAILABLE}),

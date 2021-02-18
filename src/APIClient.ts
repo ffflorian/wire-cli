@@ -5,7 +5,13 @@ import {RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
 import {Self} from '@wireapp/api-client/src/self';
 import {UserPreKeyBundleMap} from '@wireapp/api-client/src/user';
-import {ClientMismatch, NewOTRMessage, OTRRecipients, UserClients} from '@wireapp/api-client/src/conversation';
+import {
+  ClientMismatch,
+  NewOTRMessage,
+  OTRClientMap,
+  OTRRecipients,
+  UserClients,
+} from '@wireapp/api-client/src/conversation';
 import {Members} from '@wireapp/api-client/src/team';
 import {PreKeyBundle} from '@wireapp/api-client/src/auth';
 
@@ -77,10 +83,10 @@ export class APIClient {
 
   async sendOTRBroadcastMessage(
     sendingClientId: string,
-    recipients: OTRRecipients<string>,
+    recipients: OTRRecipients<Uint8Array>,
     plainTextArray: Uint8Array
   ): Promise<void> {
-    const message: NewOTRMessage<string> = {
+    const message: NewOTRMessage<Uint8Array> = {
       recipients,
       report_missing: Object.keys(recipients),
       sender: sendingClientId,
@@ -96,9 +102,9 @@ export class APIClient {
 
   private async onClientMismatch(
     error: AxiosError,
-    message: NewOTRMessage<string>,
+    message: NewOTRMessage<Uint8Array>,
     plainTextArray: Uint8Array
-  ): Promise<NewOTRMessage<string>> {
+  ): Promise<NewOTRMessage<Uint8Array>> {
     if (error.response?.status === HTTP_STATUS.PRECONDITION_FAILED) {
       const {missing, deleted}: {deleted: UserClients; missing: UserClients} = error.response.data;
 
@@ -191,9 +197,24 @@ export class APIClient {
     );
   }
 
-  async postBroadcastMessage(messageData: NewOTRMessage<string>): Promise<ClientMismatch> {
+  async postBroadcastMessage(payload: NewOTRMessage<Uint8Array>): Promise<ClientMismatch> {
+    const stringPayload: NewOTRMessage<string> = {
+      ...payload,
+      data: payload.data ? Buffer.from(payload.data).toString('base64') : undefined,
+      recipients: Object.fromEntries(
+        Object.entries(payload.recipients).map(([userId, otrClientMap]) => {
+          const otrClientMapWithBase64: OTRClientMap<string> = Object.fromEntries(
+            Object.entries(otrClientMap).map(([clientId, payload]) => {
+              return [clientId, Buffer.from(payload).toString('base64')];
+            })
+          );
+          return [userId, otrClientMapWithBase64];
+        })
+      ),
+    };
+
     const {data} = await this.request({
-      data: messageData,
+      data: stringPayload,
       method: 'post',
       url: '/broadcast/otr/messages',
     });
