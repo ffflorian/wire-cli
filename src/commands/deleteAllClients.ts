@@ -1,8 +1,10 @@
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {getBackendURL, getEmailAddress, getPassword, pluralize} from '../util';
+import {getBackendURL, getEmailAddress, getLogger, getPassword, pluralize} from '../util';
 
 export interface DeleteAllClientsOptions extends CommonOptions {}
+
+const logger = getLogger('delete-all-clients');
 
 export async function deleteAllClients({
   defaultBackendURL,
@@ -17,20 +19,20 @@ export async function deleteAllClients({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  console.info('Logging in ...');
+  logger.info('Logging in ...');
   await apiClient.login();
 
-  console.info('Getting all clients ...');
+  logger.info('Getting all clients ...');
   const {data: clients} = await apiClient.getClients();
-  console.info(`Found ${clients.length} ${pluralize('client', clients.length)}.`);
+  logger.info(`Found ${clients.length} ${pluralize('client', clients.length)}.`);
 
   await Promise.all(
     clients.map(client => {
-      console.info(`Deleting client with ID "${client.id}" ...`);
+      logger.info(`Deleting client with ID "${client.id}" ...`);
       return dryRun ? undefined : apiClient.deleteClient(client.id);
     })
   );
 
-  console.info('Logging out ...');
+  logger.info('Logging out ...');
   await apiClient.logout();
 }
