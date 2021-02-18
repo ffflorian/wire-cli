@@ -1,11 +1,13 @@
 import prompts from 'prompts';
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {getBackendURL, getEmailAddress, getPassword} from '../util';
+import {getBackendURL, getEmailAddress, getLogger, getPassword} from '../util';
 
 export interface SetNameOptions extends CommonOptions {
   name?: string;
 }
+
+const logger = getLogger('delete-all-clients');
 
 export async function setName({
   defaultBackendURL,
@@ -21,7 +23,7 @@ export async function setName({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  console.info('Logging in ...');
+  logger.info('Logging in ...');
 
   await apiClient.login();
 
@@ -35,7 +37,7 @@ export async function setName({
     name = response.newName as string;
   }
 
-  console.info('Setting new name ...');
+  logger.info('Setting new name ...');
 
   if (!dryRun) {
     await apiClient.putSelf({name});

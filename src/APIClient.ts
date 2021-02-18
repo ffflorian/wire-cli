@@ -3,7 +3,7 @@ import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
 
-import {Cookies, parseCookies, TryFunction} from './util';
+import {Cookies, getLogger, parseCookies, TryFunction} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -16,6 +16,8 @@ export interface Response<T> {
   cookies: Cookies;
   data: T;
 }
+
+const logger = getLogger('APIClient');
 
 export class APIClient {
   private readonly backendURL: string;
@@ -75,7 +77,7 @@ export class APIClient {
     if (cookies.zuid) {
       this.cookieString = `zuid=${cookies.zuid}`;
     } else {
-      console.warn('No `zuid` cookie received from server.');
+      logger.warn('No `zuid` cookie received from server.');
     }
 
     return {cookies, data: accessTokenData};

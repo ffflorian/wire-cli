@@ -2,7 +2,7 @@ import {RegisteredClient} from '@wireapp/api-client/src/client/';
 
 import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
-import {getBackendURL, getEmailAddress, getPassword} from '../util';
+import {getBackendURL, getEmailAddress, getLogger, getPassword} from '../util';
 
 export interface GetClientOptions extends CommonOptions {
   clientId: string;
@@ -21,16 +21,18 @@ export async function updateClient({
   label,
   password,
 }: UpdateClientOptions): Promise<void> {
+  const logger = getLogger('set-client-label');
+
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  console.info('Logging in ...');
+  logger.info('Logging in ...');
   await apiClient.login();
 
-  console.info(`Updating client with ID "${clientId}" ...`);
+  logger.info(`Updating client with ID "${clientId}" ...`);
   if (!dryRun) {
     await apiClient.putClient(clientId, {label});
   }
@@ -43,16 +45,18 @@ export async function getClient({
   emailAddress,
   password,
 }: GetClientOptions): Promise<RegisteredClient> {
+  const logger = getLogger('get-client');
+
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  console.info('Logging in ...');
+  logger.info('Logging in ...');
   await apiClient.login();
 
-  console.info(`Getting client with ID "${clientId}" ...`);
+  logger.info(`Getting client with ID "${clientId}" ...`);
   const {data: client} = await apiClient.getClient(clientId);
 
   return client;
@@ -64,19 +68,21 @@ export async function getAllClients({
   emailAddress,
   password,
 }: CommonOptions): Promise<RegisteredClient[]> {
+  const logger = getLogger('get-all-clients');
+
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  console.info('Logging in ...');
+  logger.info('Logging in ...');
   await apiClient.login();
 
-  console.info('Getting all clients ...');
+  logger.info('Getting all clients ...');
   const {data: clients} = await apiClient.getClients();
 
-  console.info('Found clients:', clients);
+  logger.info('Found clients:', clients);
 
   return clients;
 }
