@@ -10,7 +10,7 @@ import {setAvailabilityStatus} from './commands/setAvailabilityStatus';
 import {setName} from './commands/setName';
 import {getAllClients, updateClient} from './commands/updateOrGetClient';
 import {CommonOptions} from './CommonOptions';
-import {tryAndExit} from './util';
+import {getLogger, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
@@ -25,6 +25,8 @@ const defaultOptions: CommonOptions = {
   defaultBackendURL: 'https://staging-nginz-https.zinfra.io',
 };
 
+const logger = getLogger('get-client');
+
 commander
   .name(name.replace(/^@.+\//, ''))
   .description(description)
@@ -34,7 +36,7 @@ commander
   .option('-p, --password <password>', 'specify your Wire password')
   .version(version, '-v, --version')
   .on('command:*', args => {
-    console.error(`\n  error: invalid command \`${args[0]}'\n`);
+    logger.error(`\n  error: invalid command \`${args[0]}'\n`);
     process.exit(1);
   });
 
@@ -91,10 +93,10 @@ commander
     tryAndExit(() =>
       resetPassword({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.parent.backend}),
+        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
         ...(commanderOptions?.continue && {skipInitation: commanderOptions.continue}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.parent.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.parent.email}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
       })
     )
   );
@@ -110,10 +112,10 @@ commander
     tryAndExit(() =>
       getAllClients({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.parent.backend}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.parent.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.parent.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.parent.password}),
+        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions?.password && {password: commanderOptions.password}),
       })
     )
   );

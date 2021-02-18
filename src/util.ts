@@ -1,21 +1,11 @@
 import * as http from 'http';
 import prompts from 'prompts';
-
-export interface RequestOptions {
-  data?: any;
-  headers?: Record<string, string>;
-  method?: string;
-  url: string;
-  wantedStatusCode?: number;
-}
-
-export interface ResponseData {
-  cookies: Record<string, string>;
-  rawData: string;
-}
+import logdown = require('logdown');
 
 export type Cookies = Record<string, string>;
 export type TryFunction = () => any | Promise<any>;
+
+const logger = getLogger('get-client');
 
 export function parseCookies(rawHeaders: http.IncomingHttpHeaders): Cookies {
   const cookies: Cookies = {};
@@ -57,7 +47,7 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
     backendURL = `https://${backendURL}`;
   }
 
-  console.info(`Using "${backendURL}" as backend.`);
+  logger.info(`Using "${backendURL}" as backend.`);
 
   return backendURL;
 }
@@ -76,7 +66,7 @@ export async function getEmailAddress(): Promise<string> {
     }
   );
 
-  console.info(`Using "${emailAddress}" as email address.`);
+  logger.info(`Using "${emailAddress}" as email address.`);
 
   return emailAddress;
 }
@@ -105,7 +95,7 @@ export async function tryAndExit(fn: TryFunction): Promise<never> {
   try {
     await fn();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     exitCode = 1;
   }
 
@@ -118,4 +108,10 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
     chunks.push(array.slice(index, index + chunkSize));
   }
   return chunks;
+}
+
+export function getLogger(prefix: string): logdown.Logger {
+  const logger = logdown(prefix, {logger: console, markdown: false});
+  logger.state.isEnabled = true;
+  return logger;
 }

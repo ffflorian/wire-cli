@@ -10,7 +10,7 @@ import {Members} from '@wireapp/api-client/src/team';
 import {PreKeyBundle} from '@wireapp/api-client/src/auth';
 
 import {encryptMessage} from './crypto';
-import {chunk, Cookies, parseCookies, TryFunction} from './util';
+import {chunk, getLogger, Cookies, parseCookies, TryFunction} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -23,6 +23,8 @@ export interface Response<T> {
   cookies: Cookies;
   data: T;
 }
+
+const logger = getLogger('APIClient');
 
 export class APIClient {
   private readonly backendURL: string;
@@ -230,7 +232,7 @@ export class APIClient {
     if (cookies.zuid) {
       this.cookieString = `zuid=${cookies.zuid}`;
     } else {
-      console.warn('No `zuid` cookie received from server.');
+      logger.warn('No `zuid` cookie received from server.');
     }
 
     return {cookies, data: accessTokenData};
