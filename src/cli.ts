@@ -9,7 +9,7 @@ import {resetPassword} from './commands/resetPassword';
 import {setName} from './commands/setName';
 import {getAllClients, updateClient} from './commands/updateOrGetClient';
 import {CommonOptions} from './CommonOptions';
-import {tryAndExit} from './util';
+import {getLogger, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
@@ -24,6 +24,8 @@ const defaultOptions: CommonOptions = {
   defaultBackendURL: 'https://staging-nginz-https.zinfra.io',
 };
 
+const logger = getLogger('get-client');
+
 commander
   .name(name.replace(/^@.+\//, ''))
   .description(description)
@@ -33,7 +35,7 @@ commander
   .option('-p, --password <password>', 'specify your Wire password')
   .version(version, '-v, --version')
   .on('command:*', args => {
-    console.error(`\n  error: invalid command \`${args[0]}'\n`);
+    logger.error(`\n  error: invalid command \`${args[0]}'\n`);
     process.exit(1);
   });
 
