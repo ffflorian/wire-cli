@@ -1,14 +1,16 @@
-#!/usr/bin/env node
-
 import commander from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {deleteAllClients} from './commands/deleteAllClients';
-import {resetPassword} from './commands/resetPassword';
-import {setAvailabilityStatus} from './commands/setAvailabilityStatus';
-import {setName} from './commands/setName';
-import {getAllClients, updateClient} from './commands/updateOrGetClient';
+import {
+  chat,
+  deleteAllClients,
+  getAllClients,
+  resetPassword,
+  setAvailabilityStatus,
+  setName,
+  updateClient,
+} from './commands/';
 import {CommonOptions} from './CommonOptions';
 import {getLogger, tryAndExit} from './util';
 
@@ -160,6 +162,23 @@ commander
         ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
       })
     )
+  );
+
+commander
+  .command('chat')
+  .description('chat with others')
+  .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .action(() =>
+    chat({
+      ...defaultOptions,
+      ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+      ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+      ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+      ...(commanderOptions?.password && {password: commanderOptions.password}),
+    })
   );
 
 commander.parse(process.argv);
