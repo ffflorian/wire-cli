@@ -2,8 +2,13 @@ import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {ClientType, RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
+import {Self} from '@wireapp/api-client/src/self';
+import {UserPreKeyBundleMap} from '@wireapp/api-client/src/user';
+import {UserClients} from '@wireapp/api-client/src/conversation';
+import {Members} from '@wireapp/api-client/src/team';
+import {PreKeyBundle} from '@wireapp/api-client/src/auth';
 
-import {Cookies, getLogger, parseCookies, TryFunction} from './util';
+import {getLogger, Cookies, parseCookies, TryFunction} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -45,7 +50,35 @@ export class APIClient {
     );
   }
 
-  async completePasswordReset(resetCode: string, newPassword: string) {
+  async getUserPreKeys(userId: string): Promise<Response<PreKeyBundle>> {
+    const {data, headers} = await this.request({
+      method: 'get',
+      url: `/users/${userId}/prekeys`,
+    });
+
+    return {cookies: parseCookies(headers), data};
+  }
+
+  async getAllTeamMembers(teamId: string): Promise<Response<Members>> {
+    const {data, headers} = await this.request({
+      method: 'get',
+      url: `/teams/${teamId}/members`,
+    });
+
+    return {cookies: parseCookies(headers), data};
+  }
+
+  async postMultiPreKeyBundlesChunk(userClientMap: UserClients): Promise<UserPreKeyBundleMap> {
+    const {data} = await this.request({
+      data: userClientMap,
+      method: 'post',
+      url: '/users/prekeys',
+    });
+
+    return data;
+  }
+
+  async completePasswordReset(resetCode: string, newPassword: string): Promise<void> {
     await this.request(
       {
         data: {
@@ -137,6 +170,15 @@ export class APIClient {
       method: 'put',
       url: '/self',
     });
+  }
+
+  async getSelf(): Promise<Response<Self>> {
+    const {data, headers} = await this.request({
+      method: 'get',
+      url: 'self',
+    });
+
+    return {cookies: parseCookies(headers), data};
   }
 
   private checkCookieString(): void {

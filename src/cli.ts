@@ -6,6 +6,7 @@ import * as path from 'path';
 
 import {deleteAllClients} from './commands/deleteAllClients';
 import {resetPassword} from './commands/resetPassword';
+import {setAvailabilityStatus} from './commands/setAvailabilityStatus';
 import {setName} from './commands/setName';
 import {getAllClients, updateClient} from './commands/updateOrGetClient';
 import {CommonOptions} from './CommonOptions';
@@ -136,6 +137,27 @@ commander
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.newName && {name: commanderOptions.newName}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
+      })
+    )
+  );
+
+commander
+  .command('set-availability')
+  .description('set your availability status')
+  .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-s, --status <number>', 'specify the status type to be set')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .action(localOptions =>
+    tryAndExit(() =>
+      setAvailabilityStatus({
+        ...defaultOptions,
+        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
       })
     )
   );

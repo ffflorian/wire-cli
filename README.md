@@ -35,6 +35,7 @@ Commands:
   reset-password [options]      reset your password
   get-all-clients [options]     get all clients data
   set-name [options]            set your name
+  set-availability [options]    set your availability status
   help [command]                display help for command
 ```
 
