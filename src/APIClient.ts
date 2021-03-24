@@ -87,7 +87,7 @@ export class APIClient {
           password: newPassword,
         },
         method: 'post',
-        url: '/password-reset',
+        url: '/password-reset/complete',
       },
       false
     );

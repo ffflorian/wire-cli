@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/ffflorian/wire-cli/compare/v1.5.2...v1.5.3) (2021-02-19)
+
+
+### Bug Fixes
+
+* Complete password reset URL ([af1ee1c](https://github.com/ffflorian/wire-cli/commit/af1ee1ceeb54dbc2cccdfe508d916526b3df76da))
+
 ## [1.5.2](https://github.com/ffflorian/wire-cli/compare/v1.5.1...v1.5.2) (2021-02-18)
 
 
