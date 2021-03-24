@@ -1,9 +1,8 @@
 import {Availability} from '@wireapp/protocol-messaging';
-import prompts from 'prompts';
 import {Account} from '@wireapp/core';
 import {APIClient} from '@wireapp/api-client';
 import {ClientType} from '@wireapp/api-client/src/client/';
-import {MemoryEngine} from '@wireapp/store-engine';
+import prompts from 'prompts';
 
 import {CommonOptions} from '../CommonOptions';
 import {getLogger, getBackendURL, getEmailAddress, getPassword} from '../util';
@@ -62,9 +61,7 @@ export async function setAvailabilityStatus({
     },
   });
 
-  const engine = new MemoryEngine();
-
-  const account = new Account(apiClient, () => Promise.resolve(engine));
+  const account = new Account(apiClient);
 
   logger.info('Logging in ...');
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
