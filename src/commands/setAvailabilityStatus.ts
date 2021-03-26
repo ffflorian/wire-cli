@@ -5,23 +5,28 @@ import {ClientType} from '@wireapp/api-client/src/client/';
 import prompts from 'prompts';
 
 import {CommonOptions} from '../CommonOptions';
-import {getLogger, getBackendURL, getEmailAddress, getPassword} from '../util';
+import {getLogger, getBackendURL, getEmailAddress, getPassword, getWebSocketURL} from '../util';
 
 const logger = getLogger('set-availability');
 
 export interface SetAvailabilityStatusOptions extends CommonOptions {
+  defaultWebSocketURL: string;
   statusType?: Availability.Type;
+  webSocketURL?: string;
 }
 
 export async function setAvailabilityStatus({
   defaultBackendURL,
+  defaultWebSocketURL,
   dryRun,
   emailAddress,
   backendURL,
   password,
   statusType,
+  webSocketURL,
 }: SetAvailabilityStatusOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
+  webSocketURL ||= await getWebSocketURL(defaultWebSocketURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
   statusType ??= (
@@ -57,7 +62,7 @@ export async function setAvailabilityStatus({
     urls: {
       name: 'backend',
       rest: backendURL,
-      ws: `wss://${backendURL.replace(/https?:\/\//, '')}`,
+      ws: webSocketURL,
     },
   });
 

@@ -42,14 +42,33 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
   );
 
   backendURL ||= defaultBackendURL;
-
-  if (!backendURL.startsWith('http')) {
-    backendURL = `https://${backendURL}`;
-  }
+  backendURL = addHTTPS(backendURL);
 
   logger.info(`Using "${backendURL}" as backend.`);
 
   return backendURL;
+}
+
+export async function getWebSocketURL(defaultWebSocketURL?: string): Promise<string> {
+  let {webSocketURL} = await prompts(
+    {
+      initial: defaultWebSocketURL,
+      message: 'Enter the webSocket URL',
+      name: 'webSocketURL',
+      type: 'text',
+      validate: input => input.match(/(https?)?.+\..+/),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  webSocketURL ||= defaultWebSocketURL;
+  webSocketURL = addWSS(webSocketURL);
+
+  logger.info(`Using "${webSocketURL}" as webSocket.`);
+
+  return webSocketURL;
 }
 
 export async function getEmailAddress(): Promise<string> {
@@ -106,4 +125,12 @@ export function getLogger(moduleName: string): logdown.Logger {
   const logger = logdown(`wire-cli/${moduleName}`, {logger: console, markdown: false});
   logger.state.isEnabled = true;
   return logger;
+}
+
+export function addHTTPS(url: string): string {
+  return `https://${url.replace(/^https?:\/\//, '')}`;
+}
+
+export function addWSS(url: string): string {
+  return `wss://${url.replace(/^wss?:\/\//, '')}`;
 }
