@@ -15,31 +15,41 @@ import {WebSocketClient} from '@wireapp/api-client/src/tcp';
 import type {Config} from '@wireapp/api-client/src/Config';
 
 import {CommonOptions} from '../CommonOptions';
-import {getLogger, getBackendURL, getEmailAddress, getPassword} from '../util';
+import {getLogger, getBackendURL, getEmailAddress, getPassword, getWebSocketURL} from '../util';
 
 const logger = getLogger('chat');
 
-export interface ChatOptions extends CommonOptions {}
+export interface ChatOptions extends CommonOptions {
+  defaultWebSocketURL: string;
+  webSocketURL?: string;
+}
 
 async function createContext(storeEngine: CRUDEngine, apiClient: APIClient, loginData: LoginData): Promise<Context> {
   try {
     const {expiration, zuid} = await storeEngine.read<Cookie>(AUTH_TABLE_NAME, AUTH_COOKIE_KEY);
     const cookie = new Cookie(zuid, expiration);
     logger.log(`Found cookie "${zuid}".`);
-    logger.log('Logging in with EXISTING cookie...');
+    logger.log('Logging in with existing cookie ...');
     const context = await apiClient.init(loginData.clientType, cookie);
     return context;
   } catch (error) {
-    logger.log(`Failed to use existing cookie.`, error);
-    logger.log(`Logging in with NEW cookie...`);
+    logger.log(`Logging in with new cookie ...`);
     return apiClient.login(loginData);
   }
 }
 
-export async function chat({defaultBackendURL, emailAddress, backendURL, password}: ChatOptions): Promise<void> {
+export async function chat({
+  defaultBackendURL,
+  defaultWebSocketURL,
+  emailAddress,
+  backendURL,
+  password,
+  webSocketURL,
+}: ChatOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
+  webSocketURL ||= await getWebSocketURL(defaultWebSocketURL);
 
   const storeEngine = new MemoryEngine();
   await storeEngine.init('wire-cli');
@@ -48,7 +58,7 @@ export async function chat({defaultBackendURL, emailAddress, backendURL, passwor
     urls: {
       name: 'backend',
       rest: backendURL,
-      ws: `wss://${backendURL.replace(/https?:\/\//, '')}`,
+      ws: webSocketURL,
     },
   };
 
@@ -67,12 +77,15 @@ export async function chat({defaultBackendURL, emailAddress, backendURL, passwor
     }
   });
 
-  const context = await createContext(storeEngine, apiClient, {
+  await createContext(storeEngine, apiClient, {
     clientType: ClientType.TEMPORARY,
     email: emailAddress,
     password,
   });
-  logger.log(`Got self user with ID "${context.userId}".`);
+
+  const self = await apiClient.self.api.getSelf();
+
+  logger.log(`Got self user with ID "${self.id}" and name "${self.name}".`);
 
   const webSocketClient = await apiClient.connect();
 

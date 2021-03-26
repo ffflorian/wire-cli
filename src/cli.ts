@@ -12,7 +12,7 @@ import {
   updateClient,
 } from './commands/';
 import {CommonOptions} from './CommonOptions';
-import {addHTTPS, getLogger, tryAndExit} from './util';
+import {addHTTPS, addWSS, getLogger, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
@@ -151,7 +151,7 @@ commander
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-s, --status <number>', 'specify the status type to be set')
   .option('-p, --password <password>', 'specify your Wire password')
-  .option('-w, --websocket <URL>', 'specify the Wire websocket URL (e.g. "staging-nginz-ssl.zinfra.io")')
+  .option('-w, --websocket <URL>', 'specify the Wire WebSocket URL (e.g. "staging-nginz-ssl.zinfra.io")')
   .action(localOptions =>
     tryAndExit(() =>
       setAvailabilityStatus({
@@ -161,7 +161,7 @@ commander
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(localOptions?.websocket && {webSocketURL: localOptions.websocket}),
+        ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
         ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
       })
     )
@@ -174,13 +174,16 @@ commander
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(() =>
+  .option('-w, --websocket <URL>', 'specify the Wire WebSocket URL (e.g. "staging-nginz-ssl.zinfra.io")')
+  .action(localOptions =>
     chat({
       ...defaultOptions,
-      ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+      defaultWebSocketURL: 'wss://staging-nginz-ssl.zinfra.io',
+      ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
       ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
       ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
       ...(commanderOptions?.password && {password: commanderOptions.password}),
+      ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
     })
   );
 
