@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/ffflorian/wire-cli/compare/v1.6.1...v1.6.2) (2021-03-26)
+
+
+### Bug Fixes
+
+* Add default WebSocket URL ([f105a40](https://github.com/ffflorian/wire-cli/commit/f105a4085dec1b9668f32b0854f4880e75a804ce))
+
 ## [1.6.1](https://github.com/ffflorian/wire-cli/compare/v1.6.0...v1.6.1) (2021-03-26)
 
 
