@@ -12,7 +12,7 @@ import {
   updateClient,
 } from './commands/';
 import {CommonOptions} from './CommonOptions';
-import {getLogger, tryAndExit} from './util';
+import {addHTTPS, getLogger, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
@@ -53,7 +53,7 @@ commander
     tryAndExit(() =>
       deleteAllClients({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
@@ -76,7 +76,7 @@ commander
         ...defaultOptions,
         ...(commanderOptions?.clientId && {clientId: commanderOptions.clientId}),
         ...(commanderOptions?.label && {label: commanderOptions.label}),
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
@@ -95,7 +95,7 @@ commander
     tryAndExit(() =>
       resetPassword({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.continue && {skipInitation: commanderOptions.continue}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
@@ -114,7 +114,7 @@ commander
     tryAndExit(() =>
       getAllClients({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
@@ -134,7 +134,7 @@ commander
     tryAndExit(() =>
       setName({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.newName && {name: commanderOptions.newName}),
@@ -151,14 +151,17 @@ commander
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-s, --status <number>', 'specify the status type to be set')
   .option('-p, --password <password>', 'specify your Wire password')
+  .option('-w, --websocket <URL>', 'specify the Wire websocket URL (e.g. "staging-nginz-ssl.zinfra.io")')
   .action(localOptions =>
     tryAndExit(() =>
       setAvailabilityStatus({
         ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: commanderOptions.backend}),
+        defaultWebSocketURL: 'wss://staging-nginz-ssl.zinfra.io',
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.websocket && {webSocketURL: localOptions.websocket}),
         ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
       })
     )
