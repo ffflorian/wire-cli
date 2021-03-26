@@ -1,16 +1,17 @@
-#!/usr/bin/env node
-
 import commander from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {deleteAllClients} from './commands/deleteAllClients';
-import {resetPassword} from './commands/resetPassword';
-import {setAvailabilityStatus} from './commands/setAvailabilityStatus';
-import {setName} from './commands/setName';
-import {getAllClients, updateClient} from './commands/updateOrGetClient';
+import {
+  deleteAllClients,
+  getAllClients,
+  resetPassword,
+  setAvailabilityStatus,
+  setName,
+  updateClient,
+} from './commands/';
 import {CommonOptions} from './CommonOptions';
-import {addHTTPS, getLogger, tryAndExit} from './util';
+import {addHTTPS, addWSS, getLogger, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
 const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
@@ -20,6 +21,7 @@ const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
 const packageJson = fs.readFileSync(packageJsonPath, 'utf-8');
 const {description, name, version} = JSON.parse(packageJson);
 const commanderOptions = commander.opts();
+const defaultWebSocketURL = 'wss://staging-nginz-ssl.zinfra.io';
 
 const defaultOptions: CommonOptions = {
   defaultBackendURL: 'https://staging-nginz-https.zinfra.io',
@@ -144,22 +146,22 @@ commander
 commander
   .command('set-availability')
   .description('set your availability status')
-  .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
+  .option(`-b, --backend <URL>', 'specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-s, --status <number>', 'specify the status type to be set')
   .option('-p, --password <password>', 'specify your Wire password')
-  .option('-w, --websocket <URL>', 'specify the Wire websocket URL (e.g. "staging-nginz-ssl.zinfra.io")')
+  .option(`-w, --websocket <URL>', 'specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
   .action(localOptions =>
     tryAndExit(() =>
       setAvailabilityStatus({
+        defaultWebSocketURL,
         ...defaultOptions,
-        defaultWebSocketURL: 'wss://staging-nginz-ssl.zinfra.io',
         ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(localOptions?.websocket && {webSocketURL: localOptions.websocket}),
+        ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
         ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
       })
     )
