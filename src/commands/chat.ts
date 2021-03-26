@@ -1,5 +1,4 @@
 import {CRUDEngine, MemoryEngine} from '@wireapp/store-engine';
-
 import {APIClient} from '@wireapp/api-client/src/APIClient';
 import {
   AUTH_ACCESS_TOKEN_KEY,
@@ -13,15 +12,48 @@ import {
 import {ClientType} from '@wireapp/api-client/src/client';
 import {WebSocketClient} from '@wireapp/api-client/src/tcp';
 import type {Config} from '@wireapp/api-client/src/Config';
+import type {Notification} from '@wireapp/api-client/src/notification/';
+import prompts from 'prompts';
 
 import {CommonOptions} from '../CommonOptions';
 import {getLogger, getBackendURL, getEmailAddress, getPassword, getWebSocketURL} from '../util';
 
 const logger = getLogger('chat');
+let isSelecting = false;
+let selectedConversation: {id: string; name: string} | null = null;
+const missedNotifications: Notification[] = [];
 
 export interface ChatOptions extends CommonOptions {
   defaultWebSocketURL: string;
   webSocketURL?: string;
+}
+
+function startSelecting(): void {
+  isSelecting = true;
+}
+
+async function stopSelecting(newSelectedConv: {id: string; name: string} | null): Promise<void> {
+  isSelecting = false;
+  if (newSelectedConv) {
+    selectedConversation = newSelectedConv;
+  }
+  for (const missedNotification of missedNotifications) {
+    await displayNotification(missedNotification);
+  }
+
+  logger.info(`Selected conversation: ${selectedConversation?.name || 'none'}`);
+}
+
+async function displayNotification(notification: Notification): Promise<void> {
+  const {choice}: {choice: boolean} = await prompts({
+    message: `Message from ${(notification.payload[0] as any).from}. Read?`,
+    name: 'choice',
+    type: 'confirm',
+  });
+
+  if (choice === true) {
+    logger.info('payload data: ', (notification.payload[0] as any).data);
+  }
 }
 
 async function createContext(storeEngine: CRUDEngine, apiClient: APIClient, loginData: LoginData): Promise<Context> {
@@ -89,7 +121,29 @@ export async function chat({
 
   const webSocketClient = await apiClient.connect();
 
-  webSocketClient.on(WebSocketClient.TOPIC.ON_MESSAGE, notification => {
-    logger.log('Received notification via WebSocket', notification);
+  webSocketClient.on(WebSocketClient.TOPIC.ON_MESSAGE, async notification => {
+    if (isSelecting) {
+      missedNotifications.push(notification);
+    } else {
+      await displayNotification(notification);
+    }
   });
+
+  const conversations = await apiClient.conversation.api.getAllConversations();
+
+  const choices: prompts.Choice[] = conversations
+    .filter(conv => !!conv.name)
+    .sort((convA, convB) => convA.name.localeCompare(convB.name))
+    .map(conv => ({title: conv.name, value: conv.id}));
+
+  startSelecting();
+  const {conversationID}: {conversationID: string} = await prompts({
+    choices,
+    message: 'Select a conversation',
+    name: 'conversationID',
+    type: 'select',
+  });
+
+  const conversationName = conversations.find(conv => conv.id === conversationID)?.name || '(unknown)';
+  await stopSelecting({id: conversationID, name: conversationName});
 }
