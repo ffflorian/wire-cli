@@ -13,7 +13,7 @@
   },
   "description": "A Wire CLI.",
   "devDependencies": {
-    "@ffflorian/eslint-config": "0.6.2",
+    "@ffflorian/eslint-config": "0.8.1",
     "@ffflorian/prettier-config": "0.1.2",
     "@ffflorian/semantic-release-config": "0.5.0",
     "@semantic-release/changelog": "5.0.1",
@@ -34,6 +34,7 @@
     "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-plugin-sort-keys-fix": "1.1.1",
     "eslint-plugin-typescript-sort-keys": "1.5.0",
+    "eslint-plugin-unused-imports": "1.1.1",
     "husky": "4.3.8",
     "jasmine": "3.7.0",
     "lint-staged": "10.5.4",

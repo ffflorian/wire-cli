@@ -194,7 +194,7 @@ export class APIClient {
   }
 
   private request<T>(config: AxiosRequestConfig, accessTokenNeeded?: boolean, getErrorCode?: boolean): Promise<T>;
-  private request<T>(
+  private request(
     config: AxiosRequestConfig,
     accessTokenNeeded: boolean,
     getErrorCode: true
@@ -219,7 +219,7 @@ export class APIClient {
     return this.tryRequest(() => axios.request(config), getErrorCode);
   }
 
-  private async tryRequest<T>(fn: TryFunction, getErrorCode: true): Promise<{errorCode: HTTP_STATUS}>;
+  private async tryRequest(fn: TryFunction, getErrorCode: true): Promise<{errorCode: HTTP_STATUS}>;
   private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T>;
   private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T | {errorCode: HTTP_STATUS}> {
     try {
