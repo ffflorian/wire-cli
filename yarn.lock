@@ -484,10 +484,10 @@
   resolved "https://registry.npmjs.org/@types/platform/-/platform-1.3.3.tgz#a3d23941770d320e2c4312516a442ab35210d019"
   integrity sha512-1fuOulBHWIxAPLBtLms+UtbeRDt6rL7gP5R+Yugfzdg+poCLxXqXTE8i+FpYeiytGRLUEtnFkjsY/j+usbQBqw==
 
-"@types/prompts@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.npmjs.org/@types/prompts/-/prompts-2.0.9.tgz#19f419310eaa224a520476b19d4183f6a2b3bd8f"
-  integrity sha512-TORZP+FSjTYMWwKadftmqEn6bziN5RnfygehByGsjxoK5ydnClddtv6GikGWPvCm24oI+YBwck5WDxIIyNxUrA==
+"@types/prompts@2.0.10":
+  version "2.0.10"
+  resolved "https://registry.npmjs.org/@types/prompts/-/prompts-2.0.10.tgz#48cf7b5a5bf31723beb804f3927e510af1a96a27"
+  integrity sha512-W3PEl3l4vmxdgfY6LUG7ysh+mLJOTOFYmSpiLe6MCo1OdEm8b5s6ZJfuTQgEpYNwcMiiaRzJespPS5Py2tqLlQ==
   dependencies:
     "@types/node" "*"
 
