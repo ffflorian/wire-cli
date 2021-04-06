@@ -7,8 +7,8 @@ export interface DeleteAllClientsOptions extends CommonOptions {}
 const logger = getLogger('delete-all-clients');
 
 export async function deleteAllClients({
-  defaultBackendURL,
   backendURL,
+  defaultBackendURL,
   dryRun,
   emailAddress,
   password,

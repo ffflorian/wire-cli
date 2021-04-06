@@ -71,6 +71,36 @@ export async function getWebSocketURL(defaultWebSocketURL?: string): Promise<str
   return webSocketURL;
 }
 
+export async function getConversationID(): Promise<string> {
+  const {conversationID} = await prompts(
+    {
+      message: 'Enter the conversation ID',
+      name: 'conversationID',
+      type: 'text',
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  return conversationID;
+}
+
+export async function getMessageID(): Promise<string> {
+  const {messageID} = await prompts(
+    {
+      message: 'Enter the message ID',
+      name: 'messageID',
+      type: 'text',
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  return messageID;
+}
+
 export async function getEmailAddress(): Promise<string> {
   const {emailAddress} = await prompts(
     {

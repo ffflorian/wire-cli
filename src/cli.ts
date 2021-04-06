@@ -6,6 +6,7 @@ import {
   deleteAllClients,
   getAllClients,
   resetPassword,
+  sendMessage,
   setAvailabilityStatus,
   setName,
   updateClient,
@@ -146,7 +147,7 @@ commander
 commander
   .command('set-availability')
   .description('set your availability status')
-  .option(`-b, --backend <URL>', 'specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-s, --status <number>', 'specify the status type to be set')
@@ -163,6 +164,54 @@ commander
         ...(commanderOptions?.password && {password: commanderOptions.password}),
         ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
         ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
+      })
+    )
+  );
+
+commander
+  .command('send')
+  .description('send a message')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .option(`-w, --websocket <URL>', 'specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
+  .option('-m, --message <text>', 'specify the message to be sent')
+  .action(localOptions =>
+    tryAndExit(() =>
+      sendMessage({
+        defaultWebSocketURL,
+        ...defaultOptions,
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
+        ...(typeof localOptions?.message && {message: localOptions.message}),
+      })
+    )
+  );
+
+commander
+  .command('delete')
+  .description('delete a message')
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .option(`-w, --websocket <URL>', 'specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
+  .option('-m, --message <id>', 'specify the message ID to be deleted')
+  .action(localOptions =>
+    tryAndExit(() =>
+      setAvailabilityStatus({
+        defaultWebSocketURL,
+        ...defaultOptions,
+        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
+        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+        ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
+        ...(typeof localOptions?.messageID && {messageID: localOptions.messageID}),
       })
     )
   );

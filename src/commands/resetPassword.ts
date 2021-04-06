@@ -13,11 +13,11 @@ export interface ResetPasswordOptions extends CommonOptions {
 const logger = getLogger('reset-password');
 
 export async function resetPassword({
+  backendURL,
   defaultBackendURL,
-  skipInitation,
   dryRun,
   emailAddress,
-  backendURL,
+  skipInitation,
 }: ResetPasswordOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
