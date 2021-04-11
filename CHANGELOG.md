@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/ffflorian/wire-cli/compare/v1.6.2...v1.6.3) (2021-04-11)
+
+
+### Bug Fixes
+
+* add shebang to CLI ([fb09fad](https://github.com/ffflorian/wire-cli/commit/fb09fad4ce7524c94c118a5631979a552129755c))
+
 ## [1.6.2](https://github.com/ffflorian/wire-cli/compare/v1.6.1...v1.6.2) (2021-03-26)
 
 
