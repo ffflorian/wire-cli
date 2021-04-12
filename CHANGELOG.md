@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/ffflorian/wire-cli/compare/v1.6.3...v1.6.4) (2021-04-12)
+
+
+### Bug Fixes
+
+* Availability status options ([2f83858](https://github.com/ffflorian/wire-cli/commit/2f8385861e359c407c623fd86286d649d9c9bb19))
+
 ## [1.6.3](https://github.com/ffflorian/wire-cli/compare/v1.6.2...v1.6.3) (2021-04-11)
 
 
