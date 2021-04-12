@@ -140,7 +140,7 @@ commander
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(localOptions?.newName && {name: localOptions.newName}),
+        ...(localOptions?.newName && {newName: localOptions.newName}),
       })
     )
   );
