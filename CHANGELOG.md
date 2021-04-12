@@ -1,3 +1,10 @@
+## [1.6.8](https://github.com/ffflorian/wire-cli/compare/v1.6.7...v1.6.8) (2021-04-12)
+
+
+### Bug Fixes
+
+* Add client label when logging in ([80b6870](https://github.com/ffflorian/wire-cli/commit/80b68703dda51c331afa0762f7da4011ff3f2b06))
+
 ## [1.6.7](https://github.com/ffflorian/wire-cli/compare/v1.6.6...v1.6.7) (2021-04-12)
 
 
