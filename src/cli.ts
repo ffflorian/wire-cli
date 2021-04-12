@@ -72,16 +72,16 @@ commander
   .option('-i, --client-id <id>', `specify the client's ID`)
   .option('-l, --label <label>', 'specify the new label')
   .option('-t, --password <password>', 'specify your Wire password')
-  .action(() =>
+  .action(localOptions =>
     tryAndExit(() =>
       updateClient({
         ...defaultOptions,
-        ...(commanderOptions?.clientId && {clientId: commanderOptions.clientId}),
-        ...(commanderOptions?.label && {label: commanderOptions.label}),
         ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.clientId && {clientId: localOptions.clientId}),
+        ...(localOptions?.label && {label: localOptions.label}),
       })
     )
   );
@@ -132,15 +132,15 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-n, --new-name <name>', 'specify your new name')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(() =>
+  .action(localOptions =>
     tryAndExit(() =>
       setName({
         ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.newName && {name: commanderOptions.newName}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.newName && {name: localOptions.newName}),
       })
     )
   );
