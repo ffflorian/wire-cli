@@ -11,7 +11,7 @@ const logger = getLogger('set-availability');
 
 export interface SetAvailabilityStatusOptions extends CommonOptions {
   defaultWebSocketURL: string;
-  statusType?: Availability.Type;
+  statusType?: Availability.Type | string | number;
   webSocketURL?: string;
 }
 
@@ -29,7 +29,36 @@ export async function setAvailabilityStatus({
   webSocketURL ||= await getWebSocketURL(defaultWebSocketURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
-  statusType ??= (
+
+  let newStatusType: Availability.Type;
+
+  if (typeof statusType === 'string' && !isNaN(Number(statusType.trim()))) {
+    newStatusType = Number(statusType.trim());
+  } else if (typeof statusType === 'string' && statusType.trim() !== '') {
+    switch (statusType.toUpperCase()) {
+      case 'NONE': {
+        newStatusType = Availability.Type.NONE;
+        break;
+      }
+      case 'AVAILABLE': {
+        newStatusType = Availability.Type.AVAILABLE;
+        break;
+      }
+      case 'AWAY': {
+        newStatusType = Availability.Type.AWAY;
+        break;
+      }
+      case 'BUSY': {
+        newStatusType = Availability.Type.BUSY;
+        break;
+      }
+      default: {
+        console.warn(`Invalid status type "${statusType}" set.`);
+      }
+    }
+  }
+
+  newStatusType ??= (
     await prompts(
       {
         choices: [
@@ -42,12 +71,12 @@ export async function setAvailabilityStatus({
             value: Availability.Type.AVAILABLE,
           },
           {
-            title: 'Busy',
-            value: Availability.Type.BUSY,
-          },
-          {
             title: 'Away',
             value: Availability.Type.AWAY,
+          },
+          {
+            title: 'Busy',
+            value: Availability.Type.BUSY,
           },
         ],
         message: 'Which status would you like to set?',
@@ -80,7 +109,7 @@ export async function setAvailabilityStatus({
   logger.info('Setting availability status ...');
 
   if (!dryRun) {
-    await account.service!.user.setAvailability(teamId, statusType!);
+    await account.service!.user.setAvailability(teamId, newStatusType);
   }
 
   logger.info('Logging out ...');

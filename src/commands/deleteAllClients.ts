@@ -26,12 +26,14 @@ export async function deleteAllClients({
   const {data: clients} = await apiClient.getClients();
   logger.info(`Found ${clients.length} ${pluralize('client', clients.length)}.`);
 
-  await Promise.all(
-    clients.map(client => {
-      logger.info(`Deleting client with ID "${client.id}" ...`);
-      return dryRun ? undefined : apiClient.deleteClient(client.id);
-    })
-  );
+  if (!dryRun) {
+    await Promise.all(
+      clients.map(client => {
+        logger.info(`Deleting client with ID "${client.id}" ...`);
+        return dryRun ? undefined : apiClient.deleteClient(client.id);
+      })
+    );
+  }
 
   logger.info('Logging out ...');
   await apiClient.logout();

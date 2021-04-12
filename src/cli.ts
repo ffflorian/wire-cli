@@ -148,12 +148,12 @@ commander
 commander
   .command('set-availability')
   .description('set your availability status')
-  .option(`-b, --backend <URL>', 'specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
-  .option('-s, --status <number>', 'specify the status type to be set')
+  .option('-s, --status <number>', 'specify the status type to be set (0/1/2/3 or none/available/away/busy)')
   .option('-p, --password <password>', 'specify your Wire password')
-  .option(`-w, --websocket <URL>', 'specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
+  .option('-w, --websocket <URL>', `specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
   .action(localOptions =>
     tryAndExit(() =>
       setAvailabilityStatus({
@@ -164,7 +164,7 @@ commander
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
         ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
-        ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
+        ...(localOptions?.status && {statusType: localOptions.status}),
       })
     )
   );
