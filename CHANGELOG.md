@@ -1,3 +1,10 @@
+## [1.6.7](https://github.com/ffflorian/wire-cli/compare/v1.6.6...v1.6.7) (2021-04-12)
+
+
+### Bug Fixes
+
+* Use newName in setName ([127fd33](https://github.com/ffflorian/wire-cli/commit/127fd335bcda277247303acbbf7312b5268d381c))
+
 ## [1.6.6](https://github.com/ffflorian/wire-cli/compare/v1.6.5...v1.6.6) (2021-04-12)
 
 
