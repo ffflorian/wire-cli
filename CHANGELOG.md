@@ -1,3 +1,10 @@
+## [1.6.6](https://github.com/ffflorian/wire-cli/compare/v1.6.5...v1.6.6) (2021-04-12)
+
+
+### Bug Fixes
+
+* Use localOptions where applicable ([08ae52b](https://github.com/ffflorian/wire-cli/commit/08ae52bb490ed3dc2ad4140142811575662288b5))
+
 ## [1.6.5](https://github.com/ffflorian/wire-cli/compare/v1.6.4...v1.6.5) (2021-04-12)
 
 
