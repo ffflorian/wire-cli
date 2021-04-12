@@ -20,8 +20,7 @@ const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
   ? defaultPackageJsonPath
   : path.join(__dirname, '../package.json');
 
-const packageJson = fs.readFileSync(packageJsonPath, 'utf-8');
-const {description, name, version} = JSON.parse(packageJson);
+const {description, name, version} = require(packageJsonPath);
 const commanderOptions = commander.opts();
 const defaultWebSocketURL = 'wss://staging-nginz-ssl.zinfra.io';
 

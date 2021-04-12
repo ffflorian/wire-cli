@@ -1,8 +1,17 @@
 import {Availability} from '@wireapp/protocol-messaging';
 import {Account} from '@wireapp/core';
 import {APIClient} from '@wireapp/api-client';
-import {ClientType} from '@wireapp/api-client/src/client/';
+import {ClientClassification, ClientType} from '@wireapp/api-client/src/client/';
 import prompts from 'prompts';
+import * as path from 'path';
+import * as fs from 'fs';
+
+const defaultPackageJsonPath = path.join(__dirname, '../package.json');
+const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
+  ? defaultPackageJsonPath
+  : path.join(__dirname, '../../package.json');
+
+const pkg = require(packageJsonPath);
 
 import {CommonOptions} from '../CommonOptions';
 import {getLogger, getBackendURL, getEmailAddress, getPassword, getWebSocketURL} from '../util';
@@ -98,7 +107,11 @@ export async function setAvailabilityStatus({
   const account = new Account(apiClient);
 
   logger.info('Logging in ...');
-  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
+  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
+    classification: ClientClassification.DESKTOP,
+    cookieLabel: 'default',
+    model: `${pkg.name} ${pkg.version}`,
+  });
 
   const {team: teamId} = await account.service!.self.getSelf();
 
