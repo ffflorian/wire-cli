@@ -1,3 +1,10 @@
+## [1.6.5](https://github.com/ffflorian/wire-cli/compare/v1.6.4...v1.6.5) (2021-04-12)
+
+
+### Bug Fixes
+
+* clienttype and new name ([d9ec3bf](https://github.com/ffflorian/wire-cli/commit/d9ec3bf98242d7ee61255f6f5acfcf3e581ab1d2))
+
 ## [1.6.4](https://github.com/ffflorian/wire-cli/compare/v1.6.3...v1.6.4) (2021-04-12)
 
 
