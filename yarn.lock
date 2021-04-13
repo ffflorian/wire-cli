@@ -599,10 +599,10 @@
     "@typescript-eslint/types" "4.22.0"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@12.5.6":
-  version "12.5.6"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.5.6.tgz#a2e072e520805a831f077aad22547582f6e2ea00"
-  integrity sha512-uy7l9QwLT2xDqJGvayGOMWbCmZbXmsXnZ+8EqNJjn29I0iSa/VF7SZhyrlj63jBffPuM7Mjhpff2CLibKblAJg==
+"@wireapp/api-client@12.5.7":
+  version "12.5.7"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.5.7.tgz#d6420d95a6bda25927a6ee542c2b4eb8b756ddab"
+  integrity sha512-i5HpLJUqvByO88xEa/sn63fzV3j7VwHsex0Y98v2BYlzpLhrEj9mnfz/QjSQRr5ZwCaC6/zYCmZTngXXB3m6Pw==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
@@ -637,14 +637,14 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@17.2.6":
-  version "17.2.6"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.2.6.tgz#6e0063a6f4ab27ec2d461c7e352e7b8362a6ce27"
-  integrity sha512-bWrKzyMc1tSPeDgBhXVF+KMz4QN/H7zJdjFoB4PfuyjDkttqP912wfzv0hAWspOgyS2o5ZXucMg1tjSBHJlY8A==
+"@wireapp/core@17.2.7":
+  version "17.2.7"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.2.7.tgz#65707ee3ebc894891128084f8f91f6f2e66ac6f5"
+  integrity sha512-RhVGIxuikJZCyooDceDxERdck0E1oB1T4ul797Z9awFjOi5UZffIDuuyP/5QAwEanI6YIIfouDN3MmtydmgvZg==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "12.5.6"
+    "@wireapp/api-client" "12.5.7"
     "@wireapp/cryptobox" "12.2.60"
     bazinga64 "5.7.32"
     hash.js "1.1.7"
