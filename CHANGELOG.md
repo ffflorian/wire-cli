@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/ffflorian/wire-cli/compare/v1.6.8...v1.7.0) (2021-04-13)
+
+
+### Features
+
+* Send and delete message ([#258](https://github.com/ffflorian/wire-cli/issues/258)) ([fab4c74](https://github.com/ffflorian/wire-cli/commit/fab4c747164e62dadd3bd73f220f786d3a861655))
+
 ## [1.6.8](https://github.com/ffflorian/wire-cli/compare/v1.6.7...v1.6.8) (2021-04-12)
 
 
