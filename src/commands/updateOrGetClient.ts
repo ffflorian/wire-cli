@@ -39,9 +39,9 @@ export async function updateClient({
 }
 
 export async function getClient({
-  defaultBackendURL,
   backendURL,
   clientId,
+  defaultBackendURL,
   emailAddress,
   password,
 }: GetClientOptions): Promise<RegisteredClient> {

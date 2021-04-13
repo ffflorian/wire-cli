@@ -10,10 +10,10 @@ export interface SetNameOptions extends CommonOptions {
 const logger = getLogger('set-name');
 
 export async function setName({
+  backendURL,
   defaultBackendURL,
   dryRun,
   emailAddress,
-  backendURL,
   newName,
   password,
 }: SetNameOptions): Promise<void> {

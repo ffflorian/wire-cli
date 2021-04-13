@@ -25,11 +25,11 @@ export interface SetAvailabilityStatusOptions extends CommonOptions {
 }
 
 export async function setAvailabilityStatus({
+  backendURL,
   defaultBackendURL,
   defaultWebSocketURL,
   dryRun,
   emailAddress,
-  backendURL,
   password,
   statusType,
   webSocketURL,
