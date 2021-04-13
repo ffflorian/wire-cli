@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import commander from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -19,8 +21,7 @@ const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
   ? defaultPackageJsonPath
   : path.join(__dirname, '../package.json');
 
-const packageJson = fs.readFileSync(packageJsonPath, 'utf-8');
-const {description, name, version} = JSON.parse(packageJson);
+const {description, name, version} = require(packageJsonPath);
 const commanderOptions = commander.opts();
 const defaultWebSocketURL = 'wss://staging-nginz-ssl.zinfra.io';
 
@@ -71,16 +72,16 @@ commander
   .option('-i, --client-id <id>', `specify the client's ID`)
   .option('-l, --label <label>', 'specify the new label')
   .option('-t, --password <password>', 'specify your Wire password')
-  .action(() =>
+  .action(localOptions =>
     tryAndExit(() =>
       updateClient({
         ...defaultOptions,
-        ...(commanderOptions?.clientId && {clientId: commanderOptions.clientId}),
-        ...(commanderOptions?.label && {label: commanderOptions.label}),
         ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.clientId && {clientId: localOptions.clientId}),
+        ...(localOptions?.label && {label: localOptions.label}),
       })
     )
   );
@@ -131,15 +132,15 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-n, --new-name <name>', 'specify your new name')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(() =>
+  .action(localOptions =>
     tryAndExit(() =>
       setName({
         ...defaultOptions,
         ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
         ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.newName && {name: commanderOptions.newName}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
+        ...(localOptions?.newName && {newName: localOptions.newName}),
       })
     )
   );
@@ -150,9 +151,9 @@ commander
   .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
-  .option('-s, --status <number>', 'specify the status type to be set')
+  .option('-s, --status <number>', 'specify the status type to be set (0/1/2/3 or none/available/away/busy)')
   .option('-p, --password <password>', 'specify your Wire password')
-  .option(`-w, --websocket <URL>', 'specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
+  .option('-w, --websocket <URL>', `specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
   .action(localOptions =>
     tryAndExit(() =>
       setAvailabilityStatus({
@@ -163,7 +164,7 @@ commander
         ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
         ...(commanderOptions?.password && {password: commanderOptions.password}),
         ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
-        ...(typeof localOptions?.status !== 'undefined' && {statusType: localOptions.status}),
+        ...(localOptions?.status && {statusType: localOptions.status}),
       })
     )
   );

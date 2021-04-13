@@ -4,7 +4,7 @@ import {CommonOptions} from '../CommonOptions';
 import {getBackendURL, getEmailAddress, getLogger, getPassword} from '../util';
 
 export interface SetNameOptions extends CommonOptions {
-  name?: string;
+  newName?: string;
 }
 
 const logger = getLogger('set-name');
@@ -14,12 +14,25 @@ export async function setName({
   defaultBackendURL,
   dryRun,
   emailAddress,
-  name,
+  newName,
   password,
 }: SetNameOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
+  newName ||= (
+    await prompts(
+      {
+        max: 128,
+        message: 'Enter your new name (max. 128 chars):',
+        name: 'newName',
+        type: 'text',
+      },
+      {
+        onCancel: () => process.exit(),
+      }
+    )
+  ).newName;
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
@@ -27,20 +40,10 @@ export async function setName({
 
   await apiClient.login();
 
-  if (!name) {
-    const response = await prompts(
-      {max: 128, message: 'Enter your new name (max. 128 chars):', name: 'newName', type: 'text'},
-      {
-        onCancel: () => process.exit(),
-      }
-    );
-    name = response.newName as string;
-  }
-
   logger.info('Setting new name ...');
 
   if (!dryRun) {
-    await apiClient.putSelf({name});
+    await apiClient.putSelf({name: newName!});
   }
 
   logger.info('Logging out ...');

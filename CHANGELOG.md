@@ -1,3 +1,45 @@
+## [1.6.8](https://github.com/ffflorian/wire-cli/compare/v1.6.7...v1.6.8) (2021-04-12)
+
+
+### Bug Fixes
+
+* Add client label when logging in ([80b6870](https://github.com/ffflorian/wire-cli/commit/80b68703dda51c331afa0762f7da4011ff3f2b06))
+
+## [1.6.7](https://github.com/ffflorian/wire-cli/compare/v1.6.6...v1.6.7) (2021-04-12)
+
+
+### Bug Fixes
+
+* Use newName in setName ([127fd33](https://github.com/ffflorian/wire-cli/commit/127fd335bcda277247303acbbf7312b5268d381c))
+
+## [1.6.6](https://github.com/ffflorian/wire-cli/compare/v1.6.5...v1.6.6) (2021-04-12)
+
+
+### Bug Fixes
+
+* Use localOptions where applicable ([08ae52b](https://github.com/ffflorian/wire-cli/commit/08ae52bb490ed3dc2ad4140142811575662288b5))
+
+## [1.6.5](https://github.com/ffflorian/wire-cli/compare/v1.6.4...v1.6.5) (2021-04-12)
+
+
+### Bug Fixes
+
+* clienttype and new name ([d9ec3bf](https://github.com/ffflorian/wire-cli/commit/d9ec3bf98242d7ee61255f6f5acfcf3e581ab1d2))
+
+## [1.6.4](https://github.com/ffflorian/wire-cli/compare/v1.6.3...v1.6.4) (2021-04-12)
+
+
+### Bug Fixes
+
+* Availability status options ([2f83858](https://github.com/ffflorian/wire-cli/commit/2f8385861e359c407c623fd86286d649d9c9bb19))
+
+## [1.6.3](https://github.com/ffflorian/wire-cli/compare/v1.6.2...v1.6.3) (2021-04-11)
+
+
+### Bug Fixes
+
+* add shebang to CLI ([fb09fad](https://github.com/ffflorian/wire-cli/commit/fb09fad4ce7524c94c118a5631979a552129755c))
+
 ## [1.6.2](https://github.com/ffflorian/wire-cli/compare/v1.6.1...v1.6.2) (2021-03-26)
 
 

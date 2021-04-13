@@ -98,7 +98,7 @@ export class APIClient {
       axios.request({
         baseURL: this.backendURL,
         data: {
-          clientType: permanent ? ClientType.TEMPORARY : ClientType.PERMANENT,
+          clientType: permanent ? ClientType.PERMANENT : ClientType.TEMPORARY,
           email: this.emailAddress,
           password: this.password,
         },
