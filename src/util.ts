@@ -41,7 +41,7 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
     }
   );
 
-  backendURL ||= defaultBackendURL;
+  // backendURL ||= defaultBackendURL;
   backendURL = addHTTPS(backendURL);
 
   logger.info(`Using "${backendURL}" as backend.`);
@@ -63,7 +63,7 @@ export async function getWebSocketURL(defaultWebSocketURL?: string): Promise<str
     }
   );
 
-  webSocketURL ||= defaultWebSocketURL;
+  // webSocketURL ||= defaultWebSocketURL;
   webSocketURL = addWSS(webSocketURL);
 
   logger.info(`Using "${webSocketURL}" as webSocket.`);
@@ -77,6 +77,7 @@ export async function getConversationID(): Promise<string> {
       message: 'Enter the conversation ID',
       name: 'conversationID',
       type: 'text',
+      validate: input => isUUID(input),
     },
     {
       onCancel: () => process.exit(),
@@ -92,6 +93,7 @@ export async function getMessageID(): Promise<string> {
       message: 'Enter the message ID',
       name: 'messageID',
       type: 'text',
+      validate: input => isUUID(input),
     },
     {
       onCancel: () => process.exit(),
@@ -158,15 +160,14 @@ export function getLogger(moduleName: string): logdown.Logger {
 }
 
 export function addHTTPS(url?: string): string {
-  if (!url) {
-    return '';
-  }
-  return `https://${url.replace(/^https?:\/\//, '')}`;
+  return url ? `https://${url.replace(/^https?:\/\//, '')}` : '';
 }
 
 export function addWSS(url?: string): string {
-  if (!url) {
-    return '';
-  }
-  return `wss://${url.replace(/^wss?:\/\//, '')}`;
+  return url ? `wss://${url.replace(/^wss?:\/\//, '')}` : '';
+}
+
+export function isUUID(input: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(input);
 }
