@@ -6,13 +6,14 @@ import * as path from 'path';
 
 import {
   deleteAllClients,
+  deleteMessage,
   getAllClients,
   resetPassword,
+  sendMessage,
   setAvailabilityStatus,
   setName,
   updateClient,
 } from './commands/';
-import {CommonOptions} from './CommonOptions';
 import {addHTTPS, addWSS, getLogger, tryAndExit} from './util';
 
 const defaultPackageJsonPath = path.join(__dirname, 'package.json');
@@ -22,18 +23,15 @@ const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
 
 const {description, name, version} = require(packageJsonPath);
 const commanderOptions = commander.opts();
-const defaultWebSocketURL = 'wss://staging-nginz-ssl.zinfra.io';
-
-const defaultOptions: CommonOptions = {
-  defaultBackendURL: 'https://staging-nginz-https.zinfra.io',
-};
+const defaultWebSocketURL = 'staging-nginz-ssl.zinfra.io';
+const defaultBackendURL = 'staging-nginz-https.zinfra.io';
 
 const logger = getLogger('cli');
 
 commander
   .name(name.replace(/^@.+\//, ''))
   .description(description)
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
   .option('-p, --password <password>', 'specify your Wire password')
@@ -46,18 +44,18 @@ commander
 commander
   .command('delete-all-clients')
   .description('delete all clients')
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
     tryAndExit(() =>
       deleteAllClients({
-        ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.password}),
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        password: commanderOptions.password,
       })
     )
   );
@@ -65,22 +63,22 @@ commander
 commander
   .command('set-client-label')
   .description(`update a client's label`)
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-i, --client-id <id>', `specify the client's ID`)
   .option('-l, --label <label>', 'specify the new label')
   .option('-t, --password <password>', 'specify your Wire password')
-  .action(localOptions =>
+  .action((localOptions: {clientId?: string; label?: string} | undefined) =>
     tryAndExit(() =>
       updateClient({
-        ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(localOptions?.clientId && {clientId: localOptions.clientId}),
-        ...(localOptions?.label && {label: localOptions.label}),
+        backendURL: addHTTPS(commanderOptions.backend),
+        clientId: localOptions?.clientId!,
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        label: localOptions?.label!,
+        password: commanderOptions.password,
       })
     )
   );
@@ -88,18 +86,18 @@ commander
 commander
   .command('reset-password')
   .description('reset your password')
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-c, --continue', 'skip initiation (if you already received the password reset email)')
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .action(() =>
     tryAndExit(() =>
       resetPassword({
-        ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
-        ...(commanderOptions?.continue && {skipInitation: commanderOptions.continue}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        skipInitation: commanderOptions.continue,
       })
     )
   );
@@ -107,18 +105,18 @@ commander
 commander
   .command('get-all-clients')
   .description('get all clients data')
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
     tryAndExit(() =>
       getAllClients({
-        ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.password}),
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        password: commanderOptions.password,
       })
     )
   );
@@ -126,20 +124,20 @@ commander
 commander
   .command('set-name')
   .description('set your name')
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .option('-n, --new-name <name>', 'specify your new name')
   .option('-p, --password <password>', 'specify your Wire password')
-  .action(localOptions =>
+  .action((localOptions: {newName?: string} | undefined) =>
     tryAndExit(() =>
       setName({
-        ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(localOptions?.newName && {newName: localOptions.newName}),
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        newName: localOptions?.newName,
+        password: commanderOptions.password,
       })
     )
   );
@@ -147,23 +145,75 @@ commander
 commander
   .command('set-availability')
   .description('set your availability status')
-  .option('-b, --backend <URL>', `specify the Wire backend URL (default: "${defaultOptions.defaultBackendURL}")`)
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your Wire email address')
-  .option('-s, --status <number>', 'specify the status type to be set (0/1/2/3 or none/available/away/busy)')
   .option('-p, --password <password>', 'specify your Wire password')
-  .option('-w, --websocket <URL>', `specify the Wire WebSocket URL (default: "${defaultWebSocketURL}")`)
-  .action(localOptions =>
+  .option('-s, --status <number>', 'specify the status type to be set (0/1/2/3 or none/available/away/busy)')
+  .option('-w, --websocket <URL>', `specify the Wire WebSocket URL`)
+  .action((localOptions: {status?: string; websocket?: string} | undefined) =>
     tryAndExit(() =>
       setAvailabilityStatus({
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
         defaultWebSocketURL,
-        ...defaultOptions,
-        ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
-        ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
-        ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
-        ...(commanderOptions?.password && {password: commanderOptions.password}),
-        ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
-        ...(localOptions?.status && {statusType: localOptions.status}),
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        password: commanderOptions.password,
+        statusType: localOptions?.status,
+        webSocketURL: addWSS(localOptions?.websocket),
+      })
+    )
+  );
+
+commander
+  .command('send')
+  .description('send a message')
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .option('-c, --conversation <ID>', 'specify the conversation for the message to be sent to')
+  .option('-m, --message <text>', 'specify the message to be sent')
+  .option('-w, --websocket <URL>', `specify the Wire WebSocket URL`)
+  .action((localOptions: {conversation?: string; message?: string; websocket?: string} | undefined) =>
+    tryAndExit(() =>
+      sendMessage({
+        backendURL: addHTTPS(commanderOptions.backend),
+        conversationID: localOptions?.conversation,
+        defaultBackendURL,
+        defaultWebSocketURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        message: localOptions?.message,
+        password: commanderOptions.password,
+        webSocketURL: addWSS(localOptions?.websocket),
+      })
+    )
+  );
+
+commander
+  .command('delete')
+  .description('delete a message')
+  .option('-b, --backend <URL>', `specify the Wire backend URL`)
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .option('-w, --websocket <URL>', `specify the Wire WebSocket URL`)
+  .option('-c, --conversation <ID>', 'specify the conversation in which the message should be deleted')
+  .option('-m, --message <ID>', 'specify the message ID to be deleted')
+  .action((localOptions: {conversation?: string; message?: string; websocket?: string} | undefined) =>
+    tryAndExit(() =>
+      deleteMessage({
+        backendURL: addHTTPS(commanderOptions.backend),
+        conversationID: localOptions?.conversation,
+        defaultBackendURL,
+        defaultWebSocketURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        messageID: localOptions?.message,
+        password: commanderOptions.password,
+        webSocketURL: addWSS(localOptions?.websocket),
       })
     )
   );

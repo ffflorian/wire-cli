@@ -41,7 +41,7 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
     }
   );
 
-  backendURL ||= defaultBackendURL;
+  // backendURL ||= defaultBackendURL;
   backendURL = addHTTPS(backendURL);
 
   logger.info(`Using "${backendURL}" as backend.`);
@@ -63,12 +63,44 @@ export async function getWebSocketURL(defaultWebSocketURL?: string): Promise<str
     }
   );
 
-  webSocketURL ||= defaultWebSocketURL;
+  // webSocketURL ||= defaultWebSocketURL;
   webSocketURL = addWSS(webSocketURL);
 
   logger.info(`Using "${webSocketURL}" as webSocket.`);
 
   return webSocketURL;
+}
+
+export async function getConversationID(): Promise<string> {
+  const {conversationID} = await prompts(
+    {
+      message: 'Enter the conversation ID',
+      name: 'conversationID',
+      type: 'text',
+      validate: input => isUUID(input),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  return conversationID;
+}
+
+export async function getMessageID(): Promise<string> {
+  const {messageID} = await prompts(
+    {
+      message: 'Enter the message ID',
+      name: 'messageID',
+      type: 'text',
+      validate: input => isUUID(input),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  return messageID;
 }
 
 export async function getEmailAddress(): Promise<string> {
@@ -127,10 +159,15 @@ export function getLogger(moduleName: string): logdown.Logger {
   return logger;
 }
 
-export function addHTTPS(url: string): string {
-  return `https://${url.replace(/^https?:\/\//, '')}`;
+export function addHTTPS(url?: string): string {
+  return url ? `https://${url.replace(/^https?:\/\//, '')}` : '';
 }
 
-export function addWSS(url: string): string {
-  return `wss://${url.replace(/^wss?:\/\//, '')}`;
+export function addWSS(url?: string): string {
+  return url ? `wss://${url.replace(/^wss?:\/\//, '')}` : '';
+}
+
+export function isUUID(input: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(input);
 }
