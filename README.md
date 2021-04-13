@@ -36,6 +36,8 @@ Commands:
   get-all-clients [options]     get all clients data
   set-name [options]            set your name
   set-availability [options]    set your availability status
+  send [options]                send a message
+  delete [options]              delete a message
   help [command]                display help for command
 ```
 

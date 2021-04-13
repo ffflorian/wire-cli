@@ -157,10 +157,16 @@ export function getLogger(moduleName: string): logdown.Logger {
   return logger;
 }
 
-export function addHTTPS(url: string): string {
+export function addHTTPS(url?: string): string {
+  if (!url) {
+    return '';
+  }
   return `https://${url.replace(/^https?:\/\//, '')}`;
 }
 
-export function addWSS(url: string): string {
+export function addWSS(url?: string): string {
+  if (!url) {
+    return '';
+  }
   return `wss://${url.replace(/^wss?:\/\//, '')}`;
 }
