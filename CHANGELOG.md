@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/ffflorian/wire-cli/compare/v1.7.0...v1.8.0) (2021-05-02)
+
+
+### Features
+
+* No need for websocket anymore ([2aaf74b](https://github.com/ffflorian/wire-cli/commit/2aaf74be79afc5f3410e02f44d6f669e4712769d))
+
 # [1.7.0](https://github.com/ffflorian/wire-cli/compare/v1.6.8...v1.7.0) (2021-04-13)
 
 
