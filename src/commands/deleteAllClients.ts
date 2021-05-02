@@ -19,7 +19,7 @@ export async function deleteAllClients({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await apiClient.login();
 
   logger.info('Getting all clients ...');

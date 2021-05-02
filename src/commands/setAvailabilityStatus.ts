@@ -14,28 +14,23 @@ const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
 const pkg = require(packageJsonPath);
 
 import {CommonOptions} from '../CommonOptions';
-import {getLogger, getBackendURL, getEmailAddress, getPassword, getWebSocketURL} from '../util';
+import {getLogger, getBackendURL, getEmailAddress, getPassword} from '../util';
 
 const logger = getLogger('set-availability');
 
 export interface SetAvailabilityStatusOptions extends CommonOptions {
-  defaultWebSocketURL: string;
   statusType?: Availability.Type | string | number;
-  webSocketURL?: string;
 }
 
 export async function setAvailabilityStatus({
   backendURL,
   defaultBackendURL,
-  defaultWebSocketURL,
   dryRun,
   emailAddress,
   password,
   statusType,
-  webSocketURL,
 }: SetAvailabilityStatusOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
-  webSocketURL ||= await getWebSocketURL(defaultWebSocketURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
 
@@ -100,13 +95,13 @@ export async function setAvailabilityStatus({
     urls: {
       name: 'backend',
       rest: backendURL,
-      ws: webSocketURL,
+      ws: 'none',
     },
   });
 
   const account = new Account(apiClient);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
     classification: ClientClassification.DESKTOP,
     cookieLabel: 'default',
@@ -119,7 +114,7 @@ export async function setAvailabilityStatus({
     throw new Error('User is not part of a team on Wire.');
   }
 
-  logger.info('Setting availability status ...');
+  logger.info(`Setting availability status to "${Availability.Type[newStatusType].toLowerCase()}" ...`);
 
   if (!dryRun) {
     await account.service!.user.setAvailability(teamId, newStatusType);

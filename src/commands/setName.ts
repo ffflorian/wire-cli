@@ -36,11 +36,11 @@ export async function setName({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
 
   await apiClient.login();
 
-  logger.info('Setting new name ...');
+  logger.info(`Setting new name to "${newName}" ...`);
 
   if (!dryRun) {
     await apiClient.putSelf({name: newName!});

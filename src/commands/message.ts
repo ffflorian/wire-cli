@@ -4,45 +4,30 @@ import {ClientType} from '@wireapp/api-client/src/client/';
 import prompts from 'prompts';
 
 import {CommonOptions} from '../CommonOptions';
-import {
-  getLogger,
-  getBackendURL,
-  getEmailAddress,
-  getPassword,
-  getWebSocketURL,
-  getConversationID,
-  getMessageID,
-} from '../util';
+import {getLogger, getBackendURL, getEmailAddress, getPassword, getConversationID, getMessageID} from '../util';
 
 const logger = getLogger('set-availability');
 
 export interface SendMessageOptions extends CommonOptions {
   conversationID?: string;
-  defaultWebSocketURL: string;
   message?: string;
-  webSocketURL?: string;
 }
 
 export interface DeleteMessageOptions extends CommonOptions {
   conversationID?: string;
-  defaultWebSocketURL: string;
   messageID?: string;
-  webSocketURL?: string;
 }
 
 export async function sendMessage({
   backendURL,
   conversationID,
   defaultBackendURL,
-  defaultWebSocketURL,
   dryRun,
   emailAddress,
   message,
   password,
-  webSocketURL,
 }: SendMessageOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
-  webSocketURL ||= await getWebSocketURL(defaultWebSocketURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
   conversationID ||= await getConversationID();
@@ -61,13 +46,13 @@ export async function sendMessage({
     urls: {
       name: 'backend',
       rest: backendURL,
-      ws: webSocketURL,
+      ws: 'none',
     },
   });
 
   const account = new Account(apiClient);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
 
   logger.info(`Sending message "${message}" to conversation "${conversationID}"...`);
@@ -85,15 +70,12 @@ export async function deleteMessage({
   backendURL,
   conversationID,
   defaultBackendURL,
-  defaultWebSocketURL,
   dryRun,
   emailAddress,
   messageID,
   password,
-  webSocketURL,
 }: DeleteMessageOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
-  webSocketURL ||= await getWebSocketURL(defaultWebSocketURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
   conversationID ||= await getConversationID();
@@ -103,13 +85,13 @@ export async function deleteMessage({
     urls: {
       name: 'backend',
       rest: backendURL,
-      ws: webSocketURL,
+      ws: 'none',
     },
   });
 
   const account = new Account(apiClient);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
 
   logger.info(`Deleting message "${messageID}" in conversation "${conversationID}"...`);

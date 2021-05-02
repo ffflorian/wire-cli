@@ -49,28 +49,6 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
   return backendURL;
 }
 
-export async function getWebSocketURL(defaultWebSocketURL?: string): Promise<string> {
-  let {webSocketURL} = await prompts(
-    {
-      initial: defaultWebSocketURL,
-      message: 'Enter the webSocket URL',
-      name: 'webSocketURL',
-      type: 'text',
-      validate: input => input.match(/(https?)?.+\..+/),
-    },
-    {
-      onCancel: () => process.exit(),
-    }
-  );
-
-  // webSocketURL ||= defaultWebSocketURL;
-  webSocketURL = addWSS(webSocketURL);
-
-  logger.info(`Using "${webSocketURL}" as webSocket.`);
-
-  return webSocketURL;
-}
-
 export async function getConversationID(): Promise<string> {
   const {conversationID} = await prompts(
     {
@@ -161,10 +139,6 @@ export function getLogger(moduleName: string): logdown.Logger {
 
 export function addHTTPS(url?: string): string {
   return url ? `https://${url.replace(/^https?:\/\//, '')}` : '';
-}
-
-export function addWSS(url?: string): string {
-  return url ? `wss://${url.replace(/^wss?:\/\//, '')}` : '';
 }
 
 export function isUUID(input: string): boolean {
