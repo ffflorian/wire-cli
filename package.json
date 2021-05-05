@@ -4,7 +4,7 @@
     "wire-cli": "dist/cli.js"
   },
   "dependencies": {
-    "@wireapp/core": "17.4.7",
+    "@wireapp/core": "17.5.1",
     "axios": "0.21.1",
     "commander": "7.2.0",
     "http-status-codes": "2.1.4",
