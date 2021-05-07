@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/ffflorian/wire-cli/compare/v1.8.0...v1.8.1) (2021-05-07)
+
+
+### Bug Fixes
+
+* Always set version when logging in, fix URLs ([c94e15b](https://github.com/ffflorian/wire-cli/commit/c94e15b3dce826201eeeeb4a9643ba533466ec99))
+
 # [1.8.0](https://github.com/ffflorian/wire-cli/compare/v1.7.0...v1.8.0) (2021-05-02)
 
 
