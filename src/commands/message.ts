@@ -14,8 +14,8 @@ import {
   getMessageID,
 } from '../util';
 
-const logger = getLogger('set-availability');
-const pkg = getPackageJson();
+const logger = getLogger('message');
+const {name, version} = getPackageJson();
 
 export interface SendMessageOptions extends CommonOptions {
   conversationID?: string;
@@ -65,7 +65,7 @@ export async function sendMessage({
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
     classification: ClientClassification.DESKTOP,
     cookieLabel: 'default',
-    model: `${pkg.name} v${pkg.version}`,
+    model: `${name} v${version}`,
   });
 
   logger.info(`Sending message "${message}" to conversation "${conversationID}"...`);
@@ -108,7 +108,7 @@ export async function deleteMessage({
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
     classification: ClientClassification.DESKTOP,
     cookieLabel: 'default',
-    model: `${pkg.name} v${pkg.version}`,
+    model: `${name} v${version}`,
   });
 
   logger.info(`Deleting message "${messageID}" in conversation "${conversationID}"...`);

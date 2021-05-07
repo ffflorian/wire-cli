@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
 import commander from 'commander';
-import * as fs from 'fs';
-import * as path from 'path';
 
 import {
   deleteAllClients,
@@ -14,14 +12,9 @@ import {
   setName,
   updateClient,
 } from './commands/';
-import {addHTTPS, getLogger, tryAndExit} from './util';
+import {addHTTPS, getLogger, tryAndExit, getPackageJson} from './util';
 
-const defaultPackageJsonPath = path.join(__dirname, 'package.json');
-const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
-  ? defaultPackageJsonPath
-  : path.join(__dirname, '../package.json');
-
-const {bin, description, version} = require(packageJsonPath);
+const {bin, description, version} = getPackageJson();
 const commanderOptions = commander.opts();
 const defaultBackendURL = 'staging-nginz-https.zinfra.io';
 

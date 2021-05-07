@@ -149,15 +149,13 @@ export function isUUID(input: string): boolean {
   return uuidRegex.test(input);
 }
 
-export function getPackageJson(): {name: string; version: string} {
+export function getPackageJson(): {bin: string; description: string; name: string; version: string} {
   const defaultPackageJsonPath = path.join(__dirname, 'package.json');
   const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
     ? defaultPackageJsonPath
     : path.join(__dirname, '../package.json');
 
-  const pkg = require(packageJsonPath);
-
-  return pkg;
+  return require(packageJsonPath);
 }
 
 export function isAxiosError(errorCandidate: any): errorCandidate is AxiosError {

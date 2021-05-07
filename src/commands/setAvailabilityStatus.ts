@@ -8,7 +8,7 @@ import {CommonOptions} from '../CommonOptions';
 import {getLogger, getBackendURL, getEmailAddress, getPassword, getPackageJson} from '../util';
 
 const logger = getLogger('set-availability');
-const pkg = getPackageJson();
+const {name, version} = getPackageJson();
 
 export interface SetAvailabilityStatusOptions extends CommonOptions {
   statusType?: Availability.Type | string | number;
@@ -97,7 +97,7 @@ export async function setAvailabilityStatus({
   await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
     classification: ClientClassification.DESKTOP,
     cookieLabel: 'default',
-    model: `${pkg.name} v${pkg.version}`,
+    model: `${name} v${version}`,
   });
 
   const {team: teamId} = await account.service!.self.getSelf();
