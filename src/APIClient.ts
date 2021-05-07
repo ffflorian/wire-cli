@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {ClientType, RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
@@ -8,7 +8,7 @@ import {UserClients} from '@wireapp/api-client/src/conversation';
 import {Members} from '@wireapp/api-client/src/team';
 import {PreKeyBundle} from '@wireapp/api-client/src/auth';
 
-import {getLogger, Cookies, parseCookies, TryFunction} from './util';
+import {getLogger, Cookies, parseCookies, TryFunction, isAxiosError} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -30,6 +30,19 @@ export class APIClient {
   private readonly password: string;
   private accessToken?: TokenData;
   private cookieString?: string;
+  private static readonly URL = {
+    ACCESS: 'access',
+    CLIENTS: 'clients',
+    COMPLETE: 'complete',
+    LOGIN: 'login',
+    LOGOUT: 'logout',
+    MEMBERS: 'members',
+    PASSWORD_RESET: 'password-reset',
+    PREKEYS: 'prekeys',
+    SELF: 'self',
+    TEAMS: 'teams',
+    USERS: 'users',
+  };
 
   constructor(backendURL: string, emailAddress: string, password: string) {
     this.backendURL = backendURL;
@@ -42,7 +55,7 @@ export class APIClient {
       {
         data: {email: this.emailAddress},
         method: 'post',
-        url: '/password-reset',
+        url: `/${APIClient.URL.PASSWORD_RESET}`,
         validateStatus: status => status === HTTP_STATUS.CREATED,
       },
       false,
@@ -51,28 +64,28 @@ export class APIClient {
   }
 
   async getUserPreKeys(userId: string): Promise<Response<PreKeyBundle>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<PreKeyBundle>({
       method: 'get',
-      url: `/users/${userId}/prekeys`,
+      url: `/${APIClient.URL.USERS}/${userId}/${APIClient.URL.PREKEYS}`,
     });
 
     return {cookies: parseCookies(headers), data};
   }
 
   async getAllTeamMembers(teamId: string): Promise<Response<Members>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<Members>({
       method: 'get',
-      url: `/teams/${teamId}/members`,
+      url: `/${APIClient.URL.TEAMS}/${teamId}/${APIClient.URL.MEMBERS}`,
     });
 
     return {cookies: parseCookies(headers), data};
   }
 
   async postMultiPreKeyBundlesChunk(userClientMap: UserClients): Promise<UserPreKeyBundleMap> {
-    const {data} = await this.request({
+    const {data} = await this.request<UserPreKeyBundleMap>({
       data: userClientMap,
       method: 'post',
-      url: '/users/prekeys',
+      url: `/${APIClient.URL.USERS}/${APIClient.URL.PREKEYS}`,
     });
 
     return data;
@@ -87,7 +100,7 @@ export class APIClient {
           password: newPassword,
         },
         method: 'post',
-        url: '/password-reset/complete',
+        url: `/${APIClient.URL.PASSWORD_RESET}/${APIClient.URL.COMPLETE}`,
       },
       false
     );
@@ -103,7 +116,7 @@ export class APIClient {
           password: this.password,
         },
         method: 'post',
-        url: '/login',
+        url: `/${APIClient.URL.LOGIN}`,
       })
     );
 
@@ -121,28 +134,28 @@ export class APIClient {
   }
 
   async logout(): Promise<void> {
-    this.checkCookieString();
-    this.checkAccessToken();
-
-    await this.request({
-      method: 'post',
-      url: '/access/logout',
-    });
+    await this.request(
+      {
+        method: 'post',
+        url: `/${APIClient.URL.ACCESS}/${APIClient.URL.LOGOUT}`,
+      },
+      true
+    );
   }
 
   async getClients(): Promise<Response<Client[]>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<Client[]>({
       method: 'get',
-      url: '/clients',
+      url: `/${APIClient.URL.CLIENTS}`,
     });
 
     return {cookies: parseCookies(headers), data};
   }
 
   async getClient(clientId: string): Promise<Response<Client>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<Client>({
       method: 'get',
-      url: `/clients/${clientId}`,
+      url: `/${APIClient.URL.CLIENTS}/${clientId}`,
     });
 
     return {cookies: parseCookies(headers), data};
@@ -152,7 +165,7 @@ export class APIClient {
     await this.request({
       data: {password: this.password},
       method: 'delete',
-      url: `/clients/${clientId}`,
+      url: `/${APIClient.URL.CLIENTS}/${clientId}`,
     });
   }
 
@@ -160,7 +173,7 @@ export class APIClient {
     await this.request({
       data: updatedClient,
       method: 'put',
-      url: `/clients/${clientId}`,
+      url: `/${APIClient.URL.CLIENTS}/${clientId}`,
     });
   }
 
@@ -168,14 +181,14 @@ export class APIClient {
     await this.request({
       data: profileData,
       method: 'put',
-      url: '/self',
+      url: `/${APIClient.URL.SELF}`,
     });
   }
 
   async getSelf(): Promise<Response<Self>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<Self>({
       method: 'get',
-      url: 'self',
+      url: `/${APIClient.URL.SELF}`,
     });
 
     return {cookies: parseCookies(headers), data};
@@ -183,17 +196,21 @@ export class APIClient {
 
   private checkCookieString(): void {
     if (!this.cookieString) {
-      throw new Error('No cookie received. Please login first.');
+      throw new Error('No cookie saved. Please login first.');
     }
   }
 
   private checkAccessToken(): void {
     if (!this.accessToken) {
-      throw new Error('No access token received. Please login first.');
+      throw new Error('No access token saved. Please login first.');
     }
   }
 
-  private request<T>(config: AxiosRequestConfig, accessTokenNeeded?: boolean, getErrorCode?: boolean): Promise<T>;
+  private request<T>(
+    config: AxiosRequestConfig,
+    accessTokenNeeded?: boolean,
+    getErrorCode?: boolean
+  ): Promise<AxiosResponse<T>>;
   private request(
     config: AxiosRequestConfig,
     accessTokenNeeded: boolean,
@@ -225,9 +242,9 @@ export class APIClient {
     try {
       return await fn();
     } catch (error) {
-      if ((error as AxiosError).isAxiosError) {
-        const maybeMessage = (error as AxiosError<{message: string}>).response?.data?.message || '(no message)';
-        const errorCode = (error as AxiosError).response?.status;
+      if (isAxiosError(error)) {
+        const maybeMessage = error.response?.data?.message || '(no message)';
+        const errorCode = error.response?.status;
         if (getErrorCode) {
           return {errorCode} as {errorCode: HTTP_STATUS};
         }

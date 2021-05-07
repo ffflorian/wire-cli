@@ -1,6 +1,9 @@
 import * as http from 'http';
 import prompts from 'prompts';
 import logdown = require('logdown');
+import * as path from 'path';
+import * as fs from 'fs';
+import {AxiosError} from 'axios';
 
 export type Cookies = Record<string, string>;
 export type TryFunction = () => any | Promise<any>;
@@ -144,4 +147,19 @@ export function addHTTPS(url?: string): string {
 export function isUUID(input: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(input);
+}
+
+export function getPackageJson(): {name: string; version: string} {
+  const defaultPackageJsonPath = path.join(__dirname, 'package.json');
+  const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
+    ? defaultPackageJsonPath
+    : path.join(__dirname, '../package.json');
+
+  const pkg = require(packageJsonPath);
+
+  return pkg;
+}
+
+export function isAxiosError(errorCandidate: any): errorCandidate is AxiosError {
+  return errorCandidate.isAxiosError === true;
 }

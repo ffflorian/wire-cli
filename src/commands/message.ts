@@ -1,12 +1,21 @@
 import {Account} from '@wireapp/core';
 import {APIClient} from '@wireapp/api-client';
-import {ClientType} from '@wireapp/api-client/src/client/';
+import {ClientClassification, ClientType} from '@wireapp/api-client/src/client/';
 import prompts from 'prompts';
 
 import {CommonOptions} from '../CommonOptions';
-import {getLogger, getBackendURL, getEmailAddress, getPassword, getConversationID, getMessageID} from '../util';
+import {
+  getLogger,
+  getBackendURL,
+  getEmailAddress,
+  getPassword,
+  getConversationID,
+  getPackageJson,
+  getMessageID,
+} from '../util';
 
 const logger = getLogger('set-availability');
+const pkg = getPackageJson();
 
 export interface SendMessageOptions extends CommonOptions {
   conversationID?: string;
@@ -53,7 +62,11 @@ export async function sendMessage({
   const account = new Account(apiClient);
 
   logger.info(`Logging in with email address "${emailAddress}" ...`);
-  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
+  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
+    classification: ClientClassification.DESKTOP,
+    cookieLabel: 'default',
+    model: `${pkg.name} v${pkg.version}`,
+  });
 
   logger.info(`Sending message "${message}" to conversation "${conversationID}"...`);
 
@@ -92,7 +105,11 @@ export async function deleteMessage({
   const account = new Account(apiClient);
 
   logger.info(`Logging in with email address "${emailAddress}" ...`);
-  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password});
+  await account.login({clientType: ClientType.TEMPORARY, email: emailAddress, password}, undefined, {
+    classification: ClientClassification.DESKTOP,
+    cookieLabel: 'default',
+    model: `${pkg.name} v${pkg.version}`,
+  });
 
   logger.info(`Deleting message "${messageID}" in conversation "${conversationID}"...`);
 
