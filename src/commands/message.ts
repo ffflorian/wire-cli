@@ -29,7 +29,7 @@ export interface DeleteMessageOptions extends CommonOptions {
 
 export async function sendMessage({
   backendURL,
-  conversationID,
+  conversationID: conversationId,
   defaultBackendURL,
   dryRun,
   emailAddress,
@@ -39,7 +39,7 @@ export async function sendMessage({
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
-  conversationID ||= await getConversationID();
+  conversationId ||= await getConversationID();
   message ||= (
     await prompts(
       {
@@ -68,10 +68,10 @@ export async function sendMessage({
     model: `${name} v${version}`,
   });
 
-  logger.info(`Sending message "${message}" to conversation "${conversationID}"...`);
+  logger.info(`Sending message "${message}" to conversation "${conversationId}"...`);
 
   if (!dryRun) {
-    const payload = account.service!.conversation.messageBuilder.createText(conversationID, message!).build();
+    const payload = account.service!.conversation.messageBuilder.createText({conversationId, text: message!}).build();
     await account.service!.conversation.send(payload);
   }
 
