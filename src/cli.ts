@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import commander from 'commander';
+import {program as commander} from 'commander';
 
 import {
   deleteAllClients,
