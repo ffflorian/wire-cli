@@ -72,7 +72,7 @@ export async function sendMessage({
 
   if (!dryRun) {
     const payload = account.service!.conversation.messageBuilder.createText({conversationId, text: message!}).build();
-    await account.service!.conversation.send(payload);
+    await account.service!.conversation.send({payloadBundle: payload});
   }
 
   logger.info('Logging out ...');
