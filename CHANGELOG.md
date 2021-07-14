@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/ffflorian/wire-cli/compare/v1.8.1...v1.9.0) (2021-07-14)
+
+
+### Features
+
+* Change email address ([c23b4b6](https://github.com/ffflorian/wire-cli/commit/c23b4b6ceea4fcc5ce20d56b66cadf4134168327))
+
 ## [1.8.1](https://github.com/ffflorian/wire-cli/compare/v1.8.0...v1.8.1) (2021-05-07)
 
 
