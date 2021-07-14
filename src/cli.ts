@@ -12,6 +12,7 @@ import {
   setName,
   updateClient,
 } from './commands/';
+import {setEmail} from './commands/setEmail';
 import {addHTTPS, getLogger, tryAndExit, getPackageJson} from './util';
 
 const {bin, description, version} = getPackageJson();
@@ -129,6 +130,27 @@ commander
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         newName: localOptions?.newName,
+        password: commanderOptions.password,
+      })
+    )
+  );
+
+commander
+  .command('set-email')
+  .description('set your email address')
+  .option('-b, --backend <URL>', 'specify the Wire backend URL')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your email address')
+  .option('-n, --new-email <address>', 'specify your new email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .action((localOptions: {newEmail?: string} | undefined) =>
+    tryAndExit(() =>
+      setEmail({
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        newEmailAddress: localOptions?.newEmail,
         password: commanderOptions.password,
       })
     )

@@ -34,6 +34,7 @@ Commands:
   reset-password [options]      reset your password
   get-all-clients [options]     get all clients data
   set-name [options]            set your name
+  set-email [options]           set your email address
   set-availability [options]    set your availability status
   send [options]                send a message
   delete [options]              delete a message

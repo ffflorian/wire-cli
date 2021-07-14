@@ -22,6 +22,11 @@ export interface Response<T> {
   data: T;
 }
 
+export interface ErrorResponse {
+  errorCode: HTTP_STATUS;
+  message?: string;
+}
+
 const logger = getLogger('APIClient');
 
 export class APIClient {
@@ -34,6 +39,7 @@ export class APIClient {
     ACCESS: 'access',
     CLIENTS: 'clients',
     COMPLETE: 'complete',
+    EMAIL: 'email',
     LOGIN: 'login',
     LOGOUT: 'logout',
     MEMBERS: 'members',
@@ -50,7 +56,7 @@ export class APIClient {
     this.password = password;
   }
 
-  initatePasswordReset(): Promise<void | {errorCode: HTTP_STATUS}> {
+  initatePasswordReset(): Promise<ErrorResponse> {
     return this.request(
       {
         data: {email: this.emailAddress},
@@ -177,6 +183,17 @@ export class APIClient {
     });
   }
 
+  public async putEmail(emailData: {email: string}): Promise<void> {
+    await this.request(
+      {
+        data: emailData,
+        method: 'put',
+        url: `/${APIClient.URL.ACCESS}/${APIClient.URL.SELF}/${APIClient.URL.EMAIL}`,
+      },
+      true
+    );
+  }
+
   async putSelf(profileData: SelfUpdate): Promise<void> {
     await this.request({
       data: profileData,
@@ -211,16 +228,12 @@ export class APIClient {
     accessTokenNeeded?: boolean,
     getErrorCode?: boolean
   ): Promise<AxiosResponse<T>>;
-  private request(
-    config: AxiosRequestConfig,
-    accessTokenNeeded: boolean,
-    getErrorCode: true
-  ): Promise<{errorCode: HTTP_STATUS}>;
+  private request(config: AxiosRequestConfig, accessTokenNeeded: boolean, getErrorCode: true): Promise<ErrorResponse>;
   private request<T>(
     config: AxiosRequestConfig,
     accessTokenNeeded = true,
     getErrorCode: boolean = false
-  ): Promise<T | {errorCode: HTTP_STATUS}> {
+  ): Promise<T | ErrorResponse> {
     config.baseURL ??= this.backendURL;
 
     if (accessTokenNeeded) {
@@ -236,19 +249,19 @@ export class APIClient {
     return this.tryRequest(() => axios.request(config), getErrorCode);
   }
 
-  private async tryRequest(fn: TryFunction, getErrorCode: true): Promise<{errorCode: HTTP_STATUS}>;
+  private async tryRequest(fn: TryFunction, getErrorCode: true): Promise<ErrorResponse>;
   private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T>;
-  private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T | {errorCode: HTTP_STATUS}> {
+  private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T | ErrorResponse> {
     try {
       return await fn();
     } catch (error) {
       if (isAxiosError(error)) {
-        const maybeMessage = error.response?.data?.message || '(no message)';
+        const message = error.response?.data?.message || '(no message)';
         const errorCode = error.response?.status;
         if (getErrorCode) {
-          return {errorCode} as {errorCode: HTTP_STATUS};
+          return {errorCode, message} as ErrorResponse;
         }
-        throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
+        throw new Error(`Request failed with status code ${errorCode}: ${message}`);
       }
       throw error;
     }
