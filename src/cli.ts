@@ -6,6 +6,7 @@ import {
   deleteAllClients,
   deleteMessage,
   getAllClients,
+  getSelf,
   resetPassword,
   sendMessage,
   setAvailabilityStatus,
@@ -105,6 +106,25 @@ commander
   .action(() =>
     tryAndExit(() =>
       getAllClients({
+        backendURL: addHTTPS(commanderOptions.backend),
+        defaultBackendURL,
+        dryRun: commanderOptions.dryRun,
+        emailAddress: commanderOptions.email,
+        password: commanderOptions.password,
+      })
+    )
+  );
+
+commander
+  .command('get-self')
+  .description('get self data')
+  .option('-b, --backend <URL>', 'specify the Wire backend URL')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .action(() =>
+    tryAndExit(() =>
+      getSelf({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
