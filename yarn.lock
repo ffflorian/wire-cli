@@ -780,10 +780,10 @@
     "@typescript-eslint/types" "4.29.1"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@12.37.1":
-  version "12.37.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.37.1.tgz#7aeba5f46727136838fa2e8be8ece41c108dc81a"
-  integrity sha512-mDRyYScY7gZhRhoe5zqrsaAByhm8s49z0J1YGrPEAqXgczSKnyDc7mMx2RjqDX7n9tN5TY8RGNHE87Zjommx2w==
+"@wireapp/api-client@12.38.0":
+  version "12.38.0"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-12.38.0.tgz#2eecbaff038a45af977f4c2f6f2dd44792455024"
+  integrity sha512-htXbgdMuG+Okeq9+5Tbesn/TM2mBhAG4nISvtPUPy6DGY296U1b9z+Iff1ixyTQMcK0kGTHdmei4f6FEzvGDXg==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
@@ -819,16 +819,16 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@17.11.7":
-  version "17.11.7"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.11.7.tgz#db726d2749f561cd21302174c6078623c5afef23"
-  integrity sha512-dsU4zx9IPIjjfnA2ee+AHqWHaZ2NAVTbHz35sN/Fs21+6kjnkVmNKkrts/yMIoeHla4vt5Zb+0aeza2dnRs73g==
+"@wireapp/core@17.12.0":
+  version "17.12.0"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.12.0.tgz#d658c8a1e0ab78ae0a19ebee211fff2ce17aa8cc"
+  integrity sha512-WepoyVXKvSuyc8WUCizX0A5/kB5yqpNxXJXDSJ/Sw8638utibRj55oD/asTUXeBLA32UgjyzWmOnGxDaScro3A==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "12.37.1"
+    "@wireapp/api-client" "12.38.0"
     "@wireapp/cryptobox" "12.7.1"
-    bazinga64 "5.9.5"
+    bazinga64 "5.9.6"
     hash.js "1.1.7"
     http-status-codes "2.1.4"
     logdown "3.3.1"
@@ -1215,10 +1215,10 @@ bazinga64@5.9.2:
   resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.9.2.tgz#536d260f4d5e2298141350c4f3dfc28a263d18bd"
   integrity sha512-cWGu1Giklh8+ewb1CaTHGFErtSWX4X5vJleYiYmInfKmbyP4Oz0P/IMK3X86LJRMFiNZsK4kJN5m55oCa/U8GQ==
 
-bazinga64@5.9.5:
-  version "5.9.5"
-  resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.9.5.tgz#87208b64a9aa0c6e8617a7928a85daa0117ed500"
-  integrity sha512-l4jPBlcfbqt1haiW4GZhKlvMde8lO+CYviTvt1JQnYNZ43MkVjYNKdTZdPMTCHpklxl/wwPCL6LplAnD/bvMkQ==
+bazinga64@5.9.6:
+  version "5.9.6"
+  resolved "https://registry.npmjs.org/bazinga64/-/bazinga64-5.9.6.tgz#ab425f83687b6ae82a3bcd041ee075d27eb290ba"
+  integrity sha512-tImi45HPqL4mkoUx/ESmfoZeYSsmaBGIyFEIhVqGEWNHU/B2nkvJY2UeIblyCXAnyKA2AiR8ejpsR8zhYbW+uA==
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
