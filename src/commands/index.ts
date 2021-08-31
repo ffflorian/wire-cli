@@ -1,4 +1,5 @@
 export * from './deleteAllClients';
+export * from './getSelf';
 export * from './message';
 export * from './resetPassword';
 export * from './setAvailabilityStatus';
