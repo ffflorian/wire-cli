@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/ffflorian/wire-cli/compare/v1.9.0...v1.10.0) (2021-08-31)
+
+
+### Features
+
+* Get Self ([#431](https://github.com/ffflorian/wire-cli/issues/431)) ([578daf4](https://github.com/ffflorian/wire-cli/commit/578daf4a22494a7e2f4259ce717da4d9776ba6b1))
+
 # [1.9.0](https://github.com/ffflorian/wire-cli/compare/v1.8.1...v1.9.0) (2021-07-14)
 
 
