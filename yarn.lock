@@ -790,15 +790,15 @@
     "@typescript-eslint/types" "4.31.2"
     eslint-visitor-keys "^2.0.0"
 
-"@wireapp/api-client@13.6.1":
-  version "13.6.1"
-  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-13.6.1.tgz#8992e653edbec99ff98547d4ec9e28c64436e616"
-  integrity sha512-hY+t3aXuoTUkZpZfZGRYc4D677182ecbPr194qYATuXx74Q63j8SyHFS+yjghk+DHf0igbjK/tnkKw3Zzxgdfw==
+"@wireapp/api-client@13.8.1":
+  version "13.8.1"
+  resolved "https://registry.npmjs.org/@wireapp/api-client/-/api-client-13.8.1.tgz#795d5b4615abdf36694b0190c3e01621fe868beb"
+  integrity sha512-ApfcK7xB4Vf0nJ51oZAH5wcqaok7WEYxEbTwhAw9LcPpQJUweo6GtS7lKHtaCdW7GYjQ1HrKEYNCqSBGo5YRBQ==
   dependencies:
     "@types/node" "~14"
     "@types/spark-md5" "3.0.2"
     "@types/tough-cookie" "4.0.1"
-    "@wireapp/commons" "4.2.11"
+    "@wireapp/commons" "4.2.12"
     "@wireapp/priority-queue" "1.6.37"
     "@wireapp/protocol-messaging" "1.35.0"
     axios "0.21.4"
@@ -815,10 +815,10 @@
   resolved "https://registry.npmjs.org/@wireapp/cbor/-/cbor-4.7.2.tgz#cf890cbd1af6f684fd06c704e96b3186bd0672f3"
   integrity sha512-SfWI1pfwPLpYDC2gkQIOtVFA51x1LFbWoZ5qPp9wit5l3x1CWIpmGK3g1F06XXJn/HeRHJawwp28pzzH58h2iQ==
 
-"@wireapp/commons@4.2.11":
-  version "4.2.11"
-  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-4.2.11.tgz#786605872daf4edb20a997136c2ea8b85411c60e"
-  integrity sha512-boo+x7pV7B3G6zHV5z9BoUhvQzUn/9C72/TehAdfkRhElTJQJ7IJsBC+gMzHavlhVSt+a/63YlvfgK84BTvUtw==
+"@wireapp/commons@4.2.12":
+  version "4.2.12"
+  resolved "https://registry.npmjs.org/@wireapp/commons/-/commons-4.2.12.tgz#2121cd9e40fa6252d18e18830f615d90e80e74c4"
+  integrity sha512-wbSpRUkdTgOs/F8tazPqo3iBjp/5xTA4VY44MOQW7c8hMZuVxJbENrJW6w8ZbipiaJO3jXsYS01cXF2TfIvLdA==
   dependencies:
     "@types/fs-extra" "9.0.12"
     "@types/node" "~14"
@@ -829,14 +829,14 @@
     platform "1.3.6"
     url-search-params-polyfill "8.1.1"
 
-"@wireapp/core@17.14.6":
-  version "17.14.6"
-  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.14.6.tgz#c057fe4dd8d75f2b5bdcc7ec1c74cc2fc83aa59d"
-  integrity sha512-iLvjpCu9Supzv8NI76sNWdzWUBi7VMCsRgAcWB7TJbnxqemRCbYG/4no+vZvPhAZle3kxOetyQpZyP9hUMJqAQ==
+"@wireapp/core@17.16.3":
+  version "17.16.3"
+  resolved "https://registry.npmjs.org/@wireapp/core/-/core-17.16.3.tgz#f07303a0e5501219b95847cd3bca672dd5b4ebe6"
+  integrity sha512-W1v/eqFKKM2ONZ7qZiFgeopCvMSH/fKO53Vn/6sxKk54H7ZnHzhkkfxOZaJ5sWLv3HL5nmAxSPELeKWBD+5E6Q==
   dependencies:
     "@types/long" "4.0.1"
     "@types/node" "~14"
-    "@wireapp/api-client" "13.6.1"
+    "@wireapp/api-client" "13.8.1"
     "@wireapp/cryptobox" "12.7.1"
     bazinga64 "5.9.7"
     hash.js "1.1.7"
