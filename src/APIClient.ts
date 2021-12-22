@@ -241,7 +241,7 @@ export class APIClient {
       this.checkCookieString();
       config.headers = {
         Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
-        Cookie: this.cookieString,
+        Cookie: this.cookieString || '',
         ...config.headers,
       };
     }
