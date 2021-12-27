@@ -7,7 +7,7 @@
     "@wireapp/core": "17.17.4",
     "axios": "0.24.0",
     "commander": "8.3.0",
-    "http-status-codes": "2.1.4",
+    "http-status-codes": "2.2.0",
     "logdown": "3.3.1",
     "prompts": "2.4.2"
   },
