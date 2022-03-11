@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/ffflorian/wire-cli/compare/v1.10.0...v1.11.0) (2022-03-11)
+
+
+### Features
+
+* Add wire ASCII logo ([#201](https://github.com/ffflorian/wire-cli/issues/201)) ([aa2ec8f](https://github.com/ffflorian/wire-cli/commit/aa2ec8f4203aa18385b003c82b321e7c40ecc2a6))
+
 # [1.10.0](https://github.com/ffflorian/wire-cli/compare/v1.9.0...v1.10.0) (2021-08-31)
 
 
