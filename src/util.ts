@@ -140,6 +140,26 @@ export function getLogger(moduleName: string): logdown.Logger {
   return logger;
 }
 
+export function init(): void {
+  console.info(`
+  µ.           æ@NmL           µ      µ.     µ,     µææ        µµæ@wµµ.       ,,
+  ÑÑ          ÑÑÕ¯MÑK         HÑL    @ÑÊ     ÑÑ  æØÑÑMM    µøØÑÑMM¶MMÑÑÑNµ    ½[©
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑæÑÑÕ      µØÑM¯         ´ÕÑÑw
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑÑÕ       æÑM\`            æÑM\`
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑÕ       æÑÕ            æÑÑ\`
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑ       @ÑÊ           wÑÑÕ
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑ       ÑÑM         µØÑÕ
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑ       ÑÑ        .ØÑM\`
+  ÑÑ         HÑL   ÑÑ         HÑL    @ÑÊ     ÑÑ       ÑÑÐ      æÑM\`
+  ÑÑ         MÑÐ   ÑÑ         ÜÑM    @ÑÊ     ÑÑ        ÑÑ    æÑÑÕ
+  ÑÑ©         ÑÑ  UÑÑ         ØÑ     @ÑÊ     ÑÑ        ÕÑN µØÑÕ
+   ÑÑ©        ´ÑÑæÑÑ         ØÑÕ     @ÑÊ     ÑÑ         ÕÑÑÑÕ            µ.
+    ÕÑNµ       ÛÑÑÑL      µæÑÑ\`      @ÑÊ     ÑÑ           MÑÑwL       .æØÑM
+     \´ÕÑÑÑNNNÑÑÑÕ´MÑÑNNNNÑÑMÕ        @ÑÊ     ÑÑ             ÕMÑÑNNNNØÑÑMÕ\`
+         \´¯¯\`\`       \´¯¯\`                                       \´¯¯¯\`
+`);
+}
+
 export function addHTTPS(url?: string): string {
   return url ? `https://${url.replace(/^https?:\/\//, '')}` : '';
 }

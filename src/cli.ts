@@ -14,7 +14,7 @@ import {
   updateClient,
 } from './commands/';
 import {setEmail} from './commands/setEmail';
-import {addHTTPS, getLogger, tryAndExit, getPackageJson} from './util';
+import {addHTTPS, getLogger, init, tryAndExit, getPackageJson} from './util';
 
 const {bin, description, version} = getPackageJson();
 const commanderOptions = commander.opts();
@@ -43,15 +43,16 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      deleteAllClients({
+    tryAndExit(() => {
+      init();
+      return deleteAllClients({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -64,8 +65,9 @@ commander
   .option('-l, --label <label>', 'specify the new label')
   .option('-p, --password <password>', 'specify your Wire password')
   .action((localOptions: {clientId?: string; label?: string} | undefined) =>
-    tryAndExit(() =>
-      updateClient({
+    tryAndExit(() => {
+      init();
+      return updateClient({
         backendURL: addHTTPS(commanderOptions.backend),
         clientId: localOptions?.clientId!,
         defaultBackendURL,
@@ -73,8 +75,8 @@ commander
         emailAddress: commanderOptions.email,
         label: localOptions?.label!,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -85,15 +87,16 @@ commander
   .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
   .option('-e, --email <address>', 'specify your email address')
   .action(() =>
-    tryAndExit(() =>
-      resetPassword({
+    tryAndExit(() => {
+      init();
+      return resetPassword({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         skipInitation: commanderOptions.continue,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -104,15 +107,16 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      getAllClients({
+    tryAndExit(() => {
+      init();
+      return getAllClients({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -123,15 +127,16 @@ commander
   .option('-e, --email <address>', 'specify your email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action(() =>
-    tryAndExit(() =>
-      getSelf({
+    tryAndExit(() => {
+      init();
+      return getSelf({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -143,16 +148,17 @@ commander
   .option('-n, --new-name <name>', 'specify your new name')
   .option('-p, --password <password>', 'specify your Wire password')
   .action((localOptions: {newName?: string} | undefined) =>
-    tryAndExit(() =>
-      setName({
+    tryAndExit(() => {
+      init();
+      return setName({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         newName: localOptions?.newName,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -164,16 +170,17 @@ commander
   .option('-n, --new-email <address>', 'specify your new email address')
   .option('-p, --password <password>', 'specify your Wire password')
   .action((localOptions: {newEmail?: string} | undefined) =>
-    tryAndExit(() =>
-      setEmail({
+    tryAndExit(() => {
+      init();
+      return setEmail({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         newEmailAddress: localOptions?.newEmail,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -185,16 +192,17 @@ commander
   .option('-p, --password <password>', 'specify your Wire password')
   .option('-s, --status <status>', 'specify the status type to be set (0/1/2/3 or none/available/away/busy)')
   .action((localOptions: {status?: string} | undefined) =>
-    tryAndExit(() =>
-      setAvailabilityStatus({
+    tryAndExit(() => {
+      init();
+      return setAvailabilityStatus({
         backendURL: addHTTPS(commanderOptions.backend),
         defaultBackendURL,
         dryRun: commanderOptions.dryRun,
         emailAddress: commanderOptions.email,
         password: commanderOptions.password,
         statusType: localOptions?.status,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -207,8 +215,9 @@ commander
   .option('-c, --conversation <ID>', 'specify the conversation for the message to be sent to')
   .option('-m, --message <text>', 'specify the message to be sent')
   .action((localOptions: {conversation?: string; message?: string} | undefined) =>
-    tryAndExit(() =>
-      sendMessage({
+    tryAndExit(() => {
+      init();
+      return sendMessage({
         backendURL: addHTTPS(commanderOptions.backend),
         conversationID: localOptions?.conversation,
         defaultBackendURL,
@@ -216,8 +225,8 @@ commander
         emailAddress: commanderOptions.email,
         message: localOptions?.message,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander
@@ -230,8 +239,9 @@ commander
   .option('-m, --message <ID>', 'specify the message ID to be deleted')
   .option('-p, --password <password>', 'specify your Wire password')
   .action((localOptions: {conversation?: string; message?: string} | undefined) =>
-    tryAndExit(() =>
-      deleteMessage({
+    tryAndExit(() => {
+      init();
+      return deleteMessage({
         backendURL: addHTTPS(commanderOptions.backend),
         conversationID: localOptions?.conversation,
         defaultBackendURL,
@@ -239,8 +249,8 @@ commander
         emailAddress: commanderOptions.email,
         messageID: localOptions?.message,
         password: commanderOptions.password,
-      })
-    )
+      });
+    })
   );
 
 commander.parse(process.argv);
