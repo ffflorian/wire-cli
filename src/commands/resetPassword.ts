@@ -13,11 +13,11 @@ export interface ResetPasswordOptions extends CommonOptions {
 const logger = getLogger('reset-password');
 
 export async function resetPassword({
+  backendURL,
   defaultBackendURL,
-  skipInitation,
   dryRun,
   emailAddress,
-  backendURL,
+  skipInitation,
 }: ResetPasswordOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
@@ -27,8 +27,8 @@ export async function resetPassword({
   if (!skipInitation) {
     logger.info('Initiating password reset ...');
     if (!dryRun) {
-      const result = await apiClient.initatePasswordReset();
-      if (result && result.errorCode === HTTP_STATUS.CONFLICT) {
+      const {errorCode} = await apiClient.initatePasswordReset();
+      if (errorCode === HTTP_STATUS.CONFLICT) {
         const {shouldContinue} = await prompts(
           {
             message: 'A password reset is already in progress. Would you like to continue?',

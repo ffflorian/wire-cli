@@ -1,3 +1,115 @@
+# [1.10.0](https://github.com/ffflorian/wire-cli/compare/v1.9.0...v1.10.0) (2021-08-31)
+
+
+### Features
+
+* Get Self ([#431](https://github.com/ffflorian/wire-cli/issues/431)) ([578daf4](https://github.com/ffflorian/wire-cli/commit/578daf4a22494a7e2f4259ce717da4d9776ba6b1))
+
+# [1.9.0](https://github.com/ffflorian/wire-cli/compare/v1.8.1...v1.9.0) (2021-07-14)
+
+
+### Features
+
+* Change email address ([c23b4b6](https://github.com/ffflorian/wire-cli/commit/c23b4b6ceea4fcc5ce20d56b66cadf4134168327))
+
+## [1.8.1](https://github.com/ffflorian/wire-cli/compare/v1.8.0...v1.8.1) (2021-05-07)
+
+
+### Bug Fixes
+
+* Always set version when logging in, fix URLs ([c94e15b](https://github.com/ffflorian/wire-cli/commit/c94e15b3dce826201eeeeb4a9643ba533466ec99))
+
+# [1.8.0](https://github.com/ffflorian/wire-cli/compare/v1.7.0...v1.8.0) (2021-05-02)
+
+
+### Features
+
+* No need for websocket anymore ([2aaf74b](https://github.com/ffflorian/wire-cli/commit/2aaf74be79afc5f3410e02f44d6f669e4712769d))
+
+# [1.7.0](https://github.com/ffflorian/wire-cli/compare/v1.6.8...v1.7.0) (2021-04-13)
+
+
+### Features
+
+* Send and delete message ([#258](https://github.com/ffflorian/wire-cli/issues/258)) ([fab4c74](https://github.com/ffflorian/wire-cli/commit/fab4c747164e62dadd3bd73f220f786d3a861655))
+
+## [1.6.8](https://github.com/ffflorian/wire-cli/compare/v1.6.7...v1.6.8) (2021-04-12)
+
+
+### Bug Fixes
+
+* Add client label when logging in ([80b6870](https://github.com/ffflorian/wire-cli/commit/80b68703dda51c331afa0762f7da4011ff3f2b06))
+
+## [1.6.7](https://github.com/ffflorian/wire-cli/compare/v1.6.6...v1.6.7) (2021-04-12)
+
+
+### Bug Fixes
+
+* Use newName in setName ([127fd33](https://github.com/ffflorian/wire-cli/commit/127fd335bcda277247303acbbf7312b5268d381c))
+
+## [1.6.6](https://github.com/ffflorian/wire-cli/compare/v1.6.5...v1.6.6) (2021-04-12)
+
+
+### Bug Fixes
+
+* Use localOptions where applicable ([08ae52b](https://github.com/ffflorian/wire-cli/commit/08ae52bb490ed3dc2ad4140142811575662288b5))
+
+## [1.6.5](https://github.com/ffflorian/wire-cli/compare/v1.6.4...v1.6.5) (2021-04-12)
+
+
+### Bug Fixes
+
+* clienttype and new name ([d9ec3bf](https://github.com/ffflorian/wire-cli/commit/d9ec3bf98242d7ee61255f6f5acfcf3e581ab1d2))
+
+## [1.6.4](https://github.com/ffflorian/wire-cli/compare/v1.6.3...v1.6.4) (2021-04-12)
+
+
+### Bug Fixes
+
+* Availability status options ([2f83858](https://github.com/ffflorian/wire-cli/commit/2f8385861e359c407c623fd86286d649d9c9bb19))
+
+## [1.6.3](https://github.com/ffflorian/wire-cli/compare/v1.6.2...v1.6.3) (2021-04-11)
+
+
+### Bug Fixes
+
+* add shebang to CLI ([fb09fad](https://github.com/ffflorian/wire-cli/commit/fb09fad4ce7524c94c118a5631979a552129755c))
+
+## [1.6.2](https://github.com/ffflorian/wire-cli/compare/v1.6.1...v1.6.2) (2021-03-26)
+
+
+### Bug Fixes
+
+* Add default WebSocket URL ([f105a40](https://github.com/ffflorian/wire-cli/commit/f105a4085dec1b9668f32b0854f4880e75a804ce))
+
+## [1.6.1](https://github.com/ffflorian/wire-cli/compare/v1.6.0...v1.6.1) (2021-03-26)
+
+
+### Bug Fixes
+
+* Add default HTTPS and WSS ([3c8ce87](https://github.com/ffflorian/wire-cli/commit/3c8ce87774c7341b1d6ea45904547e7cdb62c753))
+
+# [1.6.0](https://github.com/ffflorian/wire-cli/compare/v1.5.3...v1.6.0) (2021-03-24)
+
+
+### Features
+
+* Set availability status ([#4](https://github.com/ffflorian/wire-cli/issues/4)) ([ff54b48](https://github.com/ffflorian/wire-cli/commit/ff54b48718603bfae6d3e7888f1ec9125a40460a))
+
+## [1.5.3](https://github.com/ffflorian/wire-cli/compare/v1.5.2...v1.5.3) (2021-02-19)
+
+
+### Bug Fixes
+
+* Complete password reset URL ([af1ee1c](https://github.com/ffflorian/wire-cli/commit/af1ee1ceeb54dbc2cccdfe508d916526b3df76da))
+
+## [1.5.2](https://github.com/ffflorian/wire-cli/compare/v1.5.1...v1.5.2) (2021-02-18)
+
+
+### Bug Fixes
+
+* Logger prefixes ([8c6641d](https://github.com/ffflorian/wire-cli/commit/8c6641ddcac52a22e1016ee93c1b50417dc3a07e))
+
 ## [1.5.1](https://github.com/ffflorian/wire-cli/compare/v1.5.0...v1.5.1) (2021-02-18)
 
 

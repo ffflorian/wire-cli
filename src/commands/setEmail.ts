@@ -3,36 +3,37 @@ import {APIClient} from '../APIClient';
 import {CommonOptions} from '../CommonOptions';
 import {getBackendURL, getEmailAddress, getLogger, getPassword} from '../util';
 
-export interface SetNameOptions extends CommonOptions {
-  newName?: string;
+export interface SetEmailOptions extends CommonOptions {
+  newEmailAddress?: string;
 }
 
-const logger = getLogger('set-name');
+const logger = getLogger('set-email');
 
-export async function setName({
+export async function setEmail({
   backendURL,
   defaultBackendURL,
   dryRun,
   emailAddress,
-  newName,
+  newEmailAddress,
   password,
-}: SetNameOptions): Promise<void> {
+}: SetEmailOptions): Promise<void> {
   backendURL ||= await getBackendURL(defaultBackendURL);
   emailAddress ||= await getEmailAddress();
   password ||= await getPassword();
-  newName ||= (
+  newEmailAddress ||= (
     await prompts(
       {
-        max: 128,
-        message: 'Enter your new name (max. 128 chars):',
-        name: 'newName',
+        hint: 'Email address must be in the format email@example.com',
+        message: 'Enter your new email address',
+        name: 'newEmailAddress',
         type: 'text',
+        validate: input => input.match(/.+@.+\..+/),
       },
       {
         onCancel: () => process.exit(),
       }
     )
-  ).newName;
+  ).newEmailAddress;
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
@@ -40,10 +41,10 @@ export async function setName({
 
   await apiClient.login();
 
-  logger.info(`Setting new name to "${newName}" ...`);
+  logger.info(`Requesting email change to "${newEmailAddress}" ...`);
 
   if (!dryRun) {
-    await apiClient.putSelf({name: newName!});
+    await apiClient.putEmail({email: newEmailAddress!});
   }
 
   logger.info('Logging out ...');

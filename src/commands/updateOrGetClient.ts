@@ -29,7 +29,7 @@ export async function updateClient({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await apiClient.login();
 
   logger.info(`Updating client with ID "${clientId}" ...`);
@@ -39,9 +39,9 @@ export async function updateClient({
 }
 
 export async function getClient({
-  defaultBackendURL,
   backendURL,
   clientId,
+  defaultBackendURL,
   emailAddress,
   password,
 }: GetClientOptions): Promise<RegisteredClient> {
@@ -53,7 +53,7 @@ export async function getClient({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await apiClient.login();
 
   logger.info(`Getting client with ID "${clientId}" ...`);
@@ -79,7 +79,7 @@ export async function getAllClients({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await apiClient.login();
 
   logger.info('Getting all clients ...');

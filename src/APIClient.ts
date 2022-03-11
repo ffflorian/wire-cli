@@ -1,9 +1,14 @@
-import axios, {AxiosError, AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import {StatusCodes as HTTP_STATUS} from 'http-status-codes';
 import {ClientType, RegisteredClient as Client, UpdatedClient} from '@wireapp/api-client/src/client/';
 import {UserUpdate as SelfUpdate} from '@wireapp/api-client/src/user/';
+import {Self} from '@wireapp/api-client/src/self';
+import {UserPreKeyBundleMap} from '@wireapp/api-client/src/user';
+import {UserClients} from '@wireapp/api-client/src/conversation';
+import {Members} from '@wireapp/api-client/src/team';
+import {PreKeyBundle} from '@wireapp/api-client/src/auth';
 
-import {Cookies, getLogger, parseCookies, TryFunction} from './util';
+import {getLogger, Cookies, parseCookies, TryFunction, isAxiosError} from './util';
 
 export interface TokenData {
   access_token: string;
@@ -17,6 +22,11 @@ export interface Response<T> {
   data: T;
 }
 
+export interface ErrorResponse {
+  errorCode: HTTP_STATUS;
+  message?: string;
+}
+
 const logger = getLogger('APIClient');
 
 export class APIClient {
@@ -25,6 +35,20 @@ export class APIClient {
   private readonly password: string;
   private accessToken?: TokenData;
   private cookieString?: string;
+  private static readonly URL = {
+    ACCESS: 'access',
+    CLIENTS: 'clients',
+    COMPLETE: 'complete',
+    EMAIL: 'email',
+    LOGIN: 'login',
+    LOGOUT: 'logout',
+    MEMBERS: 'members',
+    PASSWORD_RESET: 'password-reset',
+    PREKEYS: 'prekeys',
+    SELF: 'self',
+    TEAMS: 'teams',
+    USERS: 'users',
+  };
 
   constructor(backendURL: string, emailAddress: string, password: string) {
     this.backendURL = backendURL;
@@ -32,12 +56,12 @@ export class APIClient {
     this.password = password;
   }
 
-  initatePasswordReset(): Promise<void | {errorCode: HTTP_STATUS}> {
+  initatePasswordReset(): Promise<ErrorResponse> {
     return this.request(
       {
         data: {email: this.emailAddress},
         method: 'post',
-        url: '/password-reset',
+        url: `/${APIClient.URL.PASSWORD_RESET}`,
         validateStatus: status => status === HTTP_STATUS.CREATED,
       },
       false,
@@ -45,7 +69,35 @@ export class APIClient {
     );
   }
 
-  async completePasswordReset(resetCode: string, newPassword: string) {
+  async getUserPreKeys(userId: string): Promise<Response<PreKeyBundle>> {
+    const {data, headers} = await this.request<PreKeyBundle>({
+      method: 'get',
+      url: `/${APIClient.URL.USERS}/${userId}/${APIClient.URL.PREKEYS}`,
+    });
+
+    return {cookies: parseCookies(headers), data};
+  }
+
+  async getAllTeamMembers(teamId: string): Promise<Response<Members>> {
+    const {data, headers} = await this.request<Members>({
+      method: 'get',
+      url: `/${APIClient.URL.TEAMS}/${teamId}/${APIClient.URL.MEMBERS}`,
+    });
+
+    return {cookies: parseCookies(headers), data};
+  }
+
+  async postMultiPreKeyBundlesChunk(userClientMap: UserClients): Promise<UserPreKeyBundleMap> {
+    const {data} = await this.request<UserPreKeyBundleMap>({
+      data: userClientMap,
+      method: 'post',
+      url: `/${APIClient.URL.USERS}/${APIClient.URL.PREKEYS}`,
+    });
+
+    return data;
+  }
+
+  async completePasswordReset(resetCode: string, newPassword: string): Promise<void> {
     await this.request(
       {
         data: {
@@ -54,7 +106,7 @@ export class APIClient {
           password: newPassword,
         },
         method: 'post',
-        url: '/password-reset',
+        url: `/${APIClient.URL.PASSWORD_RESET}/${APIClient.URL.COMPLETE}`,
       },
       false
     );
@@ -65,12 +117,12 @@ export class APIClient {
       axios.request({
         baseURL: this.backendURL,
         data: {
-          clientType: permanent ? ClientType.TEMPORARY : ClientType.PERMANENT,
+          clientType: permanent ? ClientType.PERMANENT : ClientType.TEMPORARY,
           email: this.emailAddress,
           password: this.password,
         },
         method: 'post',
-        url: '/login',
+        url: `/${APIClient.URL.LOGIN}`,
       })
     );
 
@@ -88,28 +140,28 @@ export class APIClient {
   }
 
   async logout(): Promise<void> {
-    this.checkCookieString();
-    this.checkAccessToken();
-
-    await this.request({
-      method: 'post',
-      url: '/access/logout',
-    });
+    await this.request(
+      {
+        method: 'post',
+        url: `/${APIClient.URL.ACCESS}/${APIClient.URL.LOGOUT}`,
+      },
+      true
+    );
   }
 
   async getClients(): Promise<Response<Client[]>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<Client[]>({
       method: 'get',
-      url: '/clients',
+      url: `/${APIClient.URL.CLIENTS}`,
     });
 
     return {cookies: parseCookies(headers), data};
   }
 
   async getClient(clientId: string): Promise<Response<Client>> {
-    const {data, headers} = await this.request({
+    const {data, headers} = await this.request<Client>({
       method: 'get',
-      url: `/clients/${clientId}`,
+      url: `/${APIClient.URL.CLIENTS}/${clientId}`,
     });
 
     return {cookies: parseCookies(headers), data};
@@ -119,7 +171,7 @@ export class APIClient {
     await this.request({
       data: {password: this.password},
       method: 'delete',
-      url: `/clients/${clientId}`,
+      url: `/${APIClient.URL.CLIENTS}/${clientId}`,
     });
   }
 
@@ -127,41 +179,61 @@ export class APIClient {
     await this.request({
       data: updatedClient,
       method: 'put',
-      url: `/clients/${clientId}`,
+      url: `/${APIClient.URL.CLIENTS}/${clientId}`,
     });
+  }
+
+  public async putEmail(emailData: {email: string}): Promise<void> {
+    await this.request(
+      {
+        data: emailData,
+        method: 'put',
+        url: `/${APIClient.URL.ACCESS}/${APIClient.URL.SELF}/${APIClient.URL.EMAIL}`,
+      },
+      true
+    );
   }
 
   async putSelf(profileData: SelfUpdate): Promise<void> {
     await this.request({
       data: profileData,
       method: 'put',
-      url: '/self',
+      url: `/${APIClient.URL.SELF}`,
     });
+  }
+
+  async getSelf(): Promise<Response<Self>> {
+    const {data, headers} = await this.request<Self>({
+      method: 'get',
+      url: `/${APIClient.URL.SELF}`,
+    });
+
+    return {cookies: parseCookies(headers), data};
   }
 
   private checkCookieString(): void {
     if (!this.cookieString) {
-      throw new Error('No cookie received. Please login first.');
+      throw new Error('No cookie saved. Please login first.');
     }
   }
 
   private checkAccessToken(): void {
     if (!this.accessToken) {
-      throw new Error('No access token received. Please login first.');
+      throw new Error('No access token saved. Please login first.');
     }
   }
 
-  private request<T>(config: AxiosRequestConfig, accessTokenNeeded?: boolean, getErrorCode?: boolean): Promise<T>;
   private request<T>(
     config: AxiosRequestConfig,
-    accessTokenNeeded: boolean,
-    getErrorCode: true
-  ): Promise<{errorCode: HTTP_STATUS}>;
+    accessTokenNeeded?: boolean,
+    getErrorCode?: boolean
+  ): Promise<AxiosResponse<T>>;
+  private request(config: AxiosRequestConfig, accessTokenNeeded: boolean, getErrorCode: true): Promise<ErrorResponse>;
   private request<T>(
     config: AxiosRequestConfig,
     accessTokenNeeded = true,
     getErrorCode: boolean = false
-  ): Promise<T | {errorCode: HTTP_STATUS}> {
+  ): Promise<T | ErrorResponse> {
     config.baseURL ??= this.backendURL;
 
     if (accessTokenNeeded) {
@@ -169,7 +241,7 @@ export class APIClient {
       this.checkCookieString();
       config.headers = {
         Authorization: `${this.accessToken!.token_type} ${this.accessToken!.access_token}`,
-        Cookie: this.cookieString,
+        Cookie: this.cookieString || '',
         ...config.headers,
       };
     }
@@ -177,19 +249,19 @@ export class APIClient {
     return this.tryRequest(() => axios.request(config), getErrorCode);
   }
 
-  private async tryRequest<T>(fn: TryFunction, getErrorCode: true): Promise<{errorCode: HTTP_STATUS}>;
+  private async tryRequest(fn: TryFunction, getErrorCode: true): Promise<ErrorResponse>;
   private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T>;
-  private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T | {errorCode: HTTP_STATUS}> {
+  private async tryRequest<T>(fn: TryFunction, getErrorCode?: boolean): Promise<T | ErrorResponse> {
     try {
       return await fn();
     } catch (error) {
-      if ((error as AxiosError).isAxiosError) {
-        const maybeMessage = (error as AxiosError<{message: string}>).response?.data?.message || '(no message)';
-        const errorCode = (error as AxiosError).response?.status;
+      if (isAxiosError(error)) {
+        const message = error.response?.data?.message || '(no message)';
+        const errorCode = error.response?.status;
         if (getErrorCode) {
-          return {errorCode} as {errorCode: HTTP_STATUS};
+          return {errorCode, message} as ErrorResponse;
         }
-        throw new Error(`Request failed with status code ${errorCode}: ${maybeMessage}`);
+        throw new Error(`Request failed with status code ${errorCode}: ${message}`);
       }
       throw error;
     }

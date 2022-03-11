@@ -21,8 +21,7 @@ Usage: wire-cli [options] [command]
 A Wire CLI.
 
 Options:
-  -b, --backend <URL>           specify the Wire backend URL (default:
-                                "staging-nginz-https.zinfra.io")
+  -b, --backend <URL>           specify the Wire backend URL
   -d, --dry-run                 don't send any data (beside logging in and out)
   -e, --email <address>         specify your Wire email address
   -p, --password <password>     specify your Wire password
@@ -35,6 +34,10 @@ Commands:
   reset-password [options]      reset your password
   get-all-clients [options]     get all clients data
   set-name [options]            set your name
+  set-email [options]           set your email address
+  set-availability [options]    set your availability status
+  send [options]                send a message
+  delete [options]              delete a message
   help [command]                display help for command
 ```
 

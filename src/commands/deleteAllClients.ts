@@ -7,8 +7,8 @@ export interface DeleteAllClientsOptions extends CommonOptions {}
 const logger = getLogger('delete-all-clients');
 
 export async function deleteAllClients({
-  defaultBackendURL,
   backendURL,
+  defaultBackendURL,
   dryRun,
   emailAddress,
   password,
@@ -19,19 +19,21 @@ export async function deleteAllClients({
 
   const apiClient = new APIClient(backendURL, emailAddress, password);
 
-  logger.info('Logging in ...');
+  logger.info(`Logging in with email address "${emailAddress}" ...`);
   await apiClient.login();
 
   logger.info('Getting all clients ...');
   const {data: clients} = await apiClient.getClients();
   logger.info(`Found ${clients.length} ${pluralize('client', clients.length)}.`);
 
-  await Promise.all(
-    clients.map(client => {
-      logger.info(`Deleting client with ID "${client.id}" ...`);
-      return dryRun ? undefined : apiClient.deleteClient(client.id);
-    })
-  );
+  if (!dryRun) {
+    await Promise.all(
+      clients.map(client => {
+        logger.info(`Deleting client with ID "${client.id}" ...`);
+        return dryRun ? undefined : apiClient.deleteClient(client.id);
+      })
+    );
+  }
 
   logger.info('Logging out ...');
   await apiClient.logout();

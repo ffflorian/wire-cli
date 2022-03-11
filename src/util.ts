@@ -1,6 +1,9 @@
 import * as http from 'http';
 import prompts from 'prompts';
 import logdown = require('logdown');
+import * as path from 'path';
+import * as fs from 'fs';
+import {AxiosError} from 'axios';
 
 export type Cookies = Record<string, string>;
 export type TryFunction = () => any | Promise<any>;
@@ -41,15 +44,44 @@ export async function getBackendURL(defaultBackendURL?: string): Promise<string>
     }
   );
 
-  backendURL ||= defaultBackendURL;
-
-  if (!backendURL.startsWith('http')) {
-    backendURL = `https://${backendURL}`;
-  }
+  // backendURL ||= defaultBackendURL;
+  backendURL = addHTTPS(backendURL);
 
   logger.info(`Using "${backendURL}" as backend.`);
 
   return backendURL;
+}
+
+export async function getConversationID(): Promise<string> {
+  const {conversationID} = await prompts(
+    {
+      message: 'Enter the conversation ID',
+      name: 'conversationID',
+      type: 'text',
+      validate: input => isUUID(input),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  return conversationID;
+}
+
+export async function getMessageID(): Promise<string> {
+  const {messageID} = await prompts(
+    {
+      message: 'Enter the message ID',
+      name: 'messageID',
+      type: 'text',
+      validate: input => isUUID(input),
+    },
+    {
+      onCancel: () => process.exit(),
+    }
+  );
+
+  return messageID;
 }
 
 export async function getEmailAddress(): Promise<string> {
@@ -126,4 +158,26 @@ export function init(): void {
      \´ÕÑÑÑNNNÑÑÑÕ´MÑÑNNNNÑÑMÕ        @ÑÊ     ÑÑ             ÕMÑÑNNNNØÑÑMÕ\`
          \´¯¯\`\`       \´¯¯\`                                       \´¯¯¯\`
 `);
+}
+
+export function addHTTPS(url?: string): string {
+  return url ? `https://${url.replace(/^https?:\/\//, '')}` : '';
+}
+
+export function isUUID(input: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(input);
+}
+
+export function getPackageJson(): {bin: string; description: string; name: string; version: string} {
+  const defaultPackageJsonPath = path.join(__dirname, 'package.json');
+  const packageJsonPath = fs.existsSync(defaultPackageJsonPath)
+    ? defaultPackageJsonPath
+    : path.join(__dirname, '../package.json');
+
+  return require(packageJsonPath);
+}
+
+export function isAxiosError(errorCandidate: any): errorCandidate is AxiosError {
+  return errorCandidate.isAxiosError === true;
 }
