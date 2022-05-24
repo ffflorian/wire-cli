@@ -3,6 +3,7 @@
 import {program as commander} from 'commander';
 
 import {
+  chat,
   deleteAllClients,
   deleteMessage,
   getAllClients,
@@ -250,6 +251,26 @@ commander
         messageID: localOptions?.message,
         password: commanderOptions.password,
       });
+    })
+  );
+
+commander
+  .command('chat')
+  .description('chat with others')
+  .option('-b, --backend <URL>', 'specify the Wire backend URL (e.g. "staging-nginz-https.zinfra.io")')
+  .option('-d, --dry-run', `don't send any data (beside logging in and out)`)
+  .option('-e, --email <address>', 'specify your Wire email address')
+  .option('-p, --password <password>', 'specify your Wire password')
+  .option('-w, --websocket <URL>', 'specify the Wire WebSocket URL (e.g. "staging-nginz-ssl.zinfra.io")')
+  .action(localOptions =>
+    chat({
+      ...defaultOptions,
+      defaultWebSocketURL: 'wss://staging-nginz-ssl.zinfra.io',
+      ...(commanderOptions?.backend && {backendURL: addHTTPS(commanderOptions.backend)}),
+      ...(commanderOptions?.dryRun && {dryRun: commanderOptions.dryRun}),
+      ...(commanderOptions?.email && {emailAddress: commanderOptions.email}),
+      ...(commanderOptions?.password && {password: commanderOptions.password}),
+      ...(localOptions?.websocket && {webSocketURL: addWSS(localOptions.websocket)}),
     })
   );
 

@@ -1,3 +1,4 @@
+export * from './chat';
 export * from './deleteAllClients';
 export * from './getSelf';
 export * from './message';
